@@ -28,3 +28,6 @@ data/replay.json
 #
 # 根目录的 原型_*.html / 历史档案.html / 赛道编辑器.html / 赛历编辑器.html
 # 虽然由 source/tools/ 生成，但也有意提交 —— GitHub Pages 直接发布它们。
+
+# 一次性的可行性验证页（378KB base64，不进版本库）
+pyodide_可行性验证.html
