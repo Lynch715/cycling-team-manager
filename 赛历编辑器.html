@@ -1,0 +1,201 @@
+<meta charset="utf-8">
+<title>模拟自行车队 · 赛历编辑器</title>
+<style>
+  :root{--bg:#0e1116;--panel:#161b23;--line:#242c38;--text:#e6edf5;
+        --dim:#8b98a8;--accent:#f5b301;--good:#3fb950;--bad:#e5534b;--warn:#d29922}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font:13px/1.6 -apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+  header{display:flex;align-items:center;gap:12px;padding:12px 20px;
+    border-bottom:1px solid var(--line);flex-wrap:wrap}
+  h1{font-size:15px;margin:0;font-weight:600}
+  button,select,input{background:#222a35;color:var(--text);border:1px solid var(--line);
+    border-radius:4px;padding:5px 9px;font-size:12px}
+  button{cursor:pointer} button:hover{background:#2c3542}
+  button.pri{background:var(--accent);color:#111;border-color:var(--accent);font-weight:600}
+  .wrap{display:grid;grid-template-columns:1fr 360px;gap:14px;padding:14px 20px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;
+    padding:14px 16px;margin-bottom:14px}
+  h2{font-size:12px;margin:0 0 10px;color:var(--dim);font-weight:600;letter-spacing:.07em}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{text-align:left;color:var(--dim);font-weight:500;padding:5px 6px;
+    border-bottom:1px solid var(--line);font-size:11px}
+  td{padding:2px 4px;border-bottom:1px solid #1b222c}
+  td input,td select{width:100%;padding:3px 5px;font-size:11.5px;background:#1b222c;
+    border:1px solid transparent;color:var(--text)}
+  td input:focus{border-color:var(--accent);outline:none}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em}
+  .v{display:flex;justify-content:space-between;padding:5px 0;
+    border-bottom:1px solid #1b222c;gap:10px}
+  .v span{color:var(--dim);font-size:11.5px;text-align:right;flex:1}
+  .note{color:var(--dim);font-size:11.5px;line-height:1.8;padding:5px 0;
+    border-bottom:1px solid #1b222c}
+  .err{color:var(--bad)} .wrn{color:var(--warn)}
+  .hint{color:var(--dim);font-size:11.5px;line-height:1.85;margin-top:8px}
+  .gantt{width:100%;height:190px;display:block}
+</style>
+
+<header>
+  <h1>赛历编辑器</h1>
+  <button onclick="addRace()">＋ 加一场赛事</button>
+  <button onclick="reset()">还原</button>
+  <button class="pri" onclick="download()">导出 calendar.json</button>
+  <span class="hint" style="margin:0">
+    赛段用字母：<b class="mono">F</b>平路 <b class="mono">H</b>丘陵
+    <b class="mono">M</b>山地 <b class="mono">S</b>山顶 <b class="mono">I</b>计时
+    <b class="mono">C</b>石板
+  </span>
+</header>
+
+<div class="wrap">
+  <div>
+    <div class="card">
+      <h2>赛季时间线</h2>
+      <svg class="gantt" id="gantt" viewBox="0 0 940 190" preserveAspectRatio="none"></svg>
+      <div class="hint" id="ganttmeta"></div>
+    </div>
+    <div class="card">
+      <h2>赛事</h2>
+      <table id="races"></table>
+    </div>
+  </div>
+  <div>
+    <div class="card"><h2>赛季体检</h2><div id="verdicts"></div></div>
+    <div class="card"><h2>提醒</h2><div id="notes"></div></div>
+    <div class="card"><h2>校验</h2><div id="issues"></div></div>
+  </div>
+</div>
+
+<script>
+const ORIG = [{"id": "E01", "name": "海岸开季赛", "tier": "职业系列赛", "country": "ESP", "start_day": 20, "prestige": 42, "stages": "FF", "terrain": "coast"}, {"id": "E02", "name": "春季丘陵赛", "tier": "世巡赛", "country": "ITA", "start_day": 33, "prestige": 58, "stages": "H", "terrain": "italian_hills"}, {"id": "E03", "name": "石板路经典赛", "tier": "纪念碑", "country": "BEL", "start_day": 48, "prestige": 92, "stages": "C", "terrain": "cobbles"}, {"id": "E04", "name": "北方之战", "tier": "纪念碑", "country": "BEL", "start_day": 55, "prestige": 94, "stages": "C", "terrain": "cobbles"}, {"id": "E05", "name": "低地绕圈赛", "tier": "职业系列赛", "country": "NED", "start_day": 62, "prestige": 40, "stages": "F", "terrain": "dutch"}, {"id": "E06", "name": "阿登丘陵赛", "tier": "纪念碑", "country": "BEL", "start_day": 70, "prestige": 88, "stages": "S", "terrain": "italian_hills"}, {"id": "E07", "name": "春季山地赛", "tier": "世巡赛", "country": "ITA", "start_day": 78, "prestige": 62, "stages": "MS", "terrain": "alps"}, {"id": "E08", "name": "五月大环赛", "tier": "大环赛", "country": "ITA", "start_day": 92, "prestige": 100, "stages": "FHIFMSFMSFHFSFHIFMSF", "terrain": "italian_hills"}, {"id": "E09", "name": "城市计时赛", "tier": "职业系列赛", "country": "GER", "start_day": 122, "prestige": 38, "stages": "I", "terrain": "city"}, {"id": "E10", "name": "阿尔卑斯八日", "tier": "世巡赛", "country": "SUI", "start_day": 130, "prestige": 66, "stages": "FHMSIFMS", "terrain": "alps"}, {"id": "E11", "name": "环荷兰", "tier": "职业系列赛", "country": "NED", "start_day": 142, "prestige": 36, "stages": "FFF", "terrain": "dutch"}, {"id": "E12", "name": "比利牛斯五日", "tier": "世巡赛", "country": "FRA", "start_day": 150, "prestige": 64, "stages": "FHMSI", "terrain": "pyrenees"}, {"id": "E13", "name": "盛夏大环赛", "tier": "大环赛", "country": "FRA", "start_day": 165, "prestige": 100, "stages": "FFHMSIFMSFHFSFMSFHIFF", "terrain": "pyrenees"}, {"id": "E14", "name": "沙漠挑战赛", "tier": "职业系列赛", "country": "ESP", "start_day": 196, "prestige": 34, "stages": "FF", "terrain": "desert"}, {"id": "E15", "name": "海滨冲刺赛", "tier": "职业系列赛", "country": "POR", "start_day": 202, "prestige": 32, "stages": "F", "terrain": "coast"}, {"id": "E16", "name": "环英国", "tier": "世巡赛", "country": "GBR", "start_day": 208, "prestige": 56, "stages": "FHFHI", "terrain": "coast"}, {"id": "E17", "name": "秋季大环赛", "tier": "大环赛", "country": "ESP", "start_day": 218, "prestige": 98, "stages": "FHMSFIFMSFHFSFMSFHFI", "terrain": "alps"}, {"id": "E18", "name": "北欧丘陵赛", "tier": "职业系列赛", "country": "NOR", "start_day": 250, "prestige": 38, "stages": "H", "terrain": "coast"}, {"id": "E19", "name": "城市夜赛", "tier": "国内赛", "country": "JPN", "start_day": 256, "prestige": 26, "stages": "F", "terrain": "city"}, {"id": "E20", "name": "环中国", "tier": "职业系列赛", "country": "CHN", "start_day": 262, "prestige": 34, "stages": "FFH", "terrain": "city"}, {"id": "E21", "name": "落叶经典赛", "tier": "纪念碑", "country": "ITA", "start_day": 272, "prestige": 90, "stages": "S", "terrain": "italian_hills"}, {"id": "E22", "name": "山地告别赛", "tier": "世巡赛", "country": "SUI", "start_day": 278, "prestige": 60, "stages": "MS", "terrain": "alps"}, {"id": "E23", "name": "收官计时赛", "tier": "职业系列赛", "country": "FRA", "start_day": 284, "prestige": 40, "stages": "I", "terrain": "city"}, {"id": "E24", "name": "荒漠绕圈赛", "tier": "国内赛", "country": "AUS", "start_day": 290, "prestige": 24, "stages": "F", "terrain": "desert"}, {"id": "E25", "name": "赛季总决赛", "tier": "世巡赛", "country": "ITA", "start_day": 296, "prestige": 70, "stages": "HS", "terrain": "italian_hills"}];
+let races = JSON.parse(JSON.stringify(ORIG));
+
+const TIERS = ["大环赛","纪念碑","世巡赛","职业系列赛","国内赛"];
+const TERRAINS = ["alps","pyrenees","dutch","italian_hills","cobbles","coast","city","desert"];
+const LETTER = {F:"flat",H:"hilly",M:"mountain",S:"summit_finish",I:"itt",C:"cobbled"};
+const TIER_COLOR = {"大环赛":"#f5b301","纪念碑":"#e5534b","世巡赛":"#3fb950",
+                    "职业系列赛":"#2a6fb0","国内赛":"#4a5568"};
+// 每类车手一年至少需要多少个属于他的比赛日，和 Python 侧 ROLE_DEMAND 对齐
+const DEMAND = {"冲刺手":["F",30,"平路赛段"],"爬坡手":["MS",18,"山地与山顶终点"],
+  "总成绩核心":["MSI",22,"山地与计时赛"],"平路手":["FC",32,"平路与石板路"]};
+
+function reset(){ races = JSON.parse(JSON.stringify(ORIG)); render(); }
+function upd(i,k,v){ races[i][k]=v; render(); }
+function del(i){ races.splice(i,1); render(); }
+function addRace(){
+  races.push({id:"E"+String(races.length+1).padStart(2,"0"), name:"新赛事",
+    tier:"职业系列赛", country:"FRA", start_day:150, prestige:40,
+    stages:"F", terrain:"coast"});
+  render();
+}
+function download(){
+  const blob = new Blob([JSON.stringify({
+    "_说明":["赛历。stages 用字母：F平路 H丘陵 M山地 S山顶终点 I计时赛 C石板路"],
+    races}, null, 2)], {type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob); a.download="calendar.json"; a.click();
+}
+
+function validate(){
+  const out=[], ids=new Set();
+  for (const r of races){
+    const w = `${r.id}「${r.name}」`;
+    if (ids.has(r.id)) out.push(["错误",w,`id 重复`]);
+    ids.add(r.id);
+    if (!TIERS.includes(r.tier)) out.push(["错误",w,`未知等级`]);
+    if (!(r.start_day>=1 && r.start_day<=300)) out.push(["错误",w,`起始日超出 1–300`]);
+    if (!r.stages) out.push(["错误",w,`没有赛段构成`]);
+    for (const ch of r.stages||"") if (!LETTER[ch]) out.push(["错误",w,`未知赛段字母「${ch}」`]);
+    if (!TERRAINS.includes(r.terrain)) out.push(["错误",w,`未知地形`]);
+  }
+  const spans = races.map(r=>[+r.start_day, +r.start_day+(r.stages||"").length-1, r])
+                     .sort((a,b)=>a[0]-b[0]);
+  for (let i=0;i<spans.length-1;i++){
+    const [s1,e1,r1]=spans[i], [s2,e2,r2]=spans[i+1];
+    if (s2<=e1){
+      const top = TIERS.slice(0,2);
+      const lv = (top.includes(r1.tier)&&top.includes(r2.tier)) ? "错误":"警告";
+      out.push([lv, `${r1.name} / ${r2.name}`,
+        `日期重叠（第 ${s2}–${e1} 天）`+(lv==="错误"?"，两场都是顶级赛事，车队会被撕成两半":"")]);
+    }
+  }
+  return out;
+}
+
+function render(){
+  races.sort((a,b)=>a.start_day-b.start_day);
+  const mix={}; let days=0;
+  for (const r of races) for (const ch of r.stages||""){ mix[ch]=(mix[ch]||0)+1; days++; }
+
+  // 甘特图：横轴是赛季 300 天，每场比赛一条，按等级上色
+  const X = d => 12 + d/300*915;
+  let bars="", rowH = Math.max(5, Math.min(11, 175/Math.max(1,races.length)));
+  races.forEach((r,i)=>{
+    const y = 6 + i*rowH;
+    const len = Math.max(2, (r.stages||"").length);
+    bars += `<rect x="${X(+r.start_day)}" y="${y}" width="${Math.max(3,X(+r.start_day+len)-X(+r.start_day))}"
+      height="${rowH-1.5}" rx="1.5" fill="${TIER_COLOR[r.tier]||'#4a5568'}"/>`;
+    if (rowH > 7) bars += `<text x="${X(+r.start_day)+3}" y="${y+rowH-3.2}"
+      font-size="${Math.min(8,rowH-2)}" fill="#0e1116">${r.name}</text>`;
+  });
+  let grid="";
+  for (let mth=0; mth<=10; mth++){
+    const d=mth*30;
+    grid += `<line x1="${X(d)}" y1="0" x2="${X(d)}" y2="182" stroke="#242c38" stroke-width="1"/>
+      <text x="${X(d)+2}" y="188" font-size="8" fill="#8b98a8">${mth+2} 月</text>`;
+  }
+  document.getElementById("gantt").innerHTML = grid + bars;
+  document.getElementById("ganttmeta").innerHTML =
+    Object.entries(TIER_COLOR).map(([k,c])=>`<span style="color:${c}">■</span> ${k}`).join("　");
+
+  document.getElementById("races").innerHTML =
+    `<tr><th style="width:8%">id</th><th style="width:20%">名称</th><th>等级</th>
+      <th style="width:8%">起始日</th><th style="width:7%">声望</th>
+      <th style="width:22%">赛段构成</th><th>地形</th><th></th></tr>` +
+    races.map((r,i)=>`<tr>
+      <td><input value="${r.id}" onchange="upd(${i},'id',this.value)"></td>
+      <td><input value="${r.name}" onchange="upd(${i},'name',this.value)"></td>
+      <td><select onchange="upd(${i},'tier',this.value)">${
+        TIERS.map(x=>`<option ${x===r.tier?'selected':''}>${x}</option>`).join("")}</select></td>
+      <td><input type="number" value="${r.start_day}" onchange="upd(${i},'start_day',+this.value)"></td>
+      <td><input type="number" value="${r.prestige}" onchange="upd(${i},'prestige',+this.value)"></td>
+      <td><input class="mono" value="${r.stages}" onchange="upd(${i},'stages',this.value.toUpperCase())"></td>
+      <td><select onchange="upd(${i},'terrain',this.value)">${
+        TERRAINS.map(x=>`<option ${x===r.terrain?'selected':''}>${x}</option>`).join("")}</select></td>
+      <td><button onclick="del(${i})" style="padding:2px 7px">×</button></td>
+    </tr>`).join("");
+
+  const big = races.filter(r=>["大环赛","纪念碑"].includes(r.tier))
+                   .sort((a,b)=>a.start_day-b.start_day);
+  let worst = null;
+  for (let i=0;i<big.length-1;i++){
+    const g = big[i+1].start_day - (big[i].start_day + big[i].stages.length - 1);
+    if (worst===null || g<worst) worst=g;
+  }
+  const dayList = races.map(r=>+r.start_day);
+  document.getElementById("verdicts").innerHTML = `
+    <div class="v"><b>${races.length} 场</b><span>赛事总数 · 共 ${days} 个比赛日</span></div>
+    <div class="v"><b>${Object.entries(mix).sort((a,b)=>b[1]-a[1])
+      .map(([k,v])=>LETTER[k]+" "+v).join("、")}</b><span>赛段构成</span></div>
+    ${worst!==null?`<div class="v"><b>${worst} 天</b><span>顶级赛事最小间隔 ·
+      少于 14 天同一批核心无法两场都打</span></div>`:""}
+    <div class="v"><b>第 ${Math.min(...dayList)}–${Math.max(...dayList)} 天</b>
+      <span>赛季跨度</span></div>`;
+
+  const notes=[];
+  for (const [role,[letters,need,label]] of Object.entries(DEMAND)){
+    const got = [...letters].reduce((a,ch)=>a+(mix[ch]||0),0);
+    if (got<need) notes.push(`${role}全年只有 ${got} 个${label}赛段（建议至少 ${need} 个）——这个角色在阵容里会长期闲置。`);
+  }
+  if (races.filter(r=>r.tier==="大环赛").length<2)
+    notes.push("大环赛少于两场：赛季缺少高潮，「主攻哪个大环赛」这个决策也会失去意义。");
+  document.getElementById("notes").innerHTML =
+    notes.map(n=>`<div class="note">· ${n}</div>`).join("") ||
+    `<div class="hint">赛季节奏没有明显问题。</div>`;
+
+  const iss=validate();
+  document.getElementById("issues").innerHTML = iss.length
+    ? iss.map(([lv,w,t])=>`<div class="note ${lv==='错误'?'err':'wrn'}">[${lv}] ${w}：${t}</div>`).join("")
+    : `<div class="note" style="color:var(--good)">✓ 没有问题</div>`;
+}
+render();

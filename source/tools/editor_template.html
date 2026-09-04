@@ -1,0 +1,301 @@
+<meta charset="utf-8">
+<title>模拟自行车队 · 赛道编辑器</title>
+<style>
+  :root{--bg:#0e1116;--panel:#161b23;--line:#242c38;--text:#e6edf5;
+        --dim:#8b98a8;--accent:#f5b301;--good:#3fb950;--bad:#e5534b;
+        --warn:#d29922}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font:13px/1.6 -apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+  header{display:flex;align-items:center;gap:14px;padding:12px 20px;
+    border-bottom:1px solid var(--line);flex-wrap:wrap}
+  h1{font-size:15px;margin:0;font-weight:600}
+  select,input,button{background:#222a35;color:var(--text);
+    border:1px solid var(--line);border-radius:4px;padding:5px 9px;font-size:12px}
+  button{cursor:pointer} button:hover{background:#2c3542}
+  button.pri{background:var(--accent);color:#111;border-color:var(--accent);
+    font-weight:600}
+  .wrap{display:grid;grid-template-columns:1fr 380px;gap:14px;padding:14px 20px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;
+    padding:14px 16px;margin-bottom:14px}
+  h2{font-size:12px;margin:0 0 10px;color:var(--dim);font-weight:600;
+    letter-spacing:.07em}
+  svg{display:block;width:100%}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{text-align:left;color:var(--dim);font-weight:500;padding:5px 6px;
+    border-bottom:1px solid var(--line);font-size:11px}
+  td{padding:2px 4px;border-bottom:1px solid #1b222c}
+  td input{width:100%;padding:3px 5px;font-size:11.5px;
+    background:#1b222c;border:1px solid transparent;color:var(--text)}
+  td input:focus{border-color:var(--accent);outline:none}
+  td select{width:100%;padding:3px 4px;font-size:11.5px}
+  .v{display:flex;justify-content:space-between;padding:5px 0;
+    border-bottom:1px solid #1b222c;gap:10px}
+  .v b{font-weight:600}
+  .v span{color:var(--dim);font-size:11.5px;text-align:right;flex:1}
+  .knob{color:var(--accent);font-size:11px}
+  .bar{height:6px;background:#2a3441;border-radius:3px;overflow:hidden;
+    margin-top:3px}
+  .bar i{display:block;height:100%;background:var(--accent)}
+  .note{color:var(--dim);font-size:11.5px;line-height:1.8;
+    padding:5px 0;border-bottom:1px solid #1b222c}
+  .err{color:var(--bad)} .wrn{color:var(--warn)}
+  .hint{color:var(--dim);font-size:11.5px;line-height:1.85;margin-top:8px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+</style>
+
+<header>
+  <h1>赛道编辑器</h1>
+  <select id="pick"></select>
+  <button onclick="addSeg()">＋ 加一段</button>
+  <button onclick="reset()">还原</button>
+  <button class="pri" onclick="download()">导出 JSON</button>
+  <span class="hint" style="margin:0">改完导出，覆盖 data/courses/ 下的同名文件即可生效</span>
+</header>
+
+<div class="wrap">
+  <div>
+    <div class="card">
+      <h2>海拔剖面</h2>
+      <svg id="prof" viewBox="0 0 940 200" preserveAspectRatio="none"
+           style="height:200px"></svg>
+      <div class="row" style="margin-top:8px">
+        <span class="hint" id="profmeta" style="margin:0"></span>
+      </div>
+    </div>
+    <div class="card">
+      <h2>路段</h2>
+      <table id="segs"></table>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <h2>体检</h2>
+      <div id="verdicts"></div>
+    </div>
+    <div class="card">
+      <h2>利好谁</h2>
+      <div id="favours"></div>
+      <div class="hint">
+        这条曲线和快速结算里的 stage_merit 是同一套逻辑的简化版，
+        所以这里的判断不会和真跑一场的结果打架。
+      </div>
+    </div>
+    <div class="card">
+      <h2>提醒</h2>
+      <div id="notes"></div>
+    </div>
+    <div class="card">
+      <h2>校验</h2>
+      <div id="issues"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA = /*__COURSES__*/null;
+let cur = Object.keys(DATA)[0];
+let doc = JSON.parse(JSON.stringify(DATA[cur]));
+
+const SURFACES = ["柏油", "石板", "砾石", "湿滑"];
+
+document.getElementById("pick").innerHTML = Object.entries(DATA)
+  .map(([k, v]) => `<option value="${k}">${k}　${v.name}</option>`).join("");
+document.getElementById("pick").onchange = e => {
+  cur = e.target.value; reset();
+};
+function reset(){ doc = JSON.parse(JSON.stringify(DATA[cur])); render(); }
+
+// ---------------------------------------------------------------- 计算
+// 这几个函数是 Python 侧 course_report 的镜像。刻意保持公式一致——
+// 编辑器里看到的判断必须和引擎跑出来的一样，否则作者会被误导。
+function metrics(){
+  const segs = doc.segments;
+  let km = 0, asc = 0;
+  const pts = [[0, doc.start_altitude_m || 0]];
+  let alt = doc.start_altitude_m || 0;
+  for (const s of segs){
+    const L = +s.length_km || 0, g = (+s.grade_pct || 0) / 100;
+    km += L; alt += L * 1000 * Math.sin(Math.atan(g));
+    if (g > 0) asc += L * 1000 * Math.sin(Math.atan(g));
+    pts.push([km, alt]);
+  }
+  const apk = asc / Math.max(1, km);
+  const share = Math.max(0, Math.min(0.85, (apk - 2) / 30));
+
+  let v = 47.00 - 3.22 * Math.sqrt(Math.max(0, apk));
+  if (doc.stage_type === "itt") v += 7.2;
+  else if (doc.stage_type === "hilly") v -= 0.8;
+  v = Math.max(22, v);
+
+  // 决胜段：多个窗口按「离终点多近」加权取最大。
+  // 单一窗口不够——于伊之墙只有 1.3 公里，摊进 25 公里会被稀释成「平坦」；
+  // 波焦顶上还有 5 公里下坡，用 2 公里窗口又会漏掉它。
+  // 决定胜负的不是总爬升，是爬升在哪儿。
+  const WIN = [[2,1.00],[5,0.88],[12,0.68],[25,0.52]];
+  let fin = 0;
+  for (const [tk, w] of WIN){
+    const tail = Math.min(tk, km), startKm = km - tail;
+    let cur2 = 0, tAsc = 0;
+    for (const s of segs){
+      const L = +s.length_km || 0, g = (+s.grade_pct || 0)/100;
+      const a = cur2, b = cur2 + L; cur2 = b;
+      if (b <= startKm) continue;
+      const ov = b - Math.max(a, startKm);
+      if (g > 0) tAsc += ov * 1000 * Math.sin(Math.atan(g));
+    }
+    fin = Math.max(fin, Math.min(0.90, Math.max(0,(tAsc/Math.max(1,tail) - 2)/26)) * w);
+  }
+  return {km, asc, apk, share, fin, v, pts};
+}
+
+const DROP = {flat:0.228, cobbled:0.120, hilly:0.155, mountain:0.0,
+              summit_finish:0.0, itt:9.99};
+const ROLE_CURVE = {
+  "总成绩核心": b => 0.55 + 0.45*b, "爬坡手": b => 0.20 + 0.85*b,
+  "冲刺手": b => 0.95 - 0.85*b, "领骑员": b => 0.80 - 0.70*b,
+  "平路手": b => 0.85 - 0.35*b, "突围手": b => 0.50 + 0.10*b,
+  "工兵": () => 0.35,
+};
+
+function validate(){
+  const out = [];
+  let total = 0;
+  doc.segments.forEach((s, i) => {
+    const w = `第 ${i+1} 段${s.name ? "「"+s.name+"」" : ""}`;
+    const L = +s.length_km, g = (+s.grade_pct)/100;
+    total += L || 0;
+    if (!(L > 0.05 && L < 60)) out.push(["错误", w, `长度 ${L} km 不合理`]);
+    else if (L > 40) out.push(["警告", w, `长度 ${L} km 非常极端`]);
+    if (!(g >= -0.30 && g <= 0.30)) out.push(["错误", w, `坡度 ${(g*100).toFixed(1)}% 超出范围`]);
+    else if (g < -0.16 || g > 0.20) out.push(["警告", w, `坡度 ${(g*100).toFixed(1)}% 非常极端`]);
+    if (+s.crosswind_ms > 9) out.push(["警告", w, `侧风 ${s.crosswind_ms} m/s 非常极端`]);
+  });
+  if (total < 3 || total > 350) out.push(["错误", "整体", `总长度 ${total.toFixed(1)} km 超出范围`]);
+  return out;
+}
+
+// ---------------------------------------------------------------- 渲染
+function render(){
+  const m = metrics();
+  const mn = Math.min(...m.pts.map(p => p[1])), mx = Math.max(...m.pts.map(p => p[1]));
+  const X = km => 20 + km / Math.max(1, m.km) * 900;
+  const Y = a => 180 - (a - mn) / Math.max(1, mx - mn) * 155;
+  const line = m.pts.map(p => `${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`).join(" ");
+
+  // 按坡度给路段上色：陡坡一眼可见，这是剖面图最该做的事
+  let bands = "", km = 0;
+  for (const s of doc.segments){
+    const L = +s.length_km || 0, g = (+s.grade_pct || 0)/100;
+    const c = g > 0.08 ? "#e5534b" : g > 0.04 ? "#d29922" :
+              g > 0.015 ? "#8b7a2a" : g < -0.03 ? "#2a6fb0" : "#2a3441";
+    bands += `<rect x="${X(km)}" y="182" width="${Math.max(0.5, X(km+L)-X(km))}"
+      height="8" fill="${c}"/>`;
+    if (s.surface === "石板")
+      bands += `<rect x="${X(km)}" y="191" width="${Math.max(0.5,X(km+L)-X(km))}"
+        height="4" fill="#c6ac8f"/>`;
+    km += L;
+  }
+  document.getElementById("prof").innerHTML =
+    `<polygon points="${X(0)},180 ${line} ${X(m.km)},180" fill="#1d2530"/>
+     <polyline points="${line}" fill="none" stroke="#f5b301" stroke-width="1.8"/>
+     ${bands}`;
+  document.getElementById("profmeta").innerHTML =
+    `${m.km.toFixed(1)} km　爬升 ${m.asc.toFixed(0)} m　` +
+    `<span style="color:#e5534b">■</span>>8%　` +
+    `<span style="color:#d29922">■</span>4-8%　` +
+    `<span style="color:#2a6fb0">■</span>下坡　` +
+    `<span style="color:#c6ac8f">■</span>石板路`;
+
+  // 路段表
+  document.getElementById("segs").innerHTML =
+    `<tr><th style="width:26%">名称</th><th>长度km</th><th>坡度%</th>
+      <th>路面</th><th>逆风</th><th>侧风</th><th>弯道</th><th></th></tr>` +
+    doc.segments.map((s, i) => `<tr>
+      <td><input value="${s.name||''}" onchange="upd(${i},'name',this.value)"></td>
+      <td><input type="number" step="0.1" value="${s.length_km}" onchange="upd(${i},'length_km',+this.value)"></td>
+      <td><input type="number" step="0.1" value="${s.grade_pct}" onchange="upd(${i},'grade_pct',+this.value)"></td>
+      <td><select onchange="upd(${i},'surface',this.value)">${
+        SURFACES.map(x => `<option ${x===s.surface?'selected':''}>${x}</option>`).join("")}</select></td>
+      <td><input type="number" step="0.5" value="${s.headwind_ms||0}" onchange="upd(${i},'headwind_ms',+this.value)"></td>
+      <td><input type="number" step="0.5" value="${s.crosswind_ms||0}" onchange="upd(${i},'crosswind_ms',+this.value)"></td>
+      <td><input type="number" step="0.05" value="${s.technical||0}" onchange="upd(${i},'technical',+this.value)"></td>
+      <td><button onclick="del(${i})" style="padding:2px 7px">×</button></td>
+    </tr>`).join("");
+
+  // 体检
+  const hours = m.km / m.v;
+  const drop = DROP[doc.stage_type] ?? 0.155;
+  const sel = drop >= 0.20 ? ["很弱","绝大多数人一起过线，名次由终点冲刺决定"]
+    : drop >= 0.12 ? ["中等","会分成几个集团，但主集团仍然很大"]
+    : drop > 0 ? ["强","集团会被撕开，只有状态好的人留在前面"]
+    : ["极强","没有集团保护，每个人按自己的能力各走各的"];
+  const diff = m.apk < 5 ? "平坦。冲刺手的主场" : m.apk < 10 ? "起伏。突围有机会"
+    : m.apk < 16 ? "丘陵。纯冲刺手会掉" : m.apk < 24 ? "山地。总成绩会拉开差距"
+    : "高山。真实大环赛决胜赛段就在这个区间";
+  document.getElementById("verdicts").innerHTML = `
+    <div class="v"><b>${m.v.toFixed(1)} km/h</b>
+      <span>预计冠军均速 · 用时约 ${Math.floor(hours)} 小时 ${Math.round(hours%1*60)} 分</span></div>
+    <div class="v"><b>${m.apk.toFixed(1)} m/km</b><span>${diff}</span></div>
+    <div class="v"><b>${sel[0]}</b><span>选拔性 · ${sel[1]}</span></div>
+    <div class="v"><b>${(m.fin*100).toFixed(0)}%</b><span>决胜段难度 · ${
+      m.fin > m.share + 0.25 ? "前面再平，胜负也在最后这一段决出" :
+      m.fin > 0.55 ? "结尾极难，只有爬坡最好的人能争胜" :
+      m.fin > 0.30 ? "结尾有分量，纯冲刺手会掉" :
+      (m.fin < 0.08 && m.share > 0.35) ? "前难后平：掉队的人有机会追回来" :
+      "结尾平缓，大概率集团冲刺"}</span></div>
+    <div class="hint">想改均速就动总长度或爬升；想改选拔性就改赛段类型
+      （<span class="knob">${doc.stage_type}</span>）或调整爬坡占比。</div>`;
+
+  document.getElementById("favours").innerHTML =
+    Object.entries(ROLE_CURVE).map(([k, f]) => [k, f(Math.max(m.share, m.fin*0.92))])
+      .sort((a,b) => b[1]-a[1]).map(([k, s]) => `
+      <div class="v" style="display:block"><b>${k}</b>
+        <span style="float:right">${(s*100).toFixed(0)}%</span>
+        <div class="bar"><i style="width:${s*100}%"></i></div></div>`).join("");
+
+  // 提醒
+  const notes = [];
+  const segs = doc.segments;
+  if (segs.length){
+    if (segs.slice(-3).every(s => Math.abs(+s.grade_pct) < 2))
+      notes.push("终点前是平路：无论中途多难，最后大概率变成集团冲刺。想避免的话，把一个爬坡段挪到最后 5 公里以内。");
+    if (+segs[segs.length-1].grade_pct > 5)
+      notes.push("山顶终点：差距会一直拉到最后一米，最能体现总成绩能力。");
+    const third = Math.max(1, Math.floor(segs.length/3));
+    if (segs.slice(0, third).some(s => +s.grade_pct > 6))
+      notes.push("开场就有陡坡：突围很难形成，因为前 15 分钟本来就是全场最快的时候。");
+    const tech = segs.filter(s => +s.grade_pct < -4 && +s.technical > 0.45).length;
+    if (tech) notes.push(`有 ${tech} 段技术性下坡：下坡属性差的车手会掉时间，摔车风险集中在这里。`);
+    if (m.km > 230) notes.push("超过 230 公里：后段耐力衰减成为主导，利好耐力高的老将。");
+  }
+  document.getElementById("notes").innerHTML =
+    notes.map(n => `<div class="note">· ${n}</div>`).join("") ||
+    `<div class="hint">没有需要特别提醒的地方。</div>`;
+
+  const iss = validate();
+  document.getElementById("issues").innerHTML = iss.length
+    ? iss.map(([lv, w, t]) =>
+        `<div class="note ${lv==='错误'?'err':'wrn'}">[${lv}] ${w}：${t}</div>`).join("")
+    : `<div class="note" style="color:var(--good)">✓ 没有问题，可以直接用</div>`;
+}
+
+function upd(i, k, v){ doc.segments[i][k] = v; render(); }
+function del(i){ doc.segments.splice(i, 1); render(); }
+function addSeg(){
+  doc.segments.push({name:"新路段", length_km:5, grade_pct:0,
+    surface:"柏油", headwind_ms:0, crosswind_ms:0, technical:0});
+  render();
+}
+function download(){
+  const blob = new Blob([JSON.stringify(doc, null, 2)],
+                        {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = cur + ".json";
+  a.click();
+}
+
+render();
+</script>

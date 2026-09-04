@@ -1,0 +1,63 @@
+{
+  "id": "E08-16",
+  "name": "五月大环赛 第 16 赛段",
+  "stage_type": "itt",
+  "start_altitude_m": 60,
+  "segments": [
+    {
+      "name": "起步平路 · 1",
+      "length_km": 7.383,
+      "grade_pct": -1.1,
+      "surface": "柏油",
+      "headwind_ms": -0.8,
+      "crosswind_ms": 0.9,
+      "technical": 0.0
+    },
+    {
+      "name": "起步平路 · 2",
+      "length_km": 7.399,
+      "grade_pct": 1.95,
+      "surface": "柏油",
+      "headwind_ms": 0.4,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "中段爬坡",
+      "length_km": 6.224,
+      "grade_pct": 3.22,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "下坡",
+      "length_km": 5.446,
+      "grade_pct": -3.08,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.23
+    },
+    {
+      "name": "冲线段 · 1",
+      "length_km": 5.737,
+      "grade_pct": 1.15,
+      "surface": "柏油",
+      "headwind_ms": 1.5,
+      "crosswind_ms": 2.0,
+      "technical": 0.0
+    },
+    {
+      "name": "冲线段 · 2",
+      "length_km": 6.711,
+      "grade_pct": -0.51,
+      "surface": "柏油",
+      "headwind_ms": 0.1,
+      "crosswind_ms": 2.3,
+      "technical": 0.0
+    }
+  ],
+  "koms": []
+}

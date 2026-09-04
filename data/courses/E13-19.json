@@ -1,0 +1,45 @@
+{
+  "id": "E13-19",
+  "name": "盛夏大环赛 第 19 赛段",
+  "stage_type": "itt",
+  "start_altitude_m": 60,
+  "segments": [
+    {
+      "name": "起步平路",
+      "length_km": 7.372,
+      "grade_pct": 0.53,
+      "surface": "柏油",
+      "headwind_ms": 1.7,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "中段爬坡",
+      "length_km": 3.104,
+      "grade_pct": 3.92,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "下坡",
+      "length_km": 2.716,
+      "grade_pct": -4.44,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.44
+    },
+    {
+      "name": "冲线段",
+      "length_km": 6.208,
+      "grade_pct": -1.32,
+      "surface": "柏油",
+      "headwind_ms": 3.2,
+      "crosswind_ms": 3.5,
+      "technical": 0.0
+    }
+  ],
+  "koms": []
+}

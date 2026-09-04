@@ -1,0 +1,63 @@
+{
+  "id": "E23-1",
+  "name": "收官计时赛",
+  "stage_type": "itt",
+  "start_altitude_m": 60,
+  "segments": [
+    {
+      "name": "起步平路 · 1",
+      "length_km": 9.856,
+      "grade_pct": 0.32,
+      "surface": "柏油",
+      "headwind_ms": 3.5,
+      "crosswind_ms": 2.0,
+      "technical": 0.0
+    },
+    {
+      "name": "起步平路 · 2",
+      "length_km": 7.168,
+      "grade_pct": -1.02,
+      "surface": "柏油",
+      "headwind_ms": 2.6,
+      "crosswind_ms": 2.8,
+      "technical": 0.0
+    },
+    {
+      "name": "中段爬坡",
+      "length_km": 7.168,
+      "grade_pct": 3.09,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "下坡",
+      "length_km": 6.272,
+      "grade_pct": -4.58,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.4
+    },
+    {
+      "name": "冲线段 · 1",
+      "length_km": 7.335,
+      "grade_pct": 0.79,
+      "surface": "柏油",
+      "headwind_ms": 0.3,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "冲线段 · 2",
+      "length_km": 7.001,
+      "grade_pct": 2.1,
+      "surface": "柏油",
+      "headwind_ms": 1.0,
+      "crosswind_ms": 2.3,
+      "technical": 0.0
+    }
+  ],
+  "koms": []
+}

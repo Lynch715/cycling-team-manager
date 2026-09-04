@@ -1,0 +1,280 @@
+{
+  "id": "real-alpine-queen",
+  "name": "高山之王",
+  "stage_type": "summit_finish",
+  "start_altitude_m": 720,
+  "segments": [
+    {
+      "name": "河谷出发 · 1",
+      "length_km": 11.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "河谷出发 · 2",
+      "length_km": 11.0,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "河谷段",
+      "length_km": 5.0,
+      "grade_pct": 4.4,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "加利比耶山口（瓦卢瓦侧） 2",
+      "length_km": 4.0,
+      "grade_pct": 6.9,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "加利比耶山口（瓦卢瓦侧） 3",
+      "length_km": 4.0,
+      "grade_pct": 7.6,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "加利比耶山口（瓦卢瓦侧） 4",
+      "length_km": 3.0,
+      "grade_pct": 8.1,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "顶前陡段",
+      "length_km": 2.1,
+      "grade_pct": 9.2,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "加利比耶山口（瓦卢瓦侧） 下坡",
+      "length_km": 22.0,
+      "grade_pct": -5.81,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.6
+    },
+    {
+      "name": "谷底过渡 · 1",
+      "length_km": 7.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "谷底过渡 · 2",
+      "length_km": 7.0,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "马德莱娜山口 1",
+      "length_km": 4.0,
+      "grade_pct": 8.4,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "马德莱娜山口 2",
+      "length_km": 4.0,
+      "grade_pct": 7.8,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "中段缓坡",
+      "length_km": 3.0,
+      "grade_pct": 6.2,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "马德莱娜山口 4",
+      "length_km": 4.0,
+      "grade_pct": 8.6,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "马德莱娜山口 5",
+      "length_km": 4.2,
+      "grade_pct": 8.2,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "马德莱娜山口 下坡",
+      "length_km": 20.0,
+      "grade_pct": -6.74,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.5
+    },
+    {
+      "name": "布尔多瓦桑接近 · 1",
+      "length_km": 6.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "布尔多瓦桑接近 · 2",
+      "length_km": 6.0,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "起手陡段",
+      "length_km": 1.0,
+      "grade_pct": 10.6,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "阿尔普迪埃兹 2",
+      "length_km": 2.0,
+      "grade_pct": 9.4,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "阿尔普迪埃兹 3",
+      "length_km": 3.0,
+      "grade_pct": 8.4,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "阿尔普迪埃兹 4",
+      "length_km": 3.0,
+      "grade_pct": 7.9,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "阿尔普迪埃兹 5",
+      "length_km": 2.8,
+      "grade_pct": 7.4,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "缓段",
+      "length_km": 1.0,
+      "grade_pct": 5.6,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前",
+      "length_km": 1.0,
+      "grade_pct": 8.2,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    }
+  ],
+  "koms": [
+    {
+      "at_km": 40.1,
+      "label": "加利比耶山口（瓦卢瓦侧）",
+      "category": "hc",
+      "points": [
+        20,
+        15,
+        12,
+        10,
+        8,
+        6,
+        4,
+        2
+      ]
+    },
+    {
+      "at_km": 95.3,
+      "label": "马德莱娜山口",
+      "category": "hc",
+      "points": [
+        20,
+        15,
+        12,
+        10,
+        8,
+        6,
+        4,
+        2
+      ]
+    },
+    {
+      "at_km": 141.1,
+      "label": "阿尔普迪埃兹",
+      "category": "hc",
+      "points": [
+        20,
+        15,
+        12,
+        10,
+        8,
+        6,
+        4,
+        2
+      ]
+    }
+  ]
+}

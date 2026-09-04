@@ -1,0 +1,63 @@
+{
+  "id": "E16-5",
+  "name": "环英国 第 5 赛段",
+  "stage_type": "itt",
+  "start_altitude_m": 15,
+  "segments": [
+    {
+      "name": "起步平路 · 1",
+      "length_km": 7.069,
+      "grade_pct": 0.93,
+      "surface": "柏油",
+      "headwind_ms": 2.7,
+      "crosswind_ms": 0.5,
+      "technical": 0.0
+    },
+    {
+      "name": "起步平路 · 2",
+      "length_km": 6.155,
+      "grade_pct": 1.58,
+      "surface": "柏油",
+      "headwind_ms": 1.1,
+      "crosswind_ms": 2.4,
+      "technical": 0.0
+    },
+    {
+      "name": "中段爬坡",
+      "length_km": 5.568,
+      "grade_pct": 5.05,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "下坡",
+      "length_km": 4.872,
+      "grade_pct": -3.42,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.44
+    },
+    {
+      "name": "冲线段 · 1",
+      "length_km": 6.223,
+      "grade_pct": -0.49,
+      "surface": "柏油",
+      "headwind_ms": -0.0,
+      "crosswind_ms": 5.6,
+      "technical": 0.0
+    },
+    {
+      "name": "冲线段 · 2",
+      "length_km": 4.913,
+      "grade_pct": 1.46,
+      "surface": "柏油",
+      "headwind_ms": 1.3,
+      "crosswind_ms": 2.8,
+      "technical": 0.0
+    }
+  ],
+  "koms": []
+}

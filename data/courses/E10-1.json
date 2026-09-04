@@ -1,0 +1,86 @@
+{
+  "id": "E10-1",
+  "name": "阿尔卑斯八日 第 1 赛段",
+  "stage_type": "flat",
+  "start_altitude_m": 8,
+  "segments": [
+    {
+      "name": "终点前平路 · 1",
+      "length_km": 30.651,
+      "grade_pct": 1.32,
+      "surface": "柏油",
+      "headwind_ms": 1.2,
+      "crosswind_ms": 4.6,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 2",
+      "length_km": 25.06,
+      "grade_pct": 0.72,
+      "surface": "柏油",
+      "headwind_ms": 1.2,
+      "crosswind_ms": 1.4,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 3",
+      "length_km": 31.383,
+      "grade_pct": -1.51,
+      "surface": "柏油",
+      "headwind_ms": 0.7,
+      "crosswind_ms": 5.6,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 4",
+      "length_km": 26.601,
+      "grade_pct": 1.27,
+      "surface": "柏油",
+      "headwind_ms": 2.6,
+      "crosswind_ms": 0.1,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 5",
+      "length_km": 33.108,
+      "grade_pct": 1.59,
+      "surface": "柏油",
+      "headwind_ms": -0.5,
+      "crosswind_ms": 5.6,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 6",
+      "length_km": 30.898,
+      "grade_pct": -0.32,
+      "surface": "柏油",
+      "headwind_ms": -0.1,
+      "crosswind_ms": 5.3,
+      "technical": 0.0
+    }
+  ],
+  "koms": [
+    {
+      "at_km": 97.86,
+      "label": "途中冲刺",
+      "category": "sprint",
+      "points": [
+        20,
+        17,
+        15,
+        13,
+        11,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ]
+    }
+  ]
+}

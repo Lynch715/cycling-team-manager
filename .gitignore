@@ -1,0 +1,30 @@
+# ── 美术资源：640MB 二进制，走 GitHub Release 附件，不进 git ──
+assets/
+release/
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# ── macOS ──
+.DS_Store
+._*
+
+# ── 运行时状态与数据库（可再生，不该进版本库）──
+data/records.db
+data/t.db
+data/t.db-journal
+data/playthrough.json
+data/career_test.json
+data/replay.json
+
+# ── 说明 ──
+# data/ 下的 world.json / calendar.json / climbs.json / career.json /
+# manager.json / asset_manifest.json / courses/ 是有意提交的种子数据，
+# clone 下来无需先跑 generate_world.py 就能直接开一局。
+#
+# 根目录的 原型_*.html / 历史档案.html / 赛道编辑器.html / 赛历编辑器.html
+# 虽然由 source/tools/ 生成，但也有意提交 —— GitHub Pages 直接发布它们。

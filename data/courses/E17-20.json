@@ -1,0 +1,45 @@
+{
+  "id": "E17-20",
+  "name": "秋季大环赛 第 20 赛段",
+  "stage_type": "itt",
+  "start_altitude_m": 60,
+  "segments": [
+    {
+      "name": "起步平路",
+      "length_km": 5.624,
+      "grade_pct": 0.78,
+      "surface": "柏油",
+      "headwind_ms": 2.5,
+      "crosswind_ms": 2.6,
+      "technical": 0.0
+    },
+    {
+      "name": "中段爬坡",
+      "length_km": 2.368,
+      "grade_pct": 3.23,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "下坡",
+      "length_km": 2.072,
+      "grade_pct": -4.38,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.38
+    },
+    {
+      "name": "冲线段",
+      "length_km": 4.736,
+      "grade_pct": -0.45,
+      "surface": "柏油",
+      "headwind_ms": 2.8,
+      "crosswind_ms": 3.9,
+      "technical": 0.0
+    }
+  ],
+  "koms": []
+}

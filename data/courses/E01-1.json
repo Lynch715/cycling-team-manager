@@ -1,0 +1,86 @@
+{
+  "id": "E01-1",
+  "name": "海岸开季赛 第 1 赛段",
+  "stage_type": "flat",
+  "start_altitude_m": 15,
+  "segments": [
+    {
+      "name": "终点前平路 · 1",
+      "length_km": 27.116,
+      "grade_pct": 1.37,
+      "surface": "柏油",
+      "headwind_ms": 2.2,
+      "crosswind_ms": 0.6,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 2",
+      "length_km": 27.701,
+      "grade_pct": 0.63,
+      "surface": "柏油",
+      "headwind_ms": 2.8,
+      "crosswind_ms": 4.5,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 3",
+      "length_km": 30.715,
+      "grade_pct": 0.08,
+      "surface": "柏油",
+      "headwind_ms": 1.7,
+      "crosswind_ms": 3.1,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 4",
+      "length_km": 30.724,
+      "grade_pct": 0.98,
+      "surface": "柏油",
+      "headwind_ms": 2.6,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 5",
+      "length_km": 26.841,
+      "grade_pct": -1.21,
+      "surface": "柏油",
+      "headwind_ms": 3.1,
+      "crosswind_ms": 2.2,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 6",
+      "length_km": 28.804,
+      "grade_pct": 0.72,
+      "surface": "柏油",
+      "headwind_ms": -0.1,
+      "crosswind_ms": 4.1,
+      "technical": 0.0
+    }
+  ],
+  "koms": [
+    {
+      "at_km": 95.59,
+      "label": "途中冲刺",
+      "category": "sprint",
+      "points": [
+        20,
+        17,
+        15,
+        13,
+        11,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ]
+    }
+  ]
+}

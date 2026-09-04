@@ -1,0 +1,189 @@
+{
+  "id": "real-liguria",
+  "name": "利古里亚海岸",
+  "stage_type": "flat",
+  "start_altitude_m": 15,
+  "segments": [
+    {
+      "name": "海岸长途 · 1",
+      "length_km": 28.75,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 1.6,
+      "crosswind_ms": 2.5,
+      "technical": 0.0
+    },
+    {
+      "name": "海岸长途 · 2",
+      "length_km": 28.75,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 1.6,
+      "crosswind_ms": 2.5,
+      "technical": 0.0
+    },
+    {
+      "name": "海岸长途 · 3",
+      "length_km": 28.75,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 1.6,
+      "crosswind_ms": 2.5,
+      "technical": 0.0
+    },
+    {
+      "name": "海岸长途 · 4",
+      "length_km": 28.75,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 1.6,
+      "crosswind_ms": 2.5,
+      "technical": 0.0
+    },
+    {
+      "name": "海岸长途 · 5",
+      "length_km": 28.75,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 1.6,
+      "crosswind_ms": 2.5,
+      "technical": 0.0
+    },
+    {
+      "name": "海岸长途 · 6",
+      "length_km": 28.75,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 1.6,
+      "crosswind_ms": 2.5,
+      "technical": 0.0
+    },
+    {
+      "name": "海岸长途 · 7",
+      "length_km": 28.75,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 1.6,
+      "crosswind_ms": 2.5,
+      "technical": 0.0
+    },
+    {
+      "name": "海岸长途 · 8",
+      "length_km": 28.75,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 1.6,
+      "crosswind_ms": 2.5,
+      "technical": 0.0
+    },
+    {
+      "name": "奇普雷萨 1",
+      "length_km": 2.0,
+      "grade_pct": 4.8,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "奇普雷萨 2",
+      "length_km": 2.0,
+      "grade_pct": 4.2,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "奇普雷萨 3",
+      "length_km": 1.6,
+      "grade_pct": 3.2,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "奇普雷萨 下坡",
+      "length_km": 5.0,
+      "grade_pct": -3.51,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.5
+    },
+    {
+      "name": "过渡",
+      "length_km": 9.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "波焦 1",
+      "length_km": 1.5,
+      "grade_pct": 4.6,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "波焦 2",
+      "length_km": 1.2,
+      "grade_pct": 3.8,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "波焦 3",
+      "length_km": 1.0,
+      "grade_pct": 2.6,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "波焦下坡",
+      "length_km": 3.4,
+      "grade_pct": -4.2,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.75
+    },
+    {
+      "name": "终点直道",
+      "length_km": 2.0,
+      "grade_pct": 0.2,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.35
+    }
+  ],
+  "koms": [
+    {
+      "at_km": 235.6,
+      "label": "奇普雷萨",
+      "category": "cat3",
+      "points": [
+        2,
+        1
+      ]
+    },
+    {
+      "at_km": 253.3,
+      "label": "波焦",
+      "category": "cat4",
+      "points": [
+        1
+      ]
+    }
+  ]
+}

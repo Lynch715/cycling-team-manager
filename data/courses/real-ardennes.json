@@ -1,0 +1,226 @@
+{
+  "id": "real-ardennes",
+  "name": "阿登之墙",
+  "stage_type": "hilly",
+  "start_altitude_m": 120,
+  "segments": [
+    {
+      "name": "阿登丘陵 · 1",
+      "length_km": 17.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "阿登丘陵 · 2",
+      "length_km": 17.0,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "阿登丘陵 · 3",
+      "length_km": 17.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "阿登丘陵 · 4",
+      "length_km": 17.0,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "阿登丘陵 · 5",
+      "length_km": 17.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "拉勒杜特 1",
+      "length_km": 0.6,
+      "grade_pct": 8.0,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "陡段",
+      "length_km": 0.5,
+      "grade_pct": 12.5,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "拉勒杜特 3",
+      "length_km": 0.9,
+      "grade_pct": 7.5,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "拉勒杜特 下坡",
+      "length_km": 4.0,
+      "grade_pct": -7.56,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.5
+    },
+    {
+      "name": "回环 · 1",
+      "length_km": 14.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "回环 · 2",
+      "length_km": 14.0,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "拉勒杜特 1",
+      "length_km": 0.6,
+      "grade_pct": 8.0,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "陡段",
+      "length_km": 0.5,
+      "grade_pct": 12.5,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "拉勒杜特 3",
+      "length_km": 0.9,
+      "grade_pct": 7.5,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "拉勒杜特 下坡",
+      "length_km": 4.0,
+      "grade_pct": -7.56,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.5
+    },
+    {
+      "name": "接近于伊 · 1",
+      "length_km": 15.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "接近于伊 · 2",
+      "length_km": 15.0,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "于伊之墙 1",
+      "length_km": 0.4,
+      "grade_pct": 8.5,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "陡弯",
+      "length_km": 0.25,
+      "grade_pct": 19.0,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "于伊之墙 3",
+      "length_km": 0.35,
+      "grade_pct": 12.0,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "于伊之墙 4",
+      "length_km": 0.3,
+      "grade_pct": 6.5,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    }
+  ],
+  "koms": [
+    {
+      "at_km": 87.0,
+      "label": "拉勒杜特",
+      "category": "cat3",
+      "points": [
+        2,
+        1
+      ]
+    },
+    {
+      "at_km": 121.0,
+      "label": "拉勒杜特",
+      "category": "cat3",
+      "points": [
+        2,
+        1
+      ]
+    },
+    {
+      "at_km": 156.3,
+      "label": "于伊之墙",
+      "category": "cat3",
+      "points": [
+        2,
+        1
+      ]
+    }
+  ]
+}

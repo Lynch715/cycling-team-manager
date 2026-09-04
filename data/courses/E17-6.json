@@ -1,0 +1,45 @@
+{
+  "id": "E17-6",
+  "name": "秋季大环赛 第 6 赛段",
+  "stage_type": "itt",
+  "start_altitude_m": 60,
+  "segments": [
+    {
+      "name": "起步平路",
+      "length_km": 8.588,
+      "grade_pct": 0.94,
+      "surface": "柏油",
+      "headwind_ms": 0.5,
+      "crosswind_ms": 0.1,
+      "technical": 0.0
+    },
+    {
+      "name": "中段爬坡",
+      "length_km": 3.616,
+      "grade_pct": 4.31,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "下坡",
+      "length_km": 3.164,
+      "grade_pct": -3.58,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.43
+    },
+    {
+      "name": "冲线段",
+      "length_km": 7.232,
+      "grade_pct": -1.04,
+      "surface": "柏油",
+      "headwind_ms": 0.7,
+      "crosswind_ms": 0.5,
+      "technical": 0.0
+    }
+  ],
+  "koms": []
+}

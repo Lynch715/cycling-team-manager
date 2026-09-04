@@ -1,0 +1,45 @@
+{
+  "id": "E08-3",
+  "name": "五月大环赛 第 3 赛段",
+  "stage_type": "itt",
+  "start_altitude_m": 60,
+  "segments": [
+    {
+      "name": "起步平路",
+      "length_km": 8.36,
+      "grade_pct": 0.51,
+      "surface": "柏油",
+      "headwind_ms": 1.9,
+      "crosswind_ms": 1.3,
+      "technical": 0.0
+    },
+    {
+      "name": "中段爬坡",
+      "length_km": 3.52,
+      "grade_pct": 5.01,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "下坡",
+      "length_km": 3.08,
+      "grade_pct": -3.05,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.32
+    },
+    {
+      "name": "冲线段",
+      "length_km": 7.04,
+      "grade_pct": 1.74,
+      "surface": "柏油",
+      "headwind_ms": 0.4,
+      "crosswind_ms": 2.0,
+      "technical": 0.0
+    }
+  ],
+  "koms": []
+}

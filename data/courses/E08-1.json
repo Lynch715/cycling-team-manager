@@ -1,0 +1,86 @@
+{
+  "id": "E08-1",
+  "name": "五月大环赛 第 1 赛段",
+  "stage_type": "flat",
+  "start_altitude_m": 8,
+  "segments": [
+    {
+      "name": "终点前平路 · 1",
+      "length_km": 37.985,
+      "grade_pct": -0.75,
+      "surface": "柏油",
+      "headwind_ms": 2.1,
+      "crosswind_ms": 7.8,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 2",
+      "length_km": 29.334,
+      "grade_pct": -0.2,
+      "surface": "柏油",
+      "headwind_ms": 1.9,
+      "crosswind_ms": 5.8,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 3",
+      "length_km": 30.485,
+      "grade_pct": 1.36,
+      "surface": "柏油",
+      "headwind_ms": 3.1,
+      "crosswind_ms": 3.8,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 4",
+      "length_km": 36.14,
+      "grade_pct": 0.88,
+      "surface": "柏油",
+      "headwind_ms": 4.1,
+      "crosswind_ms": 3.8,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 5",
+      "length_km": 34.21,
+      "grade_pct": 0.58,
+      "surface": "柏油",
+      "headwind_ms": 1.5,
+      "crosswind_ms": 4.1,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 6",
+      "length_km": 34.545,
+      "grade_pct": 0.28,
+      "surface": "柏油",
+      "headwind_ms": 2.1,
+      "crosswind_ms": 6.0,
+      "technical": 0.0
+    }
+  ],
+  "koms": [
+    {
+      "at_km": 134.67,
+      "label": "途中冲刺",
+      "category": "sprint",
+      "points": [
+        20,
+        17,
+        15,
+        13,
+        11,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ]
+    }
+  ]
+}

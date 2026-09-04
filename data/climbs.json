@@ -1,0 +1,275 @@
+{
+  "_说明": [
+    "真实山口与石板路段的剖面库。",
+    "",
+    "法务边界：真实赛事名称与车手姓名是商标和人格权，游戏里一律用虚构的；",
+    "但山口名称和海拔剖面属于公开地理事实，不受此限制。所以这里录的是山，",
+    "拼出来的赛事名是虚构的。",
+    "",
+    "关键在于每座山都拆成了若干分段，而不是只记一个平均坡度。",
+    "阿尔普迪埃兹平均 8.1%，但起手第一公里就是 10.6% —— 集团正是在那里",
+    "第一次被撕开。只记平均值的话，引擎里所有的山都会变成同一座山。",
+    "",
+    "数据来源为公开的路书与等高线，误差在 0.2% 量级，足够驱动模拟。"
+  ],
+
+  "climbs": {
+    "alpe-duez": {
+      "name": "阿尔普迪埃兹",
+      "region": "法国 · 阿尔卑斯",
+      "top_m": 1815,
+      "note": "21 个发夹弯。起手最陡，之后逐渐缓和，最后一公里又立起来。",
+      "segments": [
+        {"length_km": 1.0, "grade_pct": 10.6, "name": "起手陡段"},
+        {"length_km": 2.0, "grade_pct": 9.4},
+        {"length_km": 3.0, "grade_pct": 8.4},
+        {"length_km": 3.0, "grade_pct": 7.9},
+        {"length_km": 2.8, "grade_pct": 7.4},
+        {"length_km": 1.0, "grade_pct": 5.6, "name": "缓段"},
+        {"length_km": 1.0, "grade_pct": 8.2, "name": "终点前"}
+      ]
+    },
+
+    "ventoux-bedoin": {
+      "name": "旺图山（贝杜安侧）",
+      "region": "法国 · 普罗旺斯",
+      "top_m": 1909,
+      "note": "前 6 公里几乎是平的，然后是 9 公里连续 9% 的森林段。最后 6 公里出林线，暴露在风里。",
+      "segments": [
+        {"length_km": 5.8, "grade_pct": 3.9, "name": "缓坡热身"},
+        {"length_km": 3.0, "grade_pct": 9.3, "name": "圣埃斯泰弗弯后"},
+        {"length_km": 3.0, "grade_pct": 9.6},
+        {"length_km": 3.0, "grade_pct": 8.9},
+        {"length_km": 2.5, "grade_pct": 8.4},
+        {"length_km": 2.6, "grade_pct": 7.6, "crosswind_ms": 6.0, "name": "出林线"},
+        {"length_km": 1.6, "grade_pct": 8.8, "crosswind_ms": 8.0, "name": "天文台"}
+      ]
+    },
+
+    "tourmalet-luz": {
+      "name": "图尔马莱山口（吕兹侧）",
+      "region": "法国 · 比利牛斯",
+      "top_m": 2115,
+      "note": "长而稳定，中段有一小截缓坡可以喘口气。",
+      "segments": [
+        {"length_km": 3.0, "grade_pct": 6.4},
+        {"length_km": 4.0, "grade_pct": 7.6},
+        {"length_km": 2.0, "grade_pct": 5.9, "name": "巴热德吕雄缓段"},
+        {"length_km": 4.0, "grade_pct": 8.2},
+        {"length_km": 4.0, "grade_pct": 8.6},
+        {"length_km": 2.0, "grade_pct": 8.0}
+      ]
+    },
+
+    "galibier-valloire": {
+      "name": "加利比耶山口（瓦卢瓦侧）",
+      "region": "法国 · 阿尔卑斯",
+      "top_m": 2642,
+      "note": "海拔最高的那一类。最后 5 公里在 2200 米以上，空气密度只有海平面的八成。",
+      "segments": [
+        {"length_km": 5.0, "grade_pct": 4.4, "name": "河谷段"},
+        {"length_km": 4.0, "grade_pct": 6.9},
+        {"length_km": 4.0, "grade_pct": 7.6},
+        {"length_km": 3.0, "grade_pct": 8.1},
+        {"length_km": 2.1, "grade_pct": 9.2, "name": "顶前陡段"}
+      ]
+    },
+
+    "stelvio-prato": {
+      "name": "斯泰尔维奥山口（普拉托侧）",
+      "region": "意大利 · 阿尔卑斯",
+      "top_m": 2758,
+      "note": "48 个编号发夹弯，欧洲最著名的一条。全程坡度极其稳定。",
+      "segments": [
+        {"length_km": 5.0, "grade_pct": 6.8},
+        {"length_km": 5.0, "grade_pct": 7.6},
+        {"length_km": 5.0, "grade_pct": 7.9},
+        {"length_km": 5.0, "grade_pct": 7.7},
+        {"length_km": 4.3, "grade_pct": 7.2}
+      ]
+    },
+
+    "angliru": {
+      "name": "安格利鲁",
+      "region": "西班牙 · 阿斯图里亚斯",
+      "top_m": 1573,
+      "note": "最后 6 公里平均 13%，其中一段 23.5%。全欧洲最残酷的铺装爬坡。",
+      "segments": [
+        {"length_km": 3.0, "grade_pct": 7.6},
+        {"length_km": 2.5, "grade_pct": 4.2, "name": "中段喘息"},
+        {"length_km": 1.5, "grade_pct": 12.8, "name": "进入陡段"},
+        {"length_km": 1.5, "grade_pct": 17.5, "name": "库埃尼亚勒斯卡韦罗"},
+        {"length_km": 1.5, "grade_pct": 13.5},
+        {"length_km": 2.5, "grade_pct": 10.5}
+      ]
+    },
+
+    "zoncolan-ovaro": {
+      "name": "宗科兰（奥瓦罗侧）",
+      "region": "意大利 · 弗留利",
+      "top_m": 1730,
+      "note": "十公里几乎没有一处低于 10%，路面窄到队车都上不去。",
+      "segments": [
+        {"length_km": 1.5, "grade_pct": 7.8},
+        {"length_km": 3.0, "grade_pct": 13.6},
+        {"length_km": 3.0, "grade_pct": 14.2},
+        {"length_km": 1.6, "grade_pct": 11.4},
+        {"length_km": 1.0, "grade_pct": 8.6}
+      ]
+    },
+
+    "mortirolo-mazzo": {
+      "name": "莫尔蒂罗洛（马佐侧）",
+      "region": "意大利 · 伦巴第",
+      "top_m": 1852,
+      "segments": [
+        {"length_km": 2.0, "grade_pct": 8.4},
+        {"length_km": 3.0, "grade_pct": 11.8},
+        {"length_km": 3.0, "grade_pct": 12.4},
+        {"length_km": 2.5, "grade_pct": 10.6},
+        {"length_km": 1.9, "grade_pct": 8.2}
+      ]
+    },
+
+    "madeleine": {
+      "name": "马德莱娜山口",
+      "region": "法国 · 阿尔卑斯",
+      "top_m": 2000,
+      "segments": [
+        {"length_km": 4.0, "grade_pct": 8.4},
+        {"length_km": 4.0, "grade_pct": 7.8},
+        {"length_km": 3.0, "grade_pct": 6.2, "name": "中段缓坡"},
+        {"length_km": 4.0, "grade_pct": 8.6},
+        {"length_km": 4.2, "grade_pct": 8.2}
+      ]
+    },
+
+    "mur-de-huy": {
+      "name": "于伊之墙",
+      "region": "比利时 · 阿登",
+      "top_m": 204,
+      "note": "只有一公里多，但中段一个弯里是 26%。经典的终点墙。",
+      "segments": [
+        {"length_km": 0.4, "grade_pct": 8.5},
+        {"length_km": 0.25, "grade_pct": 19.0, "name": "陡弯"},
+        {"length_km": 0.35, "grade_pct": 12.0},
+        {"length_km": 0.3, "grade_pct": 6.5}
+      ]
+    },
+
+    "la-redoute": {
+      "name": "拉勒杜特",
+      "region": "比利时 · 阿登",
+      "top_m": 290,
+      "segments": [
+        {"length_km": 0.6, "grade_pct": 8.0},
+        {"length_km": 0.5, "grade_pct": 12.5, "name": "陡段"},
+        {"length_km": 0.9, "grade_pct": 7.5}
+      ]
+    },
+
+    "poggio": {
+      "name": "波焦",
+      "region": "意大利 · 利古里亚",
+      "top_m": 160,
+      "note": "坡度不大，但离终点只有 5.4 公里，而且下坡极其技术。",
+      "segments": [
+        {"length_km": 1.5, "grade_pct": 4.6},
+        {"length_km": 1.2, "grade_pct": 3.8},
+        {"length_km": 1.0, "grade_pct": 2.6}
+      ]
+    },
+
+    "cipressa": {
+      "name": "奇普雷萨",
+      "region": "意大利 · 利古里亚",
+      "top_m": 239,
+      "segments": [
+        {"length_km": 2.0, "grade_pct": 4.8},
+        {"length_km": 2.0, "grade_pct": 4.2},
+        {"length_km": 1.6, "grade_pct": 3.2}
+      ]
+    },
+
+    "koppenberg": {
+      "name": "科彭堡",
+      "region": "比利时 · 佛兰德",
+      "top_m": 77,
+      "surface": "石板",
+      "note": "六百米石板，最陡 22%。路窄到只要有一个人下车，后面全得推车上去。",
+      "segments": [
+        {"length_km": 0.2, "grade_pct": 9.0, "surface": "石板", "technical": 0.7},
+        {"length_km": 0.2, "grade_pct": 19.5, "surface": "石板", "technical": 0.9},
+        {"length_km": 0.2, "grade_pct": 11.0, "surface": "石板", "technical": 0.8}
+      ]
+    },
+
+    "paterberg": {
+      "name": "帕特堡",
+      "region": "比利时 · 佛兰德",
+      "top_m": 72,
+      "surface": "石板",
+      "segments": [
+        {"length_km": 0.16, "grade_pct": 12.9, "surface": "石板", "technical": 0.7},
+        {"length_km": 0.2, "grade_pct": 13.5, "surface": "石板", "technical": 0.7}
+      ]
+    },
+
+    "oude-kwaremont": {
+      "name": "老克瓦雷蒙",
+      "region": "比利时 · 佛兰德",
+      "top_m": 111,
+      "surface": "石板",
+      "note": "2.2 公里，其中 1.5 公里石板。坡度不算陡，但长，而且顶上还有一段平的石板路。",
+      "segments": [
+        {"length_km": 0.7, "grade_pct": 5.5, "technical": 0.4},
+        {"length_km": 0.7, "grade_pct": 8.5, "surface": "石板", "technical": 0.8},
+        {"length_km": 0.8, "grade_pct": 2.0, "surface": "石板", "technical": 0.6, "name": "顶上平石板"}
+      ]
+    },
+
+    "muur-geraardsbergen": {
+      "name": "赫拉尔茨贝亨之墙",
+      "region": "比利时 · 佛兰德",
+      "top_m": 110,
+      "surface": "石板",
+      "segments": [
+        {"length_km": 0.4, "grade_pct": 6.0, "surface": "石板", "technical": 0.6},
+        {"length_km": 0.3, "grade_pct": 12.5, "surface": "石板", "technical": 0.8},
+        {"length_km": 0.3, "grade_pct": 9.0, "surface": "石板", "technical": 0.7}
+      ]
+    }
+  },
+
+  "cobble_sectors": {
+    "_说明": "北方古典赛的石板路段。星级是路况难度，五星最烂。",
+    "arenberg": {
+      "name": "阿伦贝格森林",
+      "stars": 5,
+      "length_km": 2.3,
+      "grade_pct": 0.0,
+      "technical": 0.85,
+      "note": "笔直、下坡、石块最大。全年最危险的两公里。"
+    },
+    "carrefour-arbre": {
+      "name": "树之路口",
+      "stars": 5,
+      "length_km": 2.1,
+      "grade_pct": 0.5,
+      "technical": 0.8,
+      "note": "离终点只剩 17 公里，通常在这里决出胜负。"
+    },
+    "mons-en-pevele": {
+      "name": "蒙昂佩韦勒",
+      "stars": 5,
+      "length_km": 3.0,
+      "grade_pct": 0.3,
+      "technical": 0.75
+    },
+    "haveluy": {"name": "阿沃吕伊", "stars": 4, "length_km": 2.5, "grade_pct": 0.2, "technical": 0.65},
+    "orchies": {"name": "奥尔希", "stars": 3, "length_km": 1.7, "grade_pct": 0.0, "technical": 0.55},
+    "templeuve": {"name": "唐普勒沃", "stars": 3, "length_km": 1.4, "grade_pct": 0.0, "technical": 0.55},
+    "camphin": {"name": "康凡昂佩韦勒", "stars": 4, "length_km": 1.8, "grade_pct": 0.0, "technical": 0.7},
+    "gruson": {"name": "格吕松", "stars": 2, "length_km": 1.1, "grade_pct": 0.0, "technical": 0.45}
+  }
+}

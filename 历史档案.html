@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>历史档案</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--line:#262b35;--fg:#e6e8ec;--dim:#8b93a3;
+      --hi:#ffcf5c;--ok:#5ad19a;--bad:#ff6b6b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+     font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:36px 20px 80px}
+h1{font-size:30px;margin:0 0 4px;letter-spacing:.5px}
+.sub{color:var(--dim);margin-bottom:30px}
+h2{font-size:19px;margin:38px 0 6px;padding-bottom:8px;
+   border-bottom:1px solid var(--line)}
+.note{color:var(--dim);font-size:13.5px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;
+      padding:16px 18px;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{color:var(--dim);font-weight:500;text-align:left;padding:6px 8px;
+   border-bottom:1px solid var(--line);font-size:12.5px}
+td{padding:6px 8px;border-bottom:1px solid #1e222b}
+tr:last-child td{border-bottom:none}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.rank{color:var(--dim);width:30px}
+.gold{color:var(--hi);font-weight:600}
+.bar{height:9px;border-radius:5px;background:#2a3140;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#4a90d9,#7bc0ff)}
+.stack{display:flex;height:22px;border-radius:5px;overflow:hidden;
+       font-size:11px;line-height:22px;color:#0c0e12}
+.stack span{text-align:center;white-space:nowrap;overflow:hidden}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.spark{display:flex;align-items:flex-end;gap:3px;height:70px}
+.spark div{flex:1;background:#3b6ea5;border-radius:2px 2px 0 0}
+.flag{color:var(--dim);font-size:12.5px}
+.tag{display:inline-block;padding:1px 7px;border-radius:4px;font-size:11.5px;
+     background:#232936;color:var(--dim);margin-left:6px}
+.warn{color:var(--bad)}.good{color:var(--ok)}
+</style></head><body><div class="wrap">
+<h1>历史档案</h1>
+<div class="sub" id="sub"></div>
+<div id="app"></div>
+</div>
+<script>
+const D = {"summary": {"rows": 35976, "seasons": 25, "riders": 520}, "hall": [{"rider_id": "R161", "rider_name": "Unai Herrero", "wins": 145, "big": 103}, {"rider_id": "R263", "rider_name": "Dries Vanhoof", "wins": 147, "big": 94}, {"rider_id": "R429", "rider_name": "Giulio Moretti", "wins": 117, "big": 83}, {"rider_id": "R162", "rider_name": "Lorenzo Marchetti", "wins": 79, "big": 51}, {"rider_id": "R011", "rider_name": "Hugo Guérin", "wins": 60, "big": 47}, {"rider_id": "R375", "rider_name": "Mauricio Cárdenas", "wins": 65, "big": 46}, {"rider_id": "R401", "rider_name": "Joost Dekker", "wins": 61, "big": 37}, {"rider_id": "R432", "rider_name": "Óscar Arango", "wins": 52, "big": 34}, {"rider_id": "R304", "rider_name": "Julien Dubois", "wins": 42, "big": 31}, {"rider_id": "R018", "rider_name": "Andrés Ospina", "wins": 38, "big": 30}, {"rider_id": "R324", "rider_name": "Valentin Lefèvre", "wins": 52, "big": 28}, {"rider_id": "R380", "rider_name": "Yuma Sakai", "wins": 32, "big": 27}, {"rider_id": "R028", "rider_name": "Rok Petrič", "wins": 38, "big": 24}, {"rider_id": "R305", "rider_name": "Duarte Cardoso", "wins": 40, "big": 22}, {"rider_id": "R044", "rider_name": "Ren Fujimoto", "wins": 38, "big": 22}, {"rider_id": "R262", "rider_name": "Juan Zapata", "wins": 35, "big": 22}, {"rider_id": "R025", "rider_name": "Luka Zupan", "wins": 30, "big": 22}, {"rider_id": "R045", "rider_name": "Bert Vanhoof", "wins": 21, "big": 21}, {"rider_id": "R330", "rider_name": "Bert Peeters", "wins": 36, "big": 20}, {"rider_id": "R481", "rider_name": "Mathis Lefèvre", "wins": 27, "big": 20}], "records": [{"course_id": "E08-1", "race_name": "五月大环赛", "best": 18357.868611496902, "rider_name": "Haruto Hoshino", "season": 2026}, {"course_id": "E08-10", "race_name": "五月大环赛", "best": 18160.65111093399, "rider_name": "Haruto Hoshino", "season": 2026}, {"course_id": "E08-11", "race_name": "五月大环赛", "best": 19332.041113856114, "rider_name": "Mauricio Valderrama", "season": 2026}, {"course_id": "E08-12", "race_name": "五月大环赛", "best": 16952.494380157976, "rider_name": "Zac Rankin", "season": 2026}, {"course_id": "E08-13", "race_name": "五月大环赛", "best": 20573.80262113286, "rider_name": "Silvan Zumbrunn", "season": 2026}, {"course_id": "E08-14", "race_name": "五月大环赛", "best": 15475.936064652384, "rider_name": "Ren Fujimoto", "season": 2026}, {"course_id": "E08-15", "race_name": "五月大环赛", "best": 17996.188296770997, "rider_name": "Silvan Zumbrunn", "season": 2026}, {"course_id": "E08-16", "race_name": "五月大环赛", "best": 3201.687569573462, "rider_name": "Nicolò Rossetti", "season": 2026}, {"course_id": "E08-17", "race_name": "五月大环赛", "best": 14779.952726930114, "rider_name": "Zac Rankin", "season": 2026}, {"course_id": "E08-18", "race_name": "五月大环赛", "best": 20379.237954584434, "rider_name": "Robin Bircher", "season": 2026}, {"course_id": "E08-19", "race_name": "五月大环赛", "best": 18703.604156899048, "rider_name": "Silvan Zumbrunn", "season": 2026}, {"course_id": "E08-2", "race_name": "五月大环赛", "best": 18835.006132253704, "rider_name": "Rok Golob", "season": 2027}, {"course_id": "E08-20", "race_name": "五月大环赛", "best": 18027.11954519399, "rider_name": "Unai Herrero", "season": 2027}, {"course_id": "E08-3", "race_name": "五月大环赛", "best": 1907.5919755668288, "rider_name": "Bert Vanhoof", "season": 2026}, {"course_id": "E08-4", "race_name": "五月大环赛", "best": 19175.48468219817, "rider_name": "Rok Petrič", "season": 2026}, {"course_id": "E08-5", "race_name": "五月大环赛", "best": 20128.551383351278, "rider_name": "Silvan Zumbrunn", "season": 2026}, {"course_id": "E08-6", "race_name": "五月大环赛", "best": 18133.36927464117, "rider_name": "Mauricio Valderrama", "season": 2026}, {"course_id": "E08-7", "race_name": "五月大环赛", "best": 18208.36311691983, "rider_name": "Rok Golob", "season": 2027}, {"course_id": "E08-8", "race_name": "五月大环赛", "best": 18714.677127614756, "rider_name": "Reece Thornton", "season": 2026}, {"course_id": "E08-9", "race_name": "五月大环赛", "best": 18005.762199029687, "rider_name": "Silvan Zumbrunn", "season": 2026}, {"course_id": "E05-1", "race_name": "低地绕圈赛", "best": 16243.954001399865, "rider_name": "Julien Marchand", "season": 2026}, {"course_id": "E04-1", "race_name": "北方之战", "best": 19426.710110538348, "rider_name": "Gino Kaufmann", "season": 2026}, {"course_id": "E18-1", "race_name": "北欧丘陵赛", "best": 15610.355569776324, "rider_name": "Silvan Zumbrunn", "season": 2026}, {"course_id": "E19-1", "race_name": "城市夜赛", "best": 19075.170565321998, "rider_name": "Kasper Kristoffersen", "season": 2026}, {"course_id": "E09-1", "race_name": "城市计时赛", "best": 1525.5945858087616, "rider_name": "Jasper Vandael", "season": 2026}, {"course_id": "E22-1", "race_name": "山地告别赛", "best": 20301.470395794768, "rider_name": "Matteo Bergamin", "season": 2026}, {"course_id": "E22-2", "race_name": "山地告别赛", "best": 20312.17256676146, "rider_name": "陆俊驰", "season": 2026}, {"course_id": "E23-1", "race_name": "收官计时赛", "best": 3673.2981610810334, "rider_name": "Alessio Marchetti", "season": 2026}, {"course_id": "E02-1", "race_name": "春季丘陵赛", "best": 16332.931593448453, "rider_name": "Rok Golob", "season": 2026}, {"course_id": "E07-1", "race_name": "春季山地赛", "best": 18774.25308907537, "rider_name": "Andrés Ospina", "season": 2026}, {"course_id": "E07-2", "race_name": "春季山地赛", "best": 17996.387984851262, "rider_name": "Matteo Bergamin", "season": 2026}, {"course_id": "E12-1", "race_name": "比利牛斯五日", "best": 18330.235296287738, "rider_name": "Niels Vermeer", "season": 2027}, {"course_id": "E12-2", "race_name": "比利牛斯五日", "best": 17026.981467082154, "rider_name": "Valentin Delorme", "season": 2026}, {"course_id": "E12-3", "race_name": "比利牛斯五日", "best": 17343.965192938722, "rider_name": "Nicolò Rossetti", "season": 2027}, {"course_id": "E12-4", "race_name": "比利牛斯五日", "best": 19165.682430707373, "rider_name": "Matteo Rossetti", "season": 2026}, {"course_id": "E12-5", "race_name": "比利牛斯五日", "best": 3498.3948431377958, "rider_name": "Gino Kaufmann", "season": 2026}, {"course_id": "E14-1", "race_name": "沙漠挑战赛", "best": 15378.047917252476, "rider_name": "Julien Marchand", "season": 2026}, {"course_id": "E14-2", "race_name": "沙漠挑战赛", "best": 18594.189604157385, "rider_name": "Julien Marchand", "season": 2026}, {"course_id": "E01-1", "race_name": "海岸开季赛", "best": 15895.212963938122, "rider_name": "Aurélien Marchand", "season": 2026}, {"course_id": "E01-2", "race_name": "海岸开季赛", "best": 17763.81860221063, "rider_name": "Léo Beaulieu", "season": 2026}], "dynasty": [{"team_id": "T02", "team_name": "恒通电信-速联网络", "titles": 6}, {"team_id": "T03", "team_name": "远瀚能源-绿岭电力", "titles": 4}, {"team_id": "T17", "team_name": "行者运动", "titles": 3}, {"team_id": "T12", "team_name": "元筑工程", "titles": 3}, {"team_id": "T13", "team_name": "风隼装备", "titles": 2}, {"team_id": "T07", "team_name": "鲜野乳业", "titles": 2}, {"team_id": "T19", "team_name": "云杉家居·FRA", "titles": 1}, {"team_id": "T18", "team_name": "云杉家居", "titles": 1}, {"team_id": "T15", "team_name": "驰远轮胎", "titles": 1}, {"team_id": "T11", "team_name": "磐石建材", "titles": 1}], "nations": [{"nation": "ITA", "wins": 378}, {"nation": "BEL", "wins": 353}, {"nation": "ESP", "wins": 346}, {"nation": "FRA", "wins": 324}, {"nation": "COL", "wins": 300}, {"nation": "NED", "wins": 236}, {"nation": "SLO", "wins": 189}, {"nation": "AUS", "wins": 161}, {"nation": "JPN", "wins": 130}, {"nation": "GER", "wins": 101}, {"nation": "SUI", "wins": 94}, {"nation": "POR", "wins": 87}], "roles": [{"role": "sprinter", "wins": 912, "overalls": 72, "gt": 531, "mon": 6, "pop": 500, "per100": 182.4}, {"role": "leadout", "wins": 400, "overalls": 28, "gt": 214, "mon": 8, "pop": 325, "per100": 123.1}, {"role": "rouleur", "wins": 483, "overalls": 53, "gt": 186, "mon": 31, "pop": 500, "per100": 96.6}, {"role": "climber", "wins": 567, "overalls": 94, "gt": 320, "mon": 27, "pop": 650, "per100": 87.2}, {"role": "leader", "wins": 109, "overalls": 14, "gt": 59, "mon": 5, "pop": 325, "per100": 33.5}, {"role": "domestique", "wins": 399, "overalls": 48, "gt": 212, "mon": 15, "pop": 1480, "per100": 27.0}, {"role": "breakaway", "wins": 130, "overalls": 16, "gt": 78, "mon": 8, "pop": 525, "per100": 24.8}], "terrain": [{"stage_type": "cobbled", "total": 50, "shares": {"rouleur": 60.0, "leadout": 14.0, "sprinter": 12.0, "breakaway": 8.0, "domestique": 6.0}}, {"stage_type": "flat", "total": 1075, "shares": {"sprinter": 64.9, "leadout": 20.9, "rouleur": 7.2, "domestique": 3.8, "breakaway": 1.4, "climber": 1.2, "leader": 0.6}}, {"stage_type": "gc", "total": 325, "shares": {"climber": 28.9, "sprinter": 22.2, "rouleur": 16.3, "domestique": 14.8, "leadout": 8.6, "breakaway": 4.9, "leader": 4.3}}, {"stage_type": "hilly", "total": 425, "shares": {"rouleur": 28.0, "sprinter": 22.1, "leadout": 17.9, "domestique": 16.2, "climber": 7.1, "breakaway": 5.2, "leader": 3.5}}, {"stage_type": "itt", "total": 275, "shares": {"rouleur": 40.4, "domestique": 25.5, "leadout": 13.5, "sprinter": 7.6, "breakaway": 6.2, "climber": 4.0, "leader": 2.9}}, {"stage_type": "mountain", "total": 350, "shares": {"climber": 45.4, "domestique": 20.6, "rouleur": 13.4, "breakaway": 7.4, "leader": 7.4, "sprinter": 3.1, "leadout": 2.6}}, {"stage_type": "summit_finish", "total": 500, "shares": {"climber": 52.0, "domestique": 19.2, "rouleur": 9.2, "leader": 8.0, "breakaway": 6.0, "leadout": 3.6, "sprinter": 2.0}}], "ages": [{"band": "24-26", "wins": 768}, {"band": "27-29", "wins": 1149}, {"band": "30-32", "wins": 750}, {"band": "33+", "wins": 76}, {"band": "≤23", "wins": 257}], "level": [{"season": 2026, "level": 82.5}, {"season": 2027, "level": 82.5}, {"season": 2028, "level": 82.9}, {"season": 2029, "level": 83.1}, {"season": 2030, "level": 83.2}, {"season": 2031, "level": 83.1}, {"season": 2032, "level": 83.6}, {"season": 2033, "level": 83.4}, {"season": 2034, "level": 83.3}, {"season": 2035, "level": 83.1}, {"season": 2036, "level": 83.4}, {"season": 2037, "level": 83.5}, {"season": 2038, "level": 83.9}, {"season": 2039, "level": 83.6}, {"season": 2040, "level": 83.6}, {"season": 2041, "level": 83.7}, {"season": 2042, "level": 84.0}, {"season": 2043, "level": 83.9}, {"season": 2044, "level": 84.0}, {"season": 2045, "level": 83.9}, {"season": 2046, "level": 83.7}, {"season": 2047, "level": 82.8}, {"season": 2048, "level": 82.5}, {"season": 2049, "level": 82.0}, {"season": 2050, "level": 82.2}], "role_cn": {"sprinter": "冲刺手", "climber": "爬坡手", "rouleur": "全能型", "leader": "总成绩核心", "domestique": "工兵", "leadout": "冲刺列车", "breakaway": "突围手"}, "type_cn": {"flat": "平路", "hilly": "丘陵", "mountain": "山地", "summit_finish": "山顶终点", "cobbled": "石板路", "itt": "个人计时", "gc": "总成绩"}};
+const rc = r => D.role_cn[r] || r, tc = t => D.type_cn[t] || t;
+const hms = s => s==null ? "—" :
+  `${Math.floor(s/3600)}:${String(Math.floor(s%3600/60)).padStart(2,"0")}:${String(Math.floor(s%60)).padStart(2,"0")}`;
+const PAL = ["#4a90d9","#e8a33d","#5ad19a","#c678dd","#ff6b6b","#7bc0ff","#8b93a3"];
+
+const S = D.summary;
+sub.textContent = `${S.seasons} 个赛季 · ${S.rows} 条成绩 · ${S.riders} 名车手留下过名字`;
+
+function tbl(head, rows){
+  return `<table><tr>${head.map(h=>`<th class="${h[1]||''}">${h[0]}</th>`).join("")}</tr>`
+    + rows.map(r=>`<tr>${r.join("")}</tr>`).join("") + `</table>`;
+}
+const td = (v,c="") => `<td class="${c}">${v}</td>`;
+
+let h = "";
+
+/* ---- 名人堂 ---- */
+h += `<h2>名人堂</h2>
+<p class="note">按大赛（大环赛与纪念碑）冠军数排序。总冠军数包含赛段胜利。</p>
+<div class="card">` + tbl(
+  [["#"],["车手"],["大赛冠军","n"],["总冠军","n"]],
+  D.hall.map((r,i)=>[td(i+1,"rank"),
+    td(`<span class="${i<3?'gold':''}">${r.rider_name}</span>`),
+    td(r.big,"n"), td(r.wins,"n")])) + `</div>`;
+
+/* ---- 赛道纪录 ---- */
+h += `<h2>赛道纪录</h2>
+<p class="note">每条赛道跑出过的最快成绩。纪录长期不被打破，说明那个年代的世界水平偏高。</p>
+<div class="card">` + tbl(
+  [["赛事"],["赛段","n"],["纪录","n"],["保持者"],["赛季","n"]],
+  D.records.slice(0,25).map(r=>{
+    const st = (r.course_id||"").split("-").pop();
+    return [td(r.race_name), td(st,"n"), td(hms(r.best),"n"),
+            td(r.rider_name), td(r.season,"n")];
+  })) + `</div>`;
+
+/* ---- 王朝 + 国籍 ---- */
+h += `<h2>车队与国籍</h2><div class="grid">
+<div class="card"><p class="note">拿过年度积分第一的车队</p>` + tbl(
+  [["车队"],["年度第一","n"]],
+  D.dynasty.map(r=>[td(r.team_name), td(r.titles,"n")])) + `</div>
+<div class="card"><p class="note">各国车手胜场</p>` + tbl(
+  [["国籍"],["胜场","n"]],
+  D.nations.map(r=>[td(r.nation), td(r.wins,"n")])) + `</div></div>`;
+
+/* ---- 角色平衡 ---- */
+const maxP = Math.max(...D.roles.map(r=>r.per100||0));
+h += `<h2>角色产出 · 平衡诊断</h2>
+<p class="note"><b>per100 = 每一百个「车手赛季」赢几场。</b>
+原始胜场数没有意义——工兵占了半个车队，胜场当然多。
+除以人数之后，这张表才回答了玩家真正在问的问题：签哪种车手划算。</p>
+<div class="card">` + tbl(
+  [["角色"],["人数","n"],["胜场","n"],["per100","n"],["产出强度"],
+   ["总成绩","n"],["大环赛","n"],["纪念碑","n"]],
+  D.roles.map(r=>[td(rc(r.role)), td(r.pop,"n"), td(r.wins,"n"),
+    td(`<b>${r.per100}</b>`,"n"),
+    td(`<div class="bar"><i style="width:${(r.per100/maxP*100).toFixed(0)}%"></i></div>`),
+    td(r.overalls,"n"), td(r.gt,"n"), td(r.mon,"n")])) + `</div>`;
+
+/* ---- 地形筛选 ---- */
+h += `<h2>地形筛选</h2>
+<p class="note">每种赛段的冠军由谁拿走。<b>这是最硬的一张表</b>——
+如果山地赛段的冠军里冲刺手占了两成，说明地形根本没在筛人，赛道设计对结果不起作用。</p>
+<div class="card">`;
+for(const t of D.terrain){
+  const es = Object.entries(t.shares).filter(([,v])=>v>=2);
+  h += `<div style="margin:12px 0">
+    <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+      <b>${tc(t.stage_type)}</b><span class="flag">${t.total} 场</span></div>
+    <div class="stack">` +
+    es.map(([k,v],i)=>`<span style="width:${v}%;background:${PAL[i%PAL.length]}"
+      title="${rc(k)} ${v}%">${v>=9?rc(k):""}</span>`).join("") +
+    `</div><div class="flag" style="margin-top:4px">` +
+    es.slice(0,5).map(([k,v])=>`${rc(k)} ${v}%`).join("　") + `</div></div>`;
+}
+h += `</div>`;
+
+/* ---- 夺冠年龄 + 世界水平 ---- */
+const maxA = Math.max(...D.ages.map(a=>a.wins));
+h += `<h2>夺冠年龄与世界水平</h2><div class="grid">
+<div class="card"><p class="note">真实公路车的夺冠年龄集中在 26–31 岁</p>` + tbl(
+  [["年龄段"],["胜场","n"],["分布"]],
+  D.ages.map(a=>[td(a.band), td(a.wins,"n"),
+    td(`<div class="bar"><i style="width:${(a.wins/maxA*100).toFixed(0)}%"></i></div>`)]))
+  + `</div><div class="card"><p class="note" id="lvnote"></p>
+  <div class="spark" id="spark"></div>
+  <div class="flag" id="lvax" style="display:flex;justify-content:space-between;margin-top:5px"></div>
+  </div></div>`;
+
+app.innerHTML = h;
+
+const L = D.level, vs = L.map(r=>r.level);
+const lo = Math.min(...vs), hi = Math.max(...vs), swing = (hi-lo).toFixed(1);
+spark.innerHTML = L.map(r=>{
+  const pct = 18 + (r.level-lo)/Math.max(.1,hi-lo)*82;
+  return `<div style="height:${pct}%" title="${r.season}: ${r.level}"></div>`;
+}).join("");
+lvax.innerHTML = `<span>${L[0]?.season??""}</span><span>${L.at(-1)?.season??""}</span>`;
+lvnote.innerHTML = `每季前 20 名车手的平均总评，应当平稳。波动 ${lo} – ${hi}
+  <span class="tag ${swing>3?'warn':'good'}">${swing} 分${swing>3?' · 稳态控制在震荡':' · 正常'}</span>`;
+</script></body></html>

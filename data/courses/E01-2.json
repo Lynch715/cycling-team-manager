@@ -1,0 +1,175 @@
+{
+  "id": "E01-2",
+  "name": "海岸开季赛 第 2 赛段",
+  "stage_type": "flat",
+  "start_altitude_m": 15,
+  "segments": [
+    {
+      "name": "过渡 1 · 1",
+      "length_km": 15.186,
+      "grade_pct": -1.12,
+      "surface": "柏油",
+      "headwind_ms": 1.3,
+      "crosswind_ms": 1.1,
+      "technical": 0.0
+    },
+    {
+      "name": "过渡 1 · 2",
+      "length_km": 14.936,
+      "grade_pct": 1.54,
+      "surface": "柏油",
+      "headwind_ms": 3.2,
+      "crosswind_ms": 3.3,
+      "technical": 0.0
+    },
+    {
+      "name": "过渡 1 · 3",
+      "length_km": 16.453,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 2.3,
+      "crosswind_ms": 2.4,
+      "technical": 0.0
+    },
+    {
+      "name": "过渡 1 · 4",
+      "length_km": 12.551,
+      "grade_pct": 1.69,
+      "surface": "柏油",
+      "headwind_ms": 1.9,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "过渡 1 · 5",
+      "length_km": 15.592,
+      "grade_pct": -0.25,
+      "surface": "柏油",
+      "headwind_ms": 3.1,
+      "crosswind_ms": 2.8,
+      "technical": 0.0
+    },
+    {
+      "name": "过渡 1 · 6",
+      "length_km": 15.275,
+      "grade_pct": -0.93,
+      "surface": "柏油",
+      "headwind_ms": 1.9,
+      "crosswind_ms": 2.6,
+      "technical": 0.0
+    },
+    {
+      "name": "CAT4 爬坡 下半段",
+      "length_km": 1.702,
+      "grade_pct": 4.86,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "CAT4 爬坡 陡段",
+      "length_km": 1.135,
+      "grade_pct": 6.37,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "CAT4 爬坡 下坡",
+      "length_km": 2.277,
+      "grade_pct": -5.78,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.33
+    },
+    {
+      "name": "终点前平路 · 1",
+      "length_km": 14.747,
+      "grade_pct": -0.29,
+      "surface": "柏油",
+      "headwind_ms": 2.5,
+      "crosswind_ms": 0.7,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 2",
+      "length_km": 15.532,
+      "grade_pct": 1.88,
+      "surface": "柏油",
+      "headwind_ms": 1.9,
+      "crosswind_ms": 3.8,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 3",
+      "length_km": 13.502,
+      "grade_pct": 0.08,
+      "surface": "柏油",
+      "headwind_ms": 2.2,
+      "crosswind_ms": 3.2,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 4",
+      "length_km": 17.485,
+      "grade_pct": 0.93,
+      "surface": "柏油",
+      "headwind_ms": 0.7,
+      "crosswind_ms": 3.2,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 5",
+      "length_km": 14.775,
+      "grade_pct": 1.94,
+      "surface": "柏油",
+      "headwind_ms": 1.9,
+      "crosswind_ms": 2.2,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 6",
+      "length_km": 13.951,
+      "grade_pct": 1.38,
+      "surface": "柏油",
+      "headwind_ms": 2.7,
+      "crosswind_ms": 1.6,
+      "technical": 0.0
+    }
+  ],
+  "koms": [
+    {
+      "at_km": 92.83,
+      "label": "CAT4 爬坡",
+      "category": "cat4",
+      "points": [
+        1
+      ]
+    },
+    {
+      "at_km": 122.83,
+      "label": "途中冲刺",
+      "category": "sprint",
+      "points": [
+        20,
+        17,
+        15,
+        13,
+        11,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ]
+    }
+  ]
+}

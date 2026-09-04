@@ -1,0 +1,63 @@
+{
+  "id": "E12-5",
+  "name": "比利牛斯五日 第 5 赛段",
+  "stage_type": "itt",
+  "start_altitude_m": 480,
+  "segments": [
+    {
+      "name": "起步平路 · 1",
+      "length_km": 8.481,
+      "grade_pct": -0.29,
+      "surface": "柏油",
+      "headwind_ms": 2.4,
+      "crosswind_ms": 2.2,
+      "technical": 0.0
+    },
+    {
+      "name": "起步平路 · 2",
+      "length_km": 7.745,
+      "grade_pct": 1.94,
+      "surface": "柏油",
+      "headwind_ms": 0.7,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "中段爬坡",
+      "length_km": 6.832,
+      "grade_pct": 4.15,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "下坡",
+      "length_km": 5.978,
+      "grade_pct": -3.91,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.35
+    },
+    {
+      "name": "冲线段 · 1",
+      "length_km": 6.001,
+      "grade_pct": -1.44,
+      "surface": "柏油",
+      "headwind_ms": 1.6,
+      "crosswind_ms": 0.4,
+      "technical": 0.0
+    },
+    {
+      "name": "冲线段 · 2",
+      "length_km": 7.663,
+      "grade_pct": -0.75,
+      "surface": "柏油",
+      "headwind_ms": 0.1,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    }
+  ],
+  "koms": []
+}

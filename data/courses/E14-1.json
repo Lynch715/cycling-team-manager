@@ -1,0 +1,86 @@
+{
+  "id": "E14-1",
+  "name": "沙漠挑战赛 第 1 赛段",
+  "stage_type": "flat",
+  "start_altitude_m": 320,
+  "segments": [
+    {
+      "name": "终点前平路 · 1",
+      "length_km": 27.53,
+      "grade_pct": 0.9,
+      "surface": "柏油",
+      "headwind_ms": 2.8,
+      "crosswind_ms": 4.8,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 2",
+      "length_km": 28.484,
+      "grade_pct": -0.2,
+      "surface": "柏油",
+      "headwind_ms": 2.5,
+      "crosswind_ms": 3.1,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 3",
+      "length_km": 30.04,
+      "grade_pct": -1.59,
+      "surface": "柏油",
+      "headwind_ms": 2.3,
+      "crosswind_ms": 4.6,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 4",
+      "length_km": 31.22,
+      "grade_pct": 0.66,
+      "surface": "柏油",
+      "headwind_ms": 4.0,
+      "crosswind_ms": 4.1,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 5",
+      "length_km": 25.999,
+      "grade_pct": 0.74,
+      "surface": "柏油",
+      "headwind_ms": 3.0,
+      "crosswind_ms": 6.2,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 6",
+      "length_km": 27.127,
+      "grade_pct": 0.68,
+      "surface": "柏油",
+      "headwind_ms": 2.8,
+      "crosswind_ms": 3.9,
+      "technical": 0.0
+    }
+  ],
+  "koms": [
+    {
+      "at_km": 93.9,
+      "label": "途中冲刺",
+      "category": "sprint",
+      "points": [
+        20,
+        17,
+        15,
+        13,
+        11,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ]
+    }
+  ]
+}

@@ -1,0 +1,207 @@
+{
+  "id": "real-north-hell",
+  "name": "北方地狱",
+  "stage_type": "cobbled",
+  "start_altitude_m": 30,
+  "segments": [
+    {
+      "name": "接近段 · 1",
+      "length_km": 19.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 1.5,
+      "crosswind_ms": 3.5,
+      "technical": 0.0
+    },
+    {
+      "name": "接近段 · 2",
+      "length_km": 19.0,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 1.5,
+      "crosswind_ms": 3.5,
+      "technical": 0.0
+    },
+    {
+      "name": "接近段 · 3",
+      "length_km": 19.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 1.5,
+      "crosswind_ms": 3.5,
+      "technical": 0.0
+    },
+    {
+      "name": "接近段 · 4",
+      "length_km": 19.0,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 1.5,
+      "crosswind_ms": 3.5,
+      "technical": 0.0
+    },
+    {
+      "name": "接近段 · 5",
+      "length_km": 19.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 1.5,
+      "crosswind_ms": 3.5,
+      "technical": 0.0
+    },
+    {
+      "name": "阿沃吕伊（4★）",
+      "length_km": 2.5,
+      "grade_pct": 0.2,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 2.5,
+      "technical": 0.65
+    },
+    {
+      "name": "过渡 1",
+      "length_km": 12.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 4.0,
+      "technical": 0.0
+    },
+    {
+      "name": "阿伦贝格森林（5★）",
+      "length_km": 2.3,
+      "grade_pct": 0.0,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 2.5,
+      "technical": 0.85
+    },
+    {
+      "name": "过渡 2",
+      "length_km": 12.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 4.0,
+      "technical": 0.0
+    },
+    {
+      "name": "奥尔希（3★）",
+      "length_km": 1.7,
+      "grade_pct": 0.0,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 2.5,
+      "technical": 0.55
+    },
+    {
+      "name": "过渡 3",
+      "length_km": 12.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 4.0,
+      "technical": 0.0
+    },
+    {
+      "name": "蒙昂佩韦勒（5★）",
+      "length_km": 3.0,
+      "grade_pct": 0.3,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 2.5,
+      "technical": 0.75
+    },
+    {
+      "name": "过渡 4",
+      "length_km": 7.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 4.0,
+      "technical": 0.0
+    },
+    {
+      "name": "唐普勒沃（3★）",
+      "length_km": 1.4,
+      "grade_pct": 0.0,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 2.5,
+      "technical": 0.55
+    },
+    {
+      "name": "过渡 5",
+      "length_km": 7.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 4.0,
+      "technical": 0.0
+    },
+    {
+      "name": "康凡昂佩韦勒（4★）",
+      "length_km": 1.8,
+      "grade_pct": 0.0,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 2.5,
+      "technical": 0.7
+    },
+    {
+      "name": "过渡 6",
+      "length_km": 7.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 4.0,
+      "technical": 0.0
+    },
+    {
+      "name": "树之路口（5★）",
+      "length_km": 2.1,
+      "grade_pct": 0.5,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 2.5,
+      "technical": 0.8
+    },
+    {
+      "name": "过渡 7",
+      "length_km": 4.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 4.0,
+      "technical": 0.0
+    },
+    {
+      "name": "格吕松（2★）",
+      "length_km": 1.1,
+      "grade_pct": 0.0,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 2.5,
+      "technical": 0.45
+    },
+    {
+      "name": "过渡 8",
+      "length_km": 4.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 4.0,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前",
+      "length_km": 6.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 2.0,
+      "technical": 0.0
+    }
+  ],
+  "koms": []
+}

@@ -1,0 +1,262 @@
+{
+  "_说明": [
+    "赛历。stages 字段用字母描述赛段构成：",
+    "F 平路 / H 丘陵 / M 山地 / S 山顶终点 / I 计时赛 / C 石板路",
+    "例如 FHIFMSF = 七个赛段的平路-丘陵-计时-平路-山地-山顶-平路。",
+    "",
+    "改完跑 python3 source/calendar_check.py 体检，",
+    "再跑 generate_world.py 让新赛历生效。"
+  ],
+  "races": [
+    {
+      "id": "E01",
+      "name": "海岸开季赛",
+      "tier": "职业系列赛",
+      "country": "ESP",
+      "start_day": 20,
+      "prestige": 42,
+      "stages": "FF",
+      "terrain": "coast"
+    },
+    {
+      "id": "E02",
+      "name": "春季丘陵赛",
+      "tier": "世巡赛",
+      "country": "ITA",
+      "start_day": 33,
+      "prestige": 58,
+      "stages": "H",
+      "terrain": "italian_hills"
+    },
+    {
+      "id": "E03",
+      "name": "石板路经典赛",
+      "tier": "纪念碑",
+      "country": "BEL",
+      "start_day": 48,
+      "prestige": 92,
+      "stages": "C",
+      "terrain": "cobbles"
+    },
+    {
+      "id": "E04",
+      "name": "北方之战",
+      "tier": "纪念碑",
+      "country": "BEL",
+      "start_day": 55,
+      "prestige": 94,
+      "stages": "C",
+      "terrain": "cobbles"
+    },
+    {
+      "id": "E05",
+      "name": "低地绕圈赛",
+      "tier": "职业系列赛",
+      "country": "NED",
+      "start_day": 62,
+      "prestige": 40,
+      "stages": "F",
+      "terrain": "dutch"
+    },
+    {
+      "id": "E06",
+      "name": "阿登丘陵赛",
+      "tier": "纪念碑",
+      "country": "BEL",
+      "start_day": 70,
+      "prestige": 88,
+      "stages": "S",
+      "terrain": "italian_hills"
+    },
+    {
+      "id": "E07",
+      "name": "春季山地赛",
+      "tier": "世巡赛",
+      "country": "ITA",
+      "start_day": 78,
+      "prestige": 62,
+      "stages": "MS",
+      "terrain": "alps"
+    },
+    {
+      "id": "E08",
+      "name": "五月大环赛",
+      "tier": "大环赛",
+      "country": "ITA",
+      "start_day": 92,
+      "prestige": 100,
+      "stages": "THIFMSFMSFHFSFHIFMSF",
+      "terrain": "italian_hills"
+    },
+    {
+      "id": "E09",
+      "name": "城市计时赛",
+      "tier": "职业系列赛",
+      "country": "GER",
+      "start_day": 122,
+      "prestige": 38,
+      "stages": "I",
+      "terrain": "city"
+    },
+    {
+      "id": "E10",
+      "name": "阿尔卑斯八日",
+      "tier": "世巡赛",
+      "country": "SUI",
+      "start_day": 130,
+      "prestige": 66,
+      "stages": "FHMSIFMS",
+      "terrain": "alps"
+    },
+    {
+      "id": "E11",
+      "name": "环荷兰",
+      "tier": "职业系列赛",
+      "country": "NED",
+      "start_day": 142,
+      "prestige": 36,
+      "stages": "FFF",
+      "terrain": "dutch"
+    },
+    {
+      "id": "E12",
+      "name": "比利牛斯五日",
+      "tier": "世巡赛",
+      "country": "FRA",
+      "start_day": 150,
+      "prestige": 64,
+      "stages": "FHMSI",
+      "terrain": "pyrenees"
+    },
+    {
+      "id": "E13",
+      "name": "盛夏大环赛",
+      "tier": "大环赛",
+      "country": "FRA",
+      "start_day": 165,
+      "prestige": 100,
+      "stages": "TFHMSIFMSFHFSFMSFHIFF",
+      "terrain": "pyrenees"
+    },
+    {
+      "id": "E14",
+      "name": "沙漠挑战赛",
+      "tier": "职业系列赛",
+      "country": "ESP",
+      "start_day": 196,
+      "prestige": 34,
+      "stages": "FF",
+      "terrain": "desert"
+    },
+    {
+      "id": "E15",
+      "name": "海滨冲刺赛",
+      "tier": "职业系列赛",
+      "country": "POR",
+      "start_day": 202,
+      "prestige": 32,
+      "stages": "F",
+      "terrain": "coast"
+    },
+    {
+      "id": "E16",
+      "name": "环英国",
+      "tier": "世巡赛",
+      "country": "GBR",
+      "start_day": 208,
+      "prestige": 56,
+      "stages": "FHFHI",
+      "terrain": "coast"
+    },
+    {
+      "id": "E17",
+      "name": "秋季大环赛",
+      "tier": "大环赛",
+      "country": "ESP",
+      "start_day": 218,
+      "prestige": 98,
+      "stages": "THMSFIFMSFHFSFMSFHFI",
+      "terrain": "alps"
+    },
+    {
+      "id": "E18",
+      "name": "北欧丘陵赛",
+      "tier": "职业系列赛",
+      "country": "NOR",
+      "start_day": 250,
+      "prestige": 38,
+      "stages": "H",
+      "terrain": "coast"
+    },
+    {
+      "id": "E19",
+      "name": "城市夜赛",
+      "tier": "国内赛",
+      "country": "JPN",
+      "start_day": 256,
+      "prestige": 26,
+      "stages": "F",
+      "terrain": "city"
+    },
+    {
+      "id": "E20",
+      "name": "环中国",
+      "tier": "职业系列赛",
+      "country": "CHN",
+      "start_day": 262,
+      "prestige": 34,
+      "stages": "FFH",
+      "terrain": "city"
+    },
+    {
+      "id": "E21",
+      "name": "落叶经典赛",
+      "tier": "纪念碑",
+      "country": "ITA",
+      "start_day": 272,
+      "prestige": 90,
+      "stages": "S",
+      "terrain": "italian_hills"
+    },
+    {
+      "id": "E22",
+      "name": "山地告别赛",
+      "tier": "世巡赛",
+      "country": "SUI",
+      "start_day": 278,
+      "prestige": 60,
+      "stages": "MS",
+      "terrain": "alps"
+    },
+    {
+      "id": "E23",
+      "name": "收官计时赛",
+      "tier": "职业系列赛",
+      "country": "FRA",
+      "start_day": 284,
+      "prestige": 40,
+      "stages": "I",
+      "terrain": "city"
+    },
+    {
+      "id": "E24",
+      "name": "荒漠绕圈赛",
+      "tier": "国内赛",
+      "country": "AUS",
+      "start_day": 290,
+      "prestige": 24,
+      "stages": "F",
+      "terrain": "desert"
+    },
+    {
+      "id": "E25",
+      "name": "赛季总决赛",
+      "tier": "世巡赛",
+      "country": "ITA",
+      "start_day": 296,
+      "prestige": 70,
+      "stages": "HS",
+      "terrain": "italian_hills"
+    }
+  ]
+}

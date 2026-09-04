@@ -1,0 +1,86 @@
+{
+  "id": "E17-14",
+  "name": "秋季大环赛 第 14 赛段",
+  "stage_type": "flat",
+  "start_altitude_m": 8,
+  "segments": [
+    {
+      "name": "终点前平路 · 1",
+      "length_km": 27.352,
+      "grade_pct": 0.09,
+      "surface": "柏油",
+      "headwind_ms": -0.6,
+      "crosswind_ms": 3.8,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 2",
+      "length_km": 34.005,
+      "grade_pct": 2.01,
+      "surface": "柏油",
+      "headwind_ms": 0.5,
+      "crosswind_ms": 4.1,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 3",
+      "length_km": 36.154,
+      "grade_pct": 1.9,
+      "surface": "柏油",
+      "headwind_ms": 0.6,
+      "crosswind_ms": 6.5,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 4",
+      "length_km": 29.114,
+      "grade_pct": -1.35,
+      "surface": "柏油",
+      "headwind_ms": 0.4,
+      "crosswind_ms": 4.0,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 5",
+      "length_km": 30.054,
+      "grade_pct": 1.92,
+      "surface": "柏油",
+      "headwind_ms": 0.9,
+      "crosswind_ms": 4.4,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 6",
+      "length_km": 29.82,
+      "grade_pct": -0.0,
+      "surface": "柏油",
+      "headwind_ms": -0.6,
+      "crosswind_ms": 4.5,
+      "technical": 0.0
+    }
+  ],
+  "koms": [
+    {
+      "at_km": 103.72,
+      "label": "途中冲刺",
+      "category": "sprint",
+      "points": [
+        20,
+        17,
+        15,
+        13,
+        11,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ]
+    }
+  ]
+}

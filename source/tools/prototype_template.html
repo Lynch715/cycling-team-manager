@@ -1,0 +1,351 @@
+<meta charset="utf-8">
+<title>模拟自行车队 · 比赛回放原型</title>
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b23; --line:#242c38; --text:#e6edf5;
+    --dim:#8b98a8; --accent:#f5b301;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font:13px/1.55 -apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+  header{display:flex;align-items:baseline;gap:16px;padding:14px 20px;
+    border-bottom:1px solid var(--line)}
+  header h1{font-size:15px;margin:0;font-weight:600}
+  header .meta{color:var(--dim);font-size:12px}
+  .wrap{display:grid;grid-template-columns:1fr 320px;gap:16px;padding:16px 20px}
+  .stageview{background:#000;border:1px solid var(--line);border-radius:6px;
+    overflow:hidden;position:relative}
+  canvas{display:block;image-rendering:pixelated}
+  .controls{display:flex;align-items:center;gap:14px;padding:10px 14px;
+    background:var(--panel);border-top:1px solid var(--line);flex-wrap:wrap}
+  button{background:#222a35;color:var(--text);border:1px solid var(--line);
+    border-radius:4px;padding:5px 12px;cursor:pointer;font-size:12px}
+  button:hover{background:#2c3542}
+  button.on{background:var(--accent);color:#111;border-color:var(--accent)}
+  input[type=range]{width:210px;accent-color:var(--accent)}
+  .side{display:flex;flex-direction:column;gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:6px;
+    padding:12px 14px}
+  .card h2{font-size:12px;margin:0 0 10px;color:var(--dim);font-weight:600;
+    letter-spacing:.08em}
+  .row{display:grid;grid-template-columns:20px 1fr auto;gap:8px;
+    align-items:center;padding:3px 0;font-size:12px}
+  .chip{width:12px;height:12px;border-radius:2px;border:1px solid #0006}
+  .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gap{color:var(--dim);font-variant-numeric:tabular-nums}
+  .bar{height:3px;background:#2a3441;border-radius:2px;margin-top:2px}
+  .bar i{display:block;height:100%;border-radius:2px;background:var(--accent)}
+  .profile{width:100%;height:88px;display:block}
+  .note{color:var(--dim);font-size:11px;line-height:1.7;margin-top:6px}
+  .verdict{padding:14px 20px;border-top:1px solid var(--line);color:var(--dim);
+    font-size:12px;line-height:1.9}
+  .verdict b{color:var(--text);font-weight:600}
+  .events{max-height:150px;overflow:auto;font-size:11px;color:var(--dim)}
+  .events div{padding:2px 0;border-bottom:1px solid #1c232d}
+  .miss{color:#e5534b}
+</style>
+
+<header>
+  <h1>模拟自行车队 · 比赛回放原型</h1>
+  <span class="meta" id="stagemeta"></span>
+</header>
+
+<div class="wrap">
+  <div>
+    <div class="stageview"><canvas id="race" width="960" height="320"></canvas></div>
+    <div class="controls">
+      <button id="play">暂停</button>
+      <button id="zoom" class="on">2× 显示</button>
+      <button id="native">320px 原尺寸</button>
+      <label style="color:var(--dim)">进度</label>
+      <input type="range" id="seek" min="0" max="100" value="0">
+      <span class="gap" id="clock"></span>
+      <label style="color:var(--dim)">速度</label>
+      <select id="rate">
+        <option value="1">1×</option>
+        <option value="3" selected>3×</option>
+        <option value="8">8×</option>
+      </select>
+      <button id="layers">层次分解</button>
+    </div>
+    <svg class="profile" id="profile" viewBox="0 0 960 88" preserveAspectRatio="none"></svg>
+  </div>
+
+  <div class="side">
+    <div class="card">
+      <h2>实时位次</h2>
+      <div id="live"></div>
+    </div>
+    <div class="card">
+      <h2>比赛过程</h2>
+      <div class="events" id="events"></div>
+    </div>
+    <div class="card">
+      <h2>最终成绩</h2>
+      <div id="result"></div>
+    </div>
+  </div>
+</div>
+
+<div class="verdict" id="verdict"></div>
+
+<script>
+const REPLAY = /*__REPLAY__*/null;
+const ART = "assets/art/";
+
+// ---------------------------------------------------------------- 资源加载
+const images = {};
+function load(key, path){
+  return new Promise(res => {
+    const im = new Image();
+    im.onload = () => { images[key] = im; res(true); };
+    im.onerror = () => { images[key] = null; res(false); };
+    im.src = ART + path;
+  });
+}
+
+// 动作 -> 姿势图。引擎输出的 mode 直接决定画哪张，
+// 所以"车手在干什么"这件事在画面上是可读的，不是随机动画。
+const POSE = {
+  cruise:"pose-01", pull:"pose-01", sprint:"pose-02", leadout:"pose-02",
+  descend:"pose-03", attack:"pose-04", survive:"pose-05", chase:"pose-04",
+};
+
+async function boot(){
+  const theme = REPLAY.stage.parallax;
+  const jobs = [
+    load("L1", `05_race_parallax/${theme}/final/L1-far-background.png`),
+    load("L2", `05_race_parallax/${theme}/final/L2-mid-background.png`),
+    load("L3", `05_race_parallax/${theme}/final/L3-near-roadside.png`),
+    load("L4", `05_race_parallax/${theme}/final/L4-road-tile.png`),
+    load("L5", `05_race_parallax/${theme}/final/L5-foreground.png`),
+  ];
+  for (const p of new Set(Object.values(POSE)))
+    jobs.push(load(p, `01_riders/action_poses/${p}.png`));
+  const ok = await Promise.all(jobs);
+  const missing = ok.filter(x => !x).length;
+  render(missing);
+}
+
+// ------------------------------------------------------------ 队服染色缓存
+const tinted = {};
+function sprite(pose, color){
+  const key = pose + color;
+  if (tinted[key]) return tinted[key];
+  const src = images[pose];
+  if (!src) return null;
+  const c = document.createElement("canvas");
+  c.width = src.width; c.height = src.height;
+  const g = c.getContext("2d");
+  g.drawImage(src, 0, 0);
+  // 只在不透明像素上叠色：车手轮廓保持不变，队服换色由程序完成，
+  // 这正是美术清单里"队服不出图、用灰度图 + 程序染色"的做法
+  g.globalCompositeOperation = "source-atop";
+  g.globalAlpha = 0.55;
+  g.fillStyle = color;
+  g.fillRect(0, 0, c.width, c.height);
+  tinted[key] = c;
+  return c;
+}
+
+// ------------------------------------------------------------------- 渲染
+const cv = document.getElementById("race");
+const ctx = cv.getContext("2d");
+const W = cv.width, H = cv.height;
+const PX_PER_M = 5.2;
+const ROAD_Y = 236;
+
+let frame = 0, playing = true, rate = 3, showLayers = false;
+
+function drawLayer(img, camX, factor, y, h){
+  if (!img) return;
+  const scale = h / img.height;
+  const w = img.width * scale;
+  let off = (-camX * factor) % w;
+  if (off > 0) off -= w;
+  for (let x = off; x < W; x += w) ctx.drawImage(img, x, y, w, h);
+}
+
+function draw(){
+  const f = REPLAY.frames[Math.floor(frame)];
+  if (!f) return;
+  const lead = f.r[0][1];
+  const camX = lead - 62 / PX_PER_M;      // 领先者放在画面偏右
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = "#8fc7e8";
+  ctx.fillRect(0, 0, W, H);
+
+  const layers = [
+    [images.L1, 0.10, 0, 176],
+    [images.L2, 0.22, 44, 156],
+    [images.L3, 0.48, 118, 132],
+  ];
+  layers.forEach(([im, fa, y, h], i) => {
+    if (showLayers && i !== (Math.floor(Date.now() / 900) % 5)) ctx.globalAlpha = 0.15;
+    drawLayer(im, camX * PX_PER_M, fa, y, h);
+    ctx.globalAlpha = 1;
+  });
+
+  // 路面
+  if (images.L4) {
+    const h = 84, sc = h / images.L4.height, w = images.L4.width * sc;
+    let off = (-camX * PX_PER_M) % w;
+    if (off > 0) off -= w;
+    for (let x = off; x < W; x += w) ctx.drawImage(images.L4, x, ROAD_Y, w, h);
+  } else {
+    ctx.fillStyle = "#3b3f45";
+    ctx.fillRect(0, ROAD_Y, W, 84);
+  }
+
+  // 车手：按"排"分车道，越靠下越近，画的时候从远到近
+  const rows = f.r.map((r, i) => {
+    const meta = REPLAY.riders[r[0]] || {};
+    const rank = r[5] || i;
+    const col = rank % 5;
+    return { id:r[0], d:r[1], v:r[2], w:r[3], mode:r[4], col, meta };
+  }).sort((a, b) => a.col - b.col);
+
+  for (const r of rows){
+    const x = (r.d - camX) * PX_PER_M;
+    if (x < -60 || x > W + 60) continue;
+    const depth = r.col / 4;
+    const y = ROAD_Y + 6 + depth * 26;
+    const h = 62 - depth * 10;            // 三头身在 320px 视图里的实际高度
+    const img = sprite(POSE[r.mode] || "pose-01", r.meta.primary || "#3355aa");
+    if (img) {
+      const w = h * img.width / img.height;
+      ctx.globalAlpha = 0.92 - depth * 0.12;
+      ctx.drawImage(img, x - w / 2, y - h, w, h);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // 前景遮挡层
+  drawLayer(images.L5, camX * PX_PER_M, 1.35, H - 46, 46);
+
+  // 终点线
+  const finX = (REPLAY.stage.length_m - camX) * PX_PER_M;
+  if (finX > -20 && finX < W + 20){
+    ctx.fillStyle = "#fff";
+    for (let i = 0; i < 10; i++){
+      ctx.fillStyle = i % 2 ? "#fff" : "#111";
+      ctx.fillRect(finX - 6, ROAD_Y + i * 8, 12, 8);
+    }
+  }
+
+  // 剩余距离
+  const togo = (REPLAY.stage.length_m - lead) / 1000;
+  ctx.fillStyle = "rgba(0,0,0,.55)";
+  ctx.fillRect(10, 10, 132, 26);
+  ctx.fillStyle = "#fff";
+  ctx.font = "600 14px system-ui";
+  ctx.fillText(`剩余 ${togo.toFixed(2)} km`, 20, 28);
+
+  updateSide(f);
+}
+
+// ------------------------------------------------------------------ 侧栏
+function fmtGap(s){
+  if (s < 0.05) return "—";
+  const m = Math.floor(s / 60);
+  return m ? `+${m}:${(s % 60).toFixed(0).padStart(2,"0")}` : `+${s.toFixed(1)}s`;
+}
+
+function updateSide(f){
+  const lead = f.r[0][1];
+  const html = f.r.slice(0, 12).map((r, i) => {
+    const m = REPLAY.riders[r[0]] || {};
+    const behind = (lead - r[1]) / Math.max(r[2], 1);
+    return `<div class="row">
+      <span class="gap">${i + 1}</span>
+      <span>
+        <span class="nm">${m.name || r[0]} <span class="gap">${m.short || ""}</span></span>
+        <span class="bar"><i style="width:${(r[3] * 100).toFixed(0)}%"></i></span>
+      </span>
+      <span class="gap">${fmtGap(behind)}</span>
+    </div>`;
+  }).join("");
+  document.getElementById("live").innerHTML = html.replace(/<span class="chip"[^>]*><\/span>/g, "");
+  const t = f.t;
+  document.getElementById("clock").textContent =
+    `${Math.floor(t/3600)}:${String(Math.floor(t%3600/60)).padStart(2,"0")}:${String(Math.floor(t%60)).padStart(2,"0")}`;
+  document.getElementById("seek").value =
+    (frame / REPLAY.frames.length * 100).toFixed(1);
+}
+
+function buildStatic(missing){
+  const s = REPLAY.stage;
+  document.getElementById("stagemeta").textContent =
+    `${s.length_m/1000} km · 累计爬升 ${s.ascent_m} m · ${s.type} · 卷轴主题 ${s.parallax}`;
+
+  // 海拔剖面
+  const pr = s.profile, maxA = Math.max(...pr.map(p => p[1])),
+        minA = Math.min(...pr.map(p => p[1]));
+  const pts = pr.map(p => `${(p[0]/s.length_m*960).toFixed(1)},${(80 - (p[1]-minA)/(maxA-minA+1)*72).toFixed(1)}`).join(" ");
+  document.getElementById("profile").innerHTML =
+    `<polygon points="0,88 ${pts} 960,88" fill="#1d2530"/>
+     <polyline points="${pts}" fill="none" stroke="#f5b301" stroke-width="1.4"/>` +
+    s.koms.filter(k => k.cat !== "sprint").map(k =>
+      `<line x1="${(k.d/s.length_m*960).toFixed(1)}" y1="0" x2="${(k.d/s.length_m*960).toFixed(1)}" y2="88" stroke="#e5534b" stroke-width="1" stroke-dasharray="3 3"/>`).join("");
+
+  document.getElementById("events").innerHTML =
+    REPLAY.events.map(([t, x]) =>
+      `<div>${Math.floor(t/3600)}:${String(Math.floor(t%3600/60)).padStart(2,"0")} ${x}</div>`).join("");
+
+  document.getElementById("result").innerHTML =
+    REPLAY.result.slice(0, 10).map(r => {
+      const m = REPLAY.riders[r.id] || {};
+      return `<div class="row">
+        <span class="chip" style="background:${m.primary}"></span>
+        <span class="nm">${m.name} <span class="gap">${m.short||""}</span></span>
+        <span class="gap">${r.place === 1 ? "冠军" : fmtGap(r.gap)}</span>
+      </div>`;
+    }).join("");
+
+  const groups = REPLAY.final_groups || [];
+  document.getElementById("verdict").innerHTML = `
+    <b>这个原型要验证的三件事</b>
+    ① 三头身车手在 320 像素高的竞速视图里能不能分辨出人和队服 —— 点「320px 原尺寸」按真实像素看。
+    ② 五层卷轴的层次和视差速度对不对 —— 点「层次分解」逐层高亮。
+    ③ 位置、差距、体力全部来自完整物理引擎的逐秒输出，不是动画脚本 ——
+       右侧的体力条就是每个人剩下的无氧储备 W′。<br>
+    <b>本场数据</b>　终点前集团结构 ${groups.join(" / ") || "—"} 人；
+    共 ${REPLAY.frames.length} 帧，采样间隔 ${REPLAY.sample_s} 秒。
+    ${missing ? `<span class="miss">有 ${missing} 张美术资源没找到，画面用底色代替——跑一遍 asset_audit.py 看缺哪些。</span>` : ""}
+  `;
+}
+
+// ------------------------------------------------------------------ 交互
+function render(missing){
+  buildStatic(missing);
+  document.getElementById("play").onclick = e => {
+    playing = !playing; e.target.textContent = playing ? "暂停" : "播放";
+  };
+  document.getElementById("zoom").onclick = () => setScale(2);
+  document.getElementById("native").onclick = () => setScale(1);
+  document.getElementById("layers").onclick = e => {
+    showLayers = !showLayers; e.target.classList.toggle("on", showLayers);
+  };
+  document.getElementById("rate").onchange = e => rate = +e.target.value;
+  document.getElementById("seek").oninput = e =>
+    frame = e.target.value / 100 * REPLAY.frames.length;
+  setScale(2);
+
+  function tick(){
+    if (playing) frame = (frame + rate * 0.35) % REPLAY.frames.length;
+    draw();
+    requestAnimationFrame(tick);
+  }
+  tick();
+}
+
+function setScale(k){
+  cv.style.width = (W * k) + "px";
+  cv.style.height = (H * k) + "px";
+  document.getElementById("zoom").classList.toggle("on", k === 2);
+  document.getElementById("native").classList.toggle("on", k === 1);
+}
+
+boot();
+</script>

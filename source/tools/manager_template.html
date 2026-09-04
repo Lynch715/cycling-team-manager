@@ -1,0 +1,290 @@
+<meta charset="utf-8">
+<title>模拟自行车队 · 车队经理原型</title>
+<style>
+  :root{--bg:#0e1116;--panel:#161b23;--line:#242c38;--text:#e6edf5;
+        --dim:#8b98a8;--accent:#f5b301;--good:#3fb950;--bad:#e5534b}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font:13px/1.6 -apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+  header{display:flex;align-items:center;gap:14px;padding:14px 22px;
+    border-bottom:1px solid var(--line)}
+  .badge{width:34px;height:34px;border-radius:6px;display:grid;place-items:center;
+    font-weight:700;font-size:13px;color:#111}
+  header h1{font-size:15px;margin:0;font-weight:600}
+  header .sub{color:var(--dim);font-size:12px}
+  .fin{margin-left:auto;display:flex;gap:22px;font-size:12px}
+  .fin b{display:block;font-size:15px;font-weight:600}
+  nav{display:flex;gap:2px;padding:0 22px;border-bottom:1px solid var(--line)}
+  nav button{background:none;border:none;color:var(--dim);padding:11px 16px;
+    cursor:pointer;font-size:13px;border-bottom:2px solid transparent}
+  nav button.on{color:var(--text);border-bottom-color:var(--accent)}
+  main{padding:20px 22px;max-width:1180px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;
+    padding:16px 18px;margin-bottom:16px}
+  h2{font-size:13px;margin:0 0 12px;color:var(--dim);font-weight:600;
+    letter-spacing:.06em}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{text-align:left;color:var(--dim);font-weight:500;padding:6px 8px;
+    border-bottom:1px solid var(--line);font-size:11.5px}
+  td{padding:6px 8px;border-bottom:1px solid #1b222c}
+  tr.mine td{background:#1d2530}
+  .num{font-variant-numeric:tabular-nums;text-align:right}
+  .pill{display:inline-block;padding:1px 7px;border-radius:9px;font-size:11px;
+    background:#232c38;color:var(--dim)}
+  .ov{font-weight:600}
+  .att{display:grid;grid-template-columns:repeat(9,1fr);gap:5px;margin-top:3px}
+  .att div{text-align:center;font-size:10px;color:var(--dim)}
+  .att i{display:block;height:26px;background:#2a3441;border-radius:2px;
+    position:relative;margin-bottom:3px}
+  .att i b{position:absolute;bottom:0;left:0;right:0;background:var(--accent);
+    border-radius:2px;display:block}
+  select{background:#222a35;color:var(--text);border:1px solid var(--line);
+    border-radius:4px;padding:4px 8px;font-size:12px}
+  button.act{background:#222a35;color:var(--text);border:1px solid var(--line);
+    border-radius:5px;padding:7px 14px;cursor:pointer;font-size:12.5px;
+    margin:0 8px 8px 0}
+  button.act:hover{background:#2c3542}
+  button.act.on{background:var(--accent);color:#111;border-color:var(--accent)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .kpi{display:flex;gap:26px;margin:12px 0 4px}
+  .kpi div b{display:block;font-size:22px;font-weight:600;line-height:1.2}
+  .kpi div span{color:var(--dim);font-size:11.5px}
+  .prof{width:100%;height:72px;display:block;margin:8px 0}
+  .ev{border-left:3px solid var(--accent);padding-left:14px;margin:14px 0}
+  .ev p{margin:6px 0 12px}
+  .chg{color:var(--good);font-size:11.5px}
+  .chg.neg{color:var(--bad)}
+  .hint{color:var(--dim);font-size:11.5px;margin-top:10px;line-height:1.8}
+  .best{color:var(--accent);font-weight:600}
+</style>
+
+<header>
+  <div class="badge" id="badge"></div>
+  <div>
+    <h1 id="tname"></h1>
+    <div class="sub" id="tsub"></div>
+  </div>
+  <div class="fin">
+    <div><span style="color:var(--dim)">赛季预算</span><b id="budget"></b></div>
+    <div><span style="color:var(--dim)">薪资支出</span><b id="payroll"></b></div>
+    <div><span style="color:var(--dim)">车队声望</span><b id="prestige"></b></div>
+  </div>
+</header>
+
+<nav>
+  <button data-tab="squad" class="on">阵容</button>
+  <button data-tab="race">赛前部署</button>
+  <button data-tab="events">俱乐部事务</button>
+</nav>
+
+<main>
+  <div id="squad"></div>
+  <div id="race" hidden></div>
+  <div id="events" hidden></div>
+</main>
+
+<script>
+const D = /*__DATA__*/null;
+const ART = "assets/art/";
+const ROLE_CN = {leader:"总成绩核心",climber:"爬坡手",sprinter:"冲刺手",
+  leadout:"领骑员",rouleur:"平路手",breakaway:"突围手",domestique:"工兵"};
+const ATT_CN = {flat:"平路",climbing:"爬坡",sprint:"冲刺",time_trial:"计时",
+  descending:"下坡",endurance:"耐力",recovery:"恢复",positioning:"占位",
+  resilience:"意志"};
+
+// ------------------------------------------------------------------ 顶栏
+const t = D.team;
+document.getElementById("badge").style.background = t.primary;
+document.getElementById("badge").style.color = t.secondary;
+document.getElementById("badge").textContent = t.short;
+document.getElementById("tname").textContent = t.name;
+document.getElementById("tsub").textContent =
+  `${D.season} 赛季 · ${t.division} · 共 ${D.roster.length} 名车手`;
+document.getElementById("budget").textContent = t.budget + " 万";
+document.getElementById("payroll").textContent = t.payroll + " 万";
+document.getElementById("payroll").style.color =
+  t.payroll > t.budget ? "var(--bad)" : "var(--good)";
+document.getElementById("prestige").textContent = t.prestige;
+
+// ------------------------------------------------------------------ 阵容
+function squad(){
+  const rows = D.roster.map(r => `
+    <tr>
+      <td><img src="${ART}01_riders/portraits/${r.portrait}.png"
+           style="width:30px;height:30px;border-radius:4px;vertical-align:middle"
+           onerror="this.style.visibility='hidden'"></td>
+      <td>${r.name}<div style="color:var(--dim);font-size:11px">${r.nation}</div></td>
+      <td><span class="pill">${ROLE_CN[r.role]}</span></td>
+      <td class="num">${r.age}</td>
+      <td class="num ov">${r.overall}</td>
+      <td class="num" style="color:var(--dim)">${r.potential}</td>
+      <td class="num">${r.mass}</td>
+      <td class="num">${r.salary} 万</td>
+      <td class="num">${r.contract} 年</td>
+      <td class="num" style="color:${r.morale>1.02?'var(--good)':r.morale<0.97?'var(--bad)':'var(--dim)'}">
+          ${(r.morale*100).toFixed(0)}</td>
+    </tr>`).join("");
+
+  const top = D.roster[0];
+  const attBars = Object.entries(top.attrs).map(([k,v]) =>
+    `<div><i><b style="height:${v}%"></b></i>${ATT_CN[k]}<br>${v}</div>`).join("");
+
+  document.getElementById("squad").innerHTML = `
+   <div class="card">
+     <h2>阵容</h2>
+     <table><tr><th></th><th>车手</th><th>角色</th><th class="num">年龄</th>
+       <th class="num">总评</th><th class="num">潜力</th><th class="num">体重</th>
+       <th class="num">年薪</th><th class="num">合同</th><th class="num">士气</th></tr>
+       ${rows}</table>
+     <div class="hint">
+       总评是按角色加权算的，不是九项平均——专精一项到 95 的人远比样样 70 的值钱。
+       潜力是成长天花板，年轻人头顶空间大。士气 100 为基准，影响比赛中的进攻欲望。
+     </div>
+   </div>
+   <div class="card">
+     <h2>头号车手 · ${top.name}</h2>
+     <div class="att">${attBars}</div>
+     <div class="hint">
+       这九项不是装饰性的数字：平路和爬坡是两条独立的持续功率曲线，按坡度插值；
+       冲刺决定峰值功率和无氧储备容量；计时决定气动姿势的迎风面积；
+       占位决定跟车质量和终点前能不能抢到好轮子。
+     </div>
+   </div>`;
+}
+
+// -------------------------------------------------------------- 赛前部署
+let curRace = 0, curBook = Object.keys(D.playbooks)[0];
+
+function race(){
+  const r = D.races[curRace];
+  const res = r.results[curBook];
+
+  const tabs = D.races.map((x,i) =>
+    `<button class="act ${i===curRace?'on':''}" onclick="pickRace(${i})">
+       ${x.name}</button>`).join("");
+  const books = Object.keys(D.playbooks).map(b =>
+    `<button class="act ${b===curBook?'on':''}" onclick="pickBook('${b}')">
+       ${b}</button>`).join("");
+
+  // 各打法对比
+  const cmp = Object.keys(D.playbooks).map(b => {
+    const o = r.results[b];
+    return {b, best:o.best, top10:o.top10, name:o.best_name};
+  }).sort((a,z)=>a.best-z.best);
+  const bestBook = cmp[0].b;
+  const cmpRows = cmp.map(c => `
+    <tr class="${c.b===curBook?'mine':''}">
+      <td>${c.b}${c.b===bestBook?' <span class="best">← 本场最优</span>':''}</td>
+      <td class="num">第 ${c.best} 名</td>
+      <td class="num">${c.top10}</td>
+      <td style="color:var(--dim)">${c.name}</td>
+    </tr>`).join("");
+
+  const pr = r.profile, mx = Math.max(...pr.map(p=>p[1])), mn = Math.min(...pr.map(p=>p[1]));
+  const pts = pr.map(p=>`${(p[0]/(r.length_km*1000)*900).toFixed(1)},${(64-(p[1]-mn)/(mx-mn+1)*56).toFixed(1)}`).join(" ");
+
+  const table = res.rows.slice(0,15).map(x => `
+    <tr class="${x.mine?'mine':''}">
+      <td class="num">${x.place}</td>
+      <td><span style="display:inline-block;width:9px;height:9px;border-radius:2px;
+        background:${x.color};margin-right:6px"></span>${x.name}</td>
+      <td><span class="pill">${ROLE_CN[x.role]}</span></td>
+      <td style="color:var(--dim)">${x.team}</td>
+      <td class="num">${x.gap<0.05?'冠军':'+'+x.gap.toFixed(1)+'s'}</td>
+    </tr>`).join("");
+
+  document.getElementById("race").innerHTML = `
+   <div class="card">
+     <h2>选择比赛</h2>${tabs}
+     <div class="kpi">
+       <div><b>${r.length_km}</b><span>公里</span></div>
+       <div><b>${r.ascent_m}</b><span>累计爬升（米）</span></div>
+       <div><b>${(r.climb_bias*100).toFixed(0)}%</b><span>爬坡权重</span></div>
+       <div><b>${r.tier}</b><span>赛事等级</span></div>
+     </div>
+     <svg class="prof" viewBox="0 0 900 72" preserveAspectRatio="none">
+       <polygon points="0,72 ${pts} 900,72" fill="#1d2530"/>
+       <polyline points="${pts}" fill="none" stroke="#f5b301" stroke-width="1.4"/>
+     </svg>
+     <img src="${ART}04_tracks/landmarks_800x450/${r.landmark}.png"
+          style="width:100%;max-height:150px;object-fit:cover;border-radius:6px"
+          onerror="this.style.display='none'">
+   </div>
+
+   <div class="card">
+     <h2>下达赛前指令</h2>${books}
+     <div class="hint">
+       指令不会直接加成绩，只改行为——攻击欲望、愿不愿意领骑、舍不舍得烧无氧储备、
+       终点前抢不抢位置。成不成功仍然由物理和能量决定。
+     </div>
+   </div>
+
+   <div class="grid2">
+     <div class="card">
+       <h2>「${curBook}」的结果</h2>
+       <table><tr><th class="num">名次</th><th>车手</th><th>角色</th>
+         <th>车队</th><th class="num">差距</th></tr>${table}</table>
+     </div>
+     <div class="card">
+       <h2>五种打法对比（同一场比赛，同一批对手）</h2>
+       <table><tr><th>打法</th><th class="num">我队最好名次</th>
+         <th class="num">进前十人次</th><th>最好的那个人</th></tr>${cmpRows}</table>
+       <div class="hint">
+         这一栏是整个原型的重点：同样一场比赛，换个打法，结果是真的不一样。
+         而且没有一种打法在所有赛段上都最优——山地赛段上「冲刺夺段」会白白
+         消耗掉冲刺手，平路赛段上「山地强攻」等于什么都没做。
+       </div>
+     </div>
+   </div>`;
+}
+function pickRace(i){ curRace = i; race(); }
+function pickBook(b){ curBook = b; race(); }
+
+// -------------------------------------------------------------- 俱乐部事务
+function events(){
+  document.getElementById("events").innerHTML = D.events.map((e,i) => `
+    <div class="card">
+      <h2>${e.category} · ${e.title}</h2>
+      <div style="display:flex;gap:16px">
+        <img src="${ART}09_misc/events/${e.art}.png"
+             style="width:230px;border-radius:6px;object-fit:cover"
+             onerror="this.replaceWith(Object.assign(document.createElement('div'),
+               {className:'hint',style:'width:230px;display:grid;place-items:center;\
+background:#1d2530;border-radius:6px;text-align:center;padding:12px',
+                textContent:'插画 ${e.art}.png 尚未出图'}))">
+        <div style="flex:1">
+          <p>${e.text}</p>
+          ${e.branches.map((b,j) => `
+            <button class="act" onclick="choose(${i},${j})">${b.label}</button>`).join("")}
+          <div id="out${i}" class="hint"></div>
+        </div>
+      </div>
+    </div>`).join("") + `
+    <div class="card">
+      <h2>关于这些选择</h2>
+      <div class="hint">
+        每个选项都是「拿 A 换 B」，没有免费的好处——如果有一个选项永远是对的，
+        玩家点三次就会看穿，之后所有事件都变成无脑点确认。<br>
+        后果全部真实写进数据：士气、疲劳、属性、资金、声望，你能在阵容表里看见。
+        部分选项带风险判定，掷骰子发生在你做完选择之后，而不是选项本身随机生效。
+      </div>
+    </div>`;
+}
+function choose(i,j){
+  const b = D.events[i].branches[j];
+  document.getElementById("out"+i).innerHTML =
+    `<div style="color:var(--text);margin:8px 0">${b.outcome}</div>` +
+    b.changes.map(c => `<span class="chg ${/-/.test(c)?'neg':''}">${c}</span>`)
+             .join("　") || "（无数值变化）";
+}
+
+// ------------------------------------------------------------------ 导航
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.remove("on"));
+  b.classList.add("on");
+  ["squad","race","events"].forEach(id =>
+    document.getElementById(id).hidden = (id !== b.dataset.tab));
+});
+
+squad(); race(); events();
+</script>

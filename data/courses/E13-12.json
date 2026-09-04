@@ -1,0 +1,86 @@
+{
+  "id": "E13-12",
+  "name": "盛夏大环赛 第 12 赛段",
+  "stage_type": "flat",
+  "start_altitude_m": 8,
+  "segments": [
+    {
+      "name": "终点前平路 · 1",
+      "length_km": 31.555,
+      "grade_pct": 0.82,
+      "surface": "柏油",
+      "headwind_ms": 3.0,
+      "crosswind_ms": 2.7,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 2",
+      "length_km": 23.233,
+      "grade_pct": -1.47,
+      "surface": "柏油",
+      "headwind_ms": 1.6,
+      "crosswind_ms": 2.5,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 3",
+      "length_km": 29.241,
+      "grade_pct": 1.33,
+      "surface": "柏油",
+      "headwind_ms": 2.5,
+      "crosswind_ms": 4.0,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 4",
+      "length_km": 27.959,
+      "grade_pct": 0.72,
+      "surface": "柏油",
+      "headwind_ms": 4.2,
+      "crosswind_ms": 3.1,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 5",
+      "length_km": 30.881,
+      "grade_pct": 1.4,
+      "surface": "柏油",
+      "headwind_ms": 2.7,
+      "crosswind_ms": 2.2,
+      "technical": 0.0
+    },
+    {
+      "name": "终点前平路 · 6",
+      "length_km": 28.931,
+      "grade_pct": 2.07,
+      "surface": "柏油",
+      "headwind_ms": 3.6,
+      "crosswind_ms": 5.1,
+      "technical": 0.0
+    }
+  ],
+  "koms": [
+    {
+      "at_km": 95.73,
+      "label": "途中冲刺",
+      "category": "sprint",
+      "points": [
+        20,
+        17,
+        15,
+        13,
+        11,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ]
+    }
+  ]
+}

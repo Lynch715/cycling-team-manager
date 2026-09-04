@@ -1,0 +1,193 @@
+{
+  "id": "real-giro-twins",
+  "name": "双子山口",
+  "stage_type": "summit_finish",
+  "start_altitude_m": 550,
+  "segments": [
+    {
+      "name": "瓦尔泰利纳河谷 · 1",
+      "length_km": 10.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "瓦尔泰利纳河谷 · 2",
+      "length_km": 10.0,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "瓦尔泰利纳河谷 · 3",
+      "length_km": 10.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "莫尔蒂罗洛（马佐侧） 1",
+      "length_km": 2.0,
+      "grade_pct": 8.4,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "莫尔蒂罗洛（马佐侧） 2",
+      "length_km": 3.0,
+      "grade_pct": 11.8,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "莫尔蒂罗洛（马佐侧） 3",
+      "length_km": 3.0,
+      "grade_pct": 12.4,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "莫尔蒂罗洛（马佐侧） 4",
+      "length_km": 2.5,
+      "grade_pct": 10.6,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "莫尔蒂罗洛（马佐侧） 5",
+      "length_km": 1.9,
+      "grade_pct": 8.2,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "莫尔蒂罗洛（马佐侧） 下坡",
+      "length_km": 14.0,
+      "grade_pct": -9.01,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.7
+    },
+    {
+      "name": "谷底长距离过渡 · 1",
+      "length_km": 9.333,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "谷底长距离过渡 · 2",
+      "length_km": 9.333,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "谷底长距离过渡 · 3",
+      "length_km": 9.333,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "斯泰尔维奥山口（普拉托侧） 1",
+      "length_km": 5.0,
+      "grade_pct": 6.8,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "斯泰尔维奥山口（普拉托侧） 2",
+      "length_km": 5.0,
+      "grade_pct": 7.6,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "斯泰尔维奥山口（普拉托侧） 3",
+      "length_km": 5.0,
+      "grade_pct": 7.9,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "斯泰尔维奥山口（普拉托侧） 4",
+      "length_km": 5.0,
+      "grade_pct": 7.7,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "斯泰尔维奥山口（普拉托侧） 5",
+      "length_km": 4.3,
+      "grade_pct": 7.2,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    }
+  ],
+  "koms": [
+    {
+      "at_km": 42.4,
+      "label": "莫尔蒂罗洛（马佐侧）",
+      "category": "hc",
+      "points": [
+        20,
+        15,
+        12,
+        10,
+        8,
+        6,
+        4,
+        2
+      ]
+    },
+    {
+      "at_km": 108.7,
+      "label": "斯泰尔维奥山口（普拉托侧）",
+      "category": "hc",
+      "points": [
+        20,
+        15,
+        12,
+        10,
+        8,
+        6,
+        4,
+        2
+      ]
+    }
+  ]
+}

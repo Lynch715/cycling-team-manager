@@ -1,0 +1,124 @@
+{
+  "id": "real-angliru",
+  "name": "终极陡坡",
+  "stage_type": "summit_finish",
+  "start_altitude_m": 180,
+  "segments": [
+    {
+      "name": "阿斯图里亚斯起伏 · 1",
+      "length_km": 16.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 1.2,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "阿斯图里亚斯起伏 · 2",
+      "length_km": 16.0,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 1.2,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "阿斯图里亚斯起伏 · 3",
+      "length_km": 16.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 1.2,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "阿斯图里亚斯起伏 · 4",
+      "length_km": 16.0,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 1.2,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "阿斯图里亚斯起伏 · 5",
+      "length_km": 16.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 1.2,
+      "crosswind_ms": 1.0,
+      "technical": 0.0
+    },
+    {
+      "name": "安格利鲁 1",
+      "length_km": 3.0,
+      "grade_pct": 7.6,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "中段喘息",
+      "length_km": 2.5,
+      "grade_pct": 4.2,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "进入陡段",
+      "length_km": 1.5,
+      "grade_pct": 12.8,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "库埃尼亚勒斯卡韦罗",
+      "length_km": 1.5,
+      "grade_pct": 17.5,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "安格利鲁 5",
+      "length_km": 1.5,
+      "grade_pct": 13.5,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "安格利鲁 6",
+      "length_km": 2.5,
+      "grade_pct": 10.5,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    }
+  ],
+  "koms": [
+    {
+      "at_km": 92.5,
+      "label": "安格利鲁",
+      "category": "hc",
+      "points": [
+        20,
+        15,
+        12,
+        10,
+        8,
+        6,
+        4,
+        2
+      ]
+    }
+  ]
+}

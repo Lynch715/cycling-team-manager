@@ -1,0 +1,45 @@
+{
+  "id": "E09-1",
+  "name": "城市计时赛",
+  "stage_type": "itt",
+  "start_altitude_m": 60,
+  "segments": [
+    {
+      "name": "起步平路",
+      "length_km": 7.258,
+      "grade_pct": -1.43,
+      "surface": "柏油",
+      "headwind_ms": 1.7,
+      "crosswind_ms": 2.3,
+      "technical": 0.0
+    },
+    {
+      "name": "中段爬坡",
+      "length_km": 3.056,
+      "grade_pct": 5.03,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "下坡",
+      "length_km": 2.674,
+      "grade_pct": -4.22,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.24
+    },
+    {
+      "name": "冲线段",
+      "length_km": 6.112,
+      "grade_pct": -1.37,
+      "surface": "柏油",
+      "headwind_ms": -0.2,
+      "crosswind_ms": 2.8,
+      "technical": 0.0
+    }
+  ],
+  "koms": []
+}

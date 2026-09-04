@@ -1,0 +1,266 @@
+{
+  "id": "real-flanders",
+  "name": "佛兰德之环",
+  "stage_type": "cobbled",
+  "start_altitude_m": 25,
+  "segments": [
+    {
+      "name": "起步 · 1",
+      "length_km": 17.5,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 4.5,
+      "technical": 0.0
+    },
+    {
+      "name": "起步 · 2",
+      "length_km": 17.5,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 4.5,
+      "technical": 0.0
+    },
+    {
+      "name": "起步 · 3",
+      "length_km": 17.5,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 4.5,
+      "technical": 0.0
+    },
+    {
+      "name": "起步 · 4",
+      "length_km": 17.5,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 4.5,
+      "technical": 0.0
+    },
+    {
+      "name": "赫拉尔茨贝亨之墙 1",
+      "length_km": 0.4,
+      "grade_pct": 6.0,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.6
+    },
+    {
+      "name": "赫拉尔茨贝亨之墙 2",
+      "length_km": 0.3,
+      "grade_pct": 12.5,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.8
+    },
+    {
+      "name": "赫拉尔茨贝亨之墙 3",
+      "length_km": 0.3,
+      "grade_pct": 9.0,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.7
+    },
+    {
+      "name": "过渡 1 · 1",
+      "length_km": 9.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 4.0,
+      "technical": 0.0
+    },
+    {
+      "name": "过渡 1 · 2",
+      "length_km": 9.0,
+      "grade_pct": 0.4,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 4.0,
+      "technical": 0.0
+    },
+    {
+      "name": "老克瓦雷蒙 1",
+      "length_km": 0.7,
+      "grade_pct": 5.5,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.4
+    },
+    {
+      "name": "老克瓦雷蒙 2",
+      "length_km": 0.7,
+      "grade_pct": 8.5,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.8
+    },
+    {
+      "name": "顶上平石板",
+      "length_km": 0.8,
+      "grade_pct": 2.0,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.6
+    },
+    {
+      "name": "过渡 2",
+      "length_km": 9.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 3.5,
+      "technical": 0.0
+    },
+    {
+      "name": "科彭堡 1",
+      "length_km": 0.2,
+      "grade_pct": 9.0,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.7
+    },
+    {
+      "name": "科彭堡 2",
+      "length_km": 0.2,
+      "grade_pct": 19.5,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.9
+    },
+    {
+      "name": "科彭堡 3",
+      "length_km": 0.2,
+      "grade_pct": 11.0,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.8
+    },
+    {
+      "name": "过渡 3",
+      "length_km": 14.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 3.0,
+      "technical": 0.0
+    },
+    {
+      "name": "老克瓦雷蒙 1",
+      "length_km": 0.7,
+      "grade_pct": 5.5,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.4
+    },
+    {
+      "name": "老克瓦雷蒙 2",
+      "length_km": 0.7,
+      "grade_pct": 8.5,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.8
+    },
+    {
+      "name": "顶上平石板",
+      "length_km": 0.8,
+      "grade_pct": 2.0,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.6
+    },
+    {
+      "name": "过渡 4",
+      "length_km": 5.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 2.5,
+      "technical": 0.0
+    },
+    {
+      "name": "帕特堡 1",
+      "length_km": 0.16,
+      "grade_pct": 12.9,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.7
+    },
+    {
+      "name": "帕特堡 2",
+      "length_km": 0.2,
+      "grade_pct": 13.5,
+      "surface": "石板",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.7
+    },
+    {
+      "name": "终点直道",
+      "length_km": 13.0,
+      "grade_pct": -0.3,
+      "surface": "柏油",
+      "headwind_ms": 0.8,
+      "crosswind_ms": 2.0,
+      "technical": 0.0
+    }
+  ],
+  "koms": [
+    {
+      "at_km": 71.0,
+      "label": "赫拉尔茨贝亨之墙",
+      "category": "cat4",
+      "points": [
+        1
+      ]
+    },
+    {
+      "at_km": 91.2,
+      "label": "老克瓦雷蒙",
+      "category": "cat4",
+      "points": [
+        1
+      ]
+    },
+    {
+      "at_km": 100.8,
+      "label": "科彭堡",
+      "category": "cat4",
+      "points": [
+        1
+      ]
+    },
+    {
+      "at_km": 117.0,
+      "label": "老克瓦雷蒙",
+      "category": "cat4",
+      "points": [
+        1
+      ]
+    },
+    {
+      "at_km": 122.36,
+      "label": "帕特堡",
+      "category": "cat4",
+      "points": [
+        1
+      ]
+    }
+  ]
+}

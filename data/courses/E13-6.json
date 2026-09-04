@@ -1,0 +1,63 @@
+{
+  "id": "E13-6",
+  "name": "盛夏大环赛 第 6 赛段",
+  "stage_type": "itt",
+  "start_altitude_m": 60,
+  "segments": [
+    {
+      "name": "起步平路 · 1",
+      "length_km": 5.225,
+      "grade_pct": 2.12,
+      "surface": "柏油",
+      "headwind_ms": 1.0,
+      "crosswind_ms": 2.3,
+      "technical": 0.0
+    },
+    {
+      "name": "起步平路 · 2",
+      "length_km": 5.985,
+      "grade_pct": 1.18,
+      "surface": "柏油",
+      "headwind_ms": 0.7,
+      "crosswind_ms": 0.7,
+      "technical": 0.0
+    },
+    {
+      "name": "中段爬坡",
+      "length_km": 4.72,
+      "grade_pct": 3.35,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "下坡",
+      "length_km": 4.13,
+      "grade_pct": -3.43,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.32
+    },
+    {
+      "name": "冲线段 · 1",
+      "length_km": 4.969,
+      "grade_pct": -0.83,
+      "surface": "柏油",
+      "headwind_ms": -0.6,
+      "crosswind_ms": 0.9,
+      "technical": 0.0
+    },
+    {
+      "name": "冲线段 · 2",
+      "length_km": 4.471,
+      "grade_pct": -0.53,
+      "surface": "柏油",
+      "headwind_ms": -2.2,
+      "crosswind_ms": 0.4,
+      "technical": 0.0
+    }
+  ],
+  "koms": []
+}

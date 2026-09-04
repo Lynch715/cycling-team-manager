@@ -1,0 +1,224 @@
+{
+  "id": "E08-19",
+  "name": "五月大环赛 第 19 赛段",
+  "stage_type": "summit_finish",
+  "start_altitude_m": 180,
+  "segments": [
+    {
+      "name": "过渡 1 · 1",
+      "length_km": 11.57,
+      "grade_pct": 1.94,
+      "surface": "柏油",
+      "headwind_ms": 3.5,
+      "crosswind_ms": 2.6,
+      "technical": 0.0
+    },
+    {
+      "name": "过渡 1 · 2",
+      "length_km": 9.295,
+      "grade_pct": -1.49,
+      "surface": "柏油",
+      "headwind_ms": 1.8,
+      "crosswind_ms": 0.4,
+      "technical": 0.0
+    },
+    {
+      "name": "过渡 1 · 3",
+      "length_km": 9.617,
+      "grade_pct": -0.93,
+      "surface": "柏油",
+      "headwind_ms": 2.3,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "HC 爬坡 下半段",
+      "length_km": 10.302,
+      "grade_pct": 8.04,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "HC 爬坡 陡段",
+      "length_km": 6.868,
+      "grade_pct": 10.54,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "HC 爬坡 下坡",
+      "length_km": 16.35,
+      "grade_pct": -8.66,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.63
+    },
+    {
+      "name": "过渡 2 · 1",
+      "length_km": 10.096,
+      "grade_pct": 0.13,
+      "surface": "柏油",
+      "headwind_ms": 0.7,
+      "crosswind_ms": 2.1,
+      "technical": 0.0
+    },
+    {
+      "name": "过渡 2 · 2",
+      "length_km": 10.445,
+      "grade_pct": -1.29,
+      "surface": "柏油",
+      "headwind_ms": 0.3,
+      "crosswind_ms": 1.6,
+      "technical": 0.0
+    },
+    {
+      "name": "过渡 2 · 3",
+      "length_km": 9.942,
+      "grade_pct": 0.09,
+      "surface": "柏油",
+      "headwind_ms": -0.9,
+      "crosswind_ms": 4.1,
+      "technical": 0.0
+    },
+    {
+      "name": "CAT2 爬坡 下半段",
+      "length_km": 6.485,
+      "grade_pct": 5.79,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "CAT2 爬坡 陡段",
+      "length_km": 4.323,
+      "grade_pct": 7.59,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "CAT2 爬坡 下坡",
+      "length_km": 8.924,
+      "grade_pct": -6.48,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.48
+    },
+    {
+      "name": "过渡 3 · 1",
+      "length_km": 11.126,
+      "grade_pct": 2.08,
+      "surface": "柏油",
+      "headwind_ms": -2.3,
+      "crosswind_ms": 1.3,
+      "technical": 0.0
+    },
+    {
+      "name": "过渡 3 · 2",
+      "length_km": 10.79,
+      "grade_pct": 0.74,
+      "surface": "柏油",
+      "headwind_ms": -1.5,
+      "crosswind_ms": 2.8,
+      "technical": 0.0
+    },
+    {
+      "name": "过渡 3 · 3",
+      "length_km": 8.567,
+      "grade_pct": 1.62,
+      "surface": "柏油",
+      "headwind_ms": -0.6,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "终点爬坡",
+      "length_km": 8.866,
+      "grade_pct": 7.36,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    },
+    {
+      "name": "终点陡段",
+      "length_km": 5.434,
+      "grade_pct": 9.76,
+      "surface": "柏油",
+      "headwind_ms": 0.0,
+      "crosswind_ms": 0.0,
+      "technical": 0.0
+    }
+  ],
+  "koms": [
+    {
+      "at_km": 47.65,
+      "label": "HC 爬坡",
+      "category": "hc",
+      "points": [
+        20,
+        15,
+        12,
+        10,
+        8,
+        6,
+        4,
+        2
+      ]
+    },
+    {
+      "at_km": 105.29,
+      "label": "CAT2 爬坡",
+      "category": "cat2",
+      "points": [
+        5,
+        3,
+        2,
+        1
+      ]
+    },
+    {
+      "at_km": 159.0,
+      "label": "终点陡段",
+      "category": "cat1",
+      "points": [
+        10,
+        8,
+        6,
+        4,
+        2,
+        1
+      ]
+    },
+    {
+      "at_km": 109.73,
+      "label": "途中冲刺",
+      "category": "sprint",
+      "points": [
+        20,
+        17,
+        15,
+        13,
+        11,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ]
+    }
+  ]
+}
