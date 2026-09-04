@@ -299,7 +299,12 @@ def run_event(world: World, event: RaceEvent, rng: random.Random,
     要不要落库、落到哪儿，由调用方决定。
     """
     entries = pick_entrants(world, event, rng, lineup)
-    entered = {rid for ids in entries.values() for rid in ids}
+    # **必须是 list，不能是 set。** 下面 race_form 按这个顺序逐人掷骰，
+    # 而 Python 的字符串哈希每个进程都重新随机化——用 set 的话，同一颗
+    # 种子在两次运行里会把「赛前状态好」发给不同的人，整个赛季从第一场
+    # 起就不一样了。种子不可复现，等于比赛结果无法复盘、bug 无法重现。
+    # entries 是按 world.teams 顺序填的 dict，天然稳定。
+    entered = [rid for ids in entries.values() for rid in ids]
 
     # 每个人都带着战术上路，不只是玩家的队。没给指令的按角色取默认值——
     # AI 车队因此也会派工兵领骑、让冲刺手躲到最后，而不是一群没有分工的人

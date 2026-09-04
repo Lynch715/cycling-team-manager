@@ -232,10 +232,9 @@ async function act(path, body){
 /* ---------------- 开局 ---------------- */
 async function boot(){
   const [teams, hs] = await Promise.all([api("/api/teams"), api("/api/hassave")]);
-  const kv = teams[0] && teams[0].badge ? null : null;
   const st = await api("/api/state");
   if (st.started){ apply(st); return; }
-  $("#kv").src = "/art/09_other/key-visual-1920x1080.png";
+  if (st.kv) $("#kv").src = st.kv;
   if (hs.exists) $("#resume").innerHTML =
     `<div class="card" style="display:flex;align-items:center;gap:14px">
       <div style="flex:1"><h3>有一份存档</h3>

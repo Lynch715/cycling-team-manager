@@ -40,6 +40,28 @@ from game.world import TERRAIN_ART                            # noqa: E402
 from game.training import CAMPS, PROGRAMS                     # noqa: E402
 
 ART = ROOT / "assets" / "art"
+
+# 美术资源的 URL 前缀，以及「这张图在不在」的判断方式。
+# 本地服务端是自己发图，所以前缀是绝对路径、存在性直接问硬盘。
+# 浏览器版（Pyodide）里图由静态站点发，Pyodide 的虚拟文件系统里
+# 根本没有 assets/art——所以这两件事都必须能被外面换掉。
+ART_PREFIX = "/art/"
+ART_EXT: str | None = None             # 静态站点发转码过的图时，替掉后缀
+ART_INDEX: set[str] | None = None      # 浏览器版注入一份可用图片的清单
+
+
+def art_has(rel: str) -> bool:
+    """这张图在不在。清单里记的始终是引擎认得的原始路径（.png），
+    转码只影响最终 URL，不影响判断。"""
+    if ART_INDEX is not None:
+        return rel in ART_INDEX
+    return (ART / rel).exists()
+
+
+def art_href(rel: str) -> str:
+    if ART_EXT:
+        rel = rel.rsplit(".", 1)[0] + ART_EXT
+    return f"{ART_PREFIX}{rel}"
 APP_HTML = ROOT / "source" / "tools" / "play_app.html"
 SAVE = ROOT / "data" / "playthrough.json"
 
@@ -94,7 +116,7 @@ def orders_json() -> list[dict]:
 
 def art_url(logical: str) -> str | None:
     rel = assets.resolve(logical)
-    return f"/art/{rel}" if rel else None
+    return art_href(rel) if rel else None
 
 
 def rider_json(r, mine: bool = False) -> dict:
@@ -144,7 +166,7 @@ def _terrain_art(terrain: str) -> str | None:
 def _parallax(terrain: str, layer: str) -> str | None:
     folder = (TERRAIN_ART.get(terrain) or ("alpine",))[0]
     rel = f"05_race_parallax/{folder}/final/{layer}.png"
-    return f"/art/{rel}" if (ART / rel).exists() else None
+    return art_href(rel) if art_has(rel) else None
 
 
 def _profile(course, points: int = 96) -> list[int]:
@@ -430,14 +452,121 @@ def teams_json() -> list[dict]:
     return out
 
 
+# --------------------------------------------------------------------------
+# 路由：与传输方式无关
+#
+# 本地版走 http.server，浏览器版（Pyodide）走一个 fetch 垫片——两边调的是
+# 下面同一份 route_get / route_post。把路由从 BaseHTTPRequestHandler 里摘
+# 出来，是为了让「换前端时只需要换掉 HTTP 之上的那一层」这句话真的成立：
+# 每多一份路由实现，就多一处迟早会和另一处对不上的地方。
+# --------------------------------------------------------------------------
+
+JSON_CT = "application/json; charset=utf-8"
+
+
+def _enc(obj) -> bytes:
+    return json.dumps(obj, ensure_ascii=False).encode("utf-8")
+
+
+def route_get(path: str) -> tuple[int, str, bytes]:
+    """GET 路由，返回 (状态码, Content-Type, 响应体)。"""
+    if path in ("/", "/index.html"):
+        return 200, "text/html; charset=utf-8", APP_HTML.read_bytes()
+    if path.startswith("/art/"):
+        f = (ART / path[5:]).resolve()
+        if not str(f).startswith(str(ART.resolve())) or not f.exists():
+            return 404, "text/plain", b""
+        ctype = mimetypes.guess_type(f.name)[0] or "application/octet-stream"
+        return 200, ctype, f.read_bytes()
+    if path == "/api/teams":
+        return 200, JSON_CT, _enc(teams_json())
+    if path == "/api/state":
+        with GAME.lock:
+            if GAME.career is None:
+                # 开局封面图也得走资源解析层。前端曾经把这张图的路径写死，
+                # 本地版看不出问题（那个路径确实有文件），网页版立刻 404——
+                # 资源解析层存在的全部意义就是「路径只有一个地方说了算」。
+                return 200, JSON_CT, _enc({"started": False,
+                                           "kv": art_url("key-visual")})
+            return 200, JSON_CT, _enc({"started": True,
+                                       **state_json(GAME.career)})
+    if path == "/api/shortlist":
+        with GAME.lock:
+            return 200, JSON_CT, _enc(shortlist_json(GAME.career))
+    if path == "/api/history":
+        return 200, JSON_CT, _enc(history_json())
+    if path == "/api/replay":
+        with GAME.lock:
+            c = GAME.career
+            return 200, JSON_CT, _enc(_replay_art(c.last_replay) if c else {})
+    if path == "/api/hassave":
+        return 200, JSON_CT, _enc({"exists": SAVE.exists()})
+    return 404, "text/plain", b"not found"
+
+
+def route_post(path: str, body: dict) -> tuple[int, str, bytes]:
+    """POST 路由。异常一律变成 500 + error 字段——前端要看得见真实错误，
+    静默失败比报错难查十倍。"""
+    with GAME.lock:
+        try:
+            return 200, JSON_CT, _enc(_act(path, body))
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return 500, JSON_CT, _enc({"error": f"{type(e).__name__}: {e}"})
+
+
+def _act(path: str, b: dict) -> dict:
+    c = GAME.career
+    if path == "/api/new":
+        c = GAME.start(b.get("team_id", "T08"), int(b.get("seed", 2026)))
+        c.advance()
+        return {"started": True, **state_json(c)}
+    if path == "/api/load":
+        c = Career.load(SAVE)
+        c.attach_db()
+        GAME.career = c
+        return {"started": True, **state_json(c)}
+    if c is None:
+        return {"started": False}
+    if path == "/api/save":
+        c.save(SAVE)
+        return {"saved": True}
+    if path == "/api/advance":
+        c.advance()
+    elif path == "/api/resolve":
+        # 拍板之后不自动往前走。否则玩家选完赛季打法，比赛就直接跑掉了,
+        # 他根本没机会看一眼赛道——推进必须永远是玩家自己按的那一下。
+        c.resolve(int(b["index"]), int(b["choice"]))
+    elif path == "/api/autoresolve":
+        c.auto_resolve()
+    elif path == "/api/playbook":
+        c.set_playbook(b["name"])
+    elif path == "/api/order":
+        c.set_order(b["rider_id"], b.get("order"))
+    elif path == "/api/lineup":
+        c.set_lineup(list(b.get("ids") or []))
+    elif path == "/api/training":
+        c.set_training(b["rider_id"], b["program"], b.get("focus"))
+    elif path == "/api/watch":
+        # 亲自看下一场：指定要看哪个赛段，然后照常推进
+        c.watch_index = int(b.get("stage_index", 0))
+        c.advance()
+    elif path == "/api/skip":
+        # 一路跑到赛季结束，途中所有决策取默认值
+        c.play_season(auto=True)
+    return {"started": True, **state_json(c)}
+
+
 class Handler(BaseHTTPRequestHandler):
+    """把 route_* 的结果写进 socket。这个类里不该有任何游戏逻辑。"""
+
     protocol_version = "HTTP/1.1"
 
     def log_message(self, *a):            # 安静点，这是个游戏不是服务器
         pass
 
-    # ---- 基础 ----
-    def _send(self, code, body: bytes, ctype="application/json"):
+    def _send(self, code: int, ctype: str, body: bytes):
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
@@ -445,99 +574,16 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def _json(self, obj, code=200):
-        self._send(code, json.dumps(obj, ensure_ascii=False).encode("utf-8"))
-
-    def _body(self) -> dict:
-        n = int(self.headers.get("Content-Length") or 0)
-        return json.loads(self.rfile.read(n) or b"{}")
-
-    # ---- 路由 ----
     def do_GET(self):
-        path = urlparse(self.path).path
-        if path in ("/", "/index.html"):
-            return self._send(200, APP_HTML.read_bytes(),
-                              "text/html; charset=utf-8")
-        if path.startswith("/art/"):
-            f = (ART / path[5:]).resolve()
-            if not str(f).startswith(str(ART.resolve())) or not f.exists():
-                return self._send(404, b"", "text/plain")
-            ctype = mimetypes.guess_type(f.name)[0] or "application/octet-stream"
-            return self._send(200, f.read_bytes(), ctype)
-        if path == "/api/teams":
-            return self._json(teams_json())
-        if path == "/api/state":
-            with GAME.lock:
-                if GAME.career is None:
-                    return self._json({"started": False})
-                return self._json({"started": True, **state_json(GAME.career)})
-        if path == "/api/shortlist":
-            with GAME.lock:
-                return self._json(shortlist_json(GAME.career))
-        if path == "/api/history":
-            return self._json(history_json())
-        if path == "/api/replay":
-            with GAME.lock:
-                c = GAME.career
-                return self._json(_replay_art(c.last_replay) if c else {})
-        if path == "/api/hassave":
-            return self._json({"exists": SAVE.exists()})
-        return self._send(404, b"not found", "text/plain")
+        self._send(*route_get(urlparse(self.path).path))
 
     def do_POST(self):
-        path = urlparse(self.path).path
+        n = int(self.headers.get("Content-Length") or 0)
         try:
-            b = self._body()
+            body = json.loads(self.rfile.read(n) or b"{}")
         except Exception:
-            b = {}
-        with GAME.lock:
-            try:
-                return self._json(self._act(path, b))
-            except Exception as e:      # 让前端看到真实错误，别静默失败
-                import traceback
-                traceback.print_exc()
-                return self._json({"error": f"{type(e).__name__}: {e}"}, 500)
-
-    def _act(self, path: str, b: dict) -> dict:
-        c = GAME.career
-        if path == "/api/new":
-            c = GAME.start(b.get("team_id", "T08"), int(b.get("seed", 2026)))
-            c.advance()
-            return {"started": True, **state_json(c)}
-        if path == "/api/load":
-            c = Career.load(SAVE)
-            c.attach_db()
-            GAME.career = c
-            return {"started": True, **state_json(c)}
-        if c is None:
-            return {"started": False}
-        if path == "/api/save":
-            c.save(SAVE)
-            return {"saved": True}
-        if path == "/api/advance":
-            c.advance()
-        elif path == "/api/resolve":
-            # 拍板之后不自动往前走。否则玩家选完赛季打法，比赛就直接跑掉了,
-            # 他根本没机会看一眼赛道——推进必须永远是玩家自己按的那一下。
-            c.resolve(int(b["index"]), int(b["choice"]))
-        elif path == "/api/autoresolve":
-            c.auto_resolve()
-        elif path == "/api/playbook":
-            c.set_playbook(b["name"])
-        elif path == "/api/order":
-            c.set_order(b["rider_id"], b.get("order"))
-        elif path == "/api/lineup":
-            c.set_lineup(list(b.get("ids") or []))
-        elif path == "/api/training":
-            c.set_training(b["rider_id"], b["program"], b.get("focus"))
-        elif path == "/api/watch":
-            # 亲自看下一场：指定要看哪个赛段，然后照常推进
-            c.watch_index = int(b.get("stage_index", 0))
-            c.advance()
-        elif path == "/api/skip":
-            # 一路跑到赛季结束，途中所有决策取默认值
-            c.play_season(auto=True)
-        return {"started": True, **state_json(c)}
+            body = {}
+        self._send(*route_post(urlparse(self.path).path, body))
 
 
 def history_json() -> dict:

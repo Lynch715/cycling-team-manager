@@ -1,0 +1,1031 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>模拟自行车队</title>
+<style>
+:root{
+  --bg:#0d0f13; --panel:#161a21; --panel2:#1c212a; --line:#272d38;
+  --fg:#e8eaef; --dim:#8a92a3; --dim2:#5f6879;
+  --gold:#ffcf5c; --ok:#5ad19a; --bad:#ff6b6b; --blue:#5aa2ff;
+  --team:#4a90d9;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);overflow:hidden;
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
+img{display:block}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:#2b323e;border-radius:5px}
+
+/* ---------- 布局 ---------- */
+#shell{display:none;height:100%;grid-template-rows:auto 1fr}
+#shell.on{display:grid}
+header{display:flex;align-items:center;gap:14px;padding:10px 18px;
+  background:linear-gradient(180deg,#191d25,#12151b);border-bottom:1px solid var(--line)}
+header .badge{width:38px;height:38px;object-fit:contain}
+header h1{font-size:16px;margin:0;font-weight:600;letter-spacing:.3px}
+header .meta{color:var(--dim);font-size:12.5px}
+header .spacer{flex:1}
+.pill{background:var(--panel2);border:1px solid var(--line);border-radius:20px;
+  padding:4px 13px;font-size:12.5px;color:var(--dim)}
+.pill b{color:var(--fg);font-weight:600}
+nav{display:flex;gap:2px;padding:0 12px;background:#12151b;border-bottom:1px solid var(--line)}
+nav button{padding:9px 15px;font-size:14px;color:var(--dim);border-bottom:2px solid transparent}
+nav button:hover{color:var(--fg)}
+nav button.on{color:var(--fg);border-bottom-color:var(--team)}
+main{overflow-y:auto;padding:20px 22px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+
+/* ---------- 通用 ---------- */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:16px 18px;margin-bottom:14px}
+.card h3{margin:0 0 3px;font-size:15.5px}
+.note{color:var(--dim);font-size:13px;margin:0 0 12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{color:var(--dim);font-weight:500;text-align:left;padding:6px 8px;font-size:12px;
+   border-bottom:1px solid var(--line)}
+td{padding:6px 8px;border-bottom:1px solid #1d222b;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+.n{text-align:right;font-variant-numeric:tabular-nums}
+tr.me td{background:rgba(74,144,217,.10)}
+.btn{background:var(--team);color:#08111c;font-weight:600;padding:9px 20px;
+  border-radius:8px;font-size:14.5px}
+.btn:hover{filter:brightness(1.1)}
+.btn.ghost{background:var(--panel2);color:var(--fg);border:1px solid var(--line);font-weight:500}
+.btn.big{padding:13px 32px;font-size:16px;border-radius:10px}
+.btn:disabled{opacity:.4;cursor:default}
+.dim{color:var(--dim)}
+.gold{color:var(--gold)}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:4px;
+  background:#232a36;color:var(--dim);margin-left:5px}
+.av{width:34px;height:34px;border-radius:8px;object-fit:cover;background:#222833}
+.av.lg{width:56px;height:56px;border-radius:10px}
+.who{display:flex;align-items:center;gap:9px}
+
+/* ---------- 开局 ---------- */
+#intro{position:absolute;inset:0;overflow-y:auto;background:var(--bg)}
+#intro .hero{position:relative;height:290px;overflow:hidden;
+  border-bottom:1px solid var(--line)}
+#intro .hero img{width:100%;height:100%;object-fit:cover;opacity:.55}
+#intro .hero .t{position:absolute;left:0;right:0;bottom:26px;text-align:center}
+#intro .hero h1{font-size:38px;margin:0;letter-spacing:5px;
+  text-shadow:0 3px 18px #000}
+#intro .hero p{color:#c3cad6;margin:6px 0 0;text-shadow:0 2px 10px #000}
+.tcard{background:var(--panel);border:1px solid var(--line);border-radius:11px;
+  padding:14px;cursor:pointer;transition:.12s;position:relative;overflow:hidden}
+.tcard:hover{border-color:var(--team);transform:translateY(-2px)}
+.tcard .bar{position:absolute;left:0;top:0;bottom:0;width:4px}
+.tcard .hd{display:flex;gap:11px;align-items:center;margin-bottom:9px}
+.tcard .hd img{width:44px;height:44px;object-fit:contain}
+.tcard .nm{font-weight:600;font-size:14.5px}
+.tcard .st{display:flex;gap:14px;font-size:12.5px;color:var(--dim);margin-top:8px;
+  padding-top:8px;border-top:1px solid var(--line)}
+
+/* ---------- 决策弹层 ---------- */
+#modal{position:fixed;inset:0;background:rgba(6,8,11,.82);display:none;
+  align-items:center;justify-content:center;padding:24px;z-index:50}
+#modal.on{display:flex}
+.dlg{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  max-width:660px;width:100%;max-height:88vh;overflow-y:auto}
+.dlg .pic{width:100%;height:200px;object-fit:cover;border-radius:14px 14px 0 0}
+.dlg .bd{padding:20px 22px}
+.dlg h2{margin:0 0 4px;font-size:19px}
+.dlg .kind{color:var(--dim);font-size:12px;letter-spacing:1px}
+.dlg p.txt{color:#c9d0dc;white-space:pre-wrap;margin:12px 0 18px}
+.opt{display:block;width:100%;text-align:left;background:var(--panel2);
+  border:1px solid var(--line);border-radius:9px;padding:12px 15px;margin-bottom:9px}
+.opt:hover{border-color:var(--team);background:#222836}
+.opt .d{color:var(--dim);font-size:12px}
+
+/* ---------- 剖面图 ---------- */
+.prof{width:100%;height:66px;display:block}
+.stage{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--panel2)}
+.stage .sh{display:flex;align-items:center;gap:9px;padding:8px 11px;font-size:13px}
+.stage .sh .ix{width:22px;height:22px;border-radius:5px;background:#2b3340;
+  display:flex;align-items:center;justify-content:center;font-size:11.5px;color:var(--dim)}
+.stage img.land{width:100%;height:74px;object-fit:cover;opacity:.85}
+
+/* ---------- 结果 ---------- */
+.podium{display:flex;gap:12px;align-items:flex-end;margin:6px 0 16px}
+.pod{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:10px;
+  padding:12px;text-align:center}
+.pod.p1{border-color:var(--gold)}
+.pod img{width:52px;height:52px;border-radius:10px;object-fit:cover;margin:0 auto 7px}
+.pod .pl{font-size:11px;color:var(--dim)}
+.bars{height:7px;background:#242b36;border-radius:4px;overflow:hidden}
+.bars i{display:block;height:100%;background:var(--team)}
+.sel{background:var(--panel2);border:1px solid var(--line);color:var(--fg);
+  border-radius:6px;padding:4px 7px;font-size:12.5px;max-width:170px}
+/* ---------- 观战 ---------- */
+#watch{position:fixed;inset:0;background:#090b0f;display:none;
+  flex-direction:column;z-index:70}
+#watch.on{display:flex}
+#watch .wh{display:flex;align-items:center;gap:14px;padding:12px 20px;
+  border-bottom:1px solid var(--line)}
+#watch .wb{flex:1;overflow-y:auto;padding:18px 20px}
+.road{position:relative;height:120px;margin:10px 0 6px}
+.road svg{position:absolute;inset:0;width:100%;height:100%}
+.blob{position:absolute;transform:translate(-50%,-50%);border-radius:20px;
+  background:var(--panel2);border:1px solid var(--line);padding:2px 8px;
+  font-size:11.5px;white-space:nowrap;transition:left .18s linear;
+  font-variant-numeric:tabular-nums}
+.blob.main{background:#2b3442;border-color:#3c485a}
+.blob.brk{background:#4a3a1a;border-color:var(--gold);color:var(--gold)}
+.blob.has{box-shadow:0 0 0 2px var(--team)}
+.clock{font-size:26px;font-variant-numeric:tabular-nums;font-weight:600}
+.gapbar{height:5px;background:#242b36;border-radius:3px;overflow:hidden;margin-top:3px}
+.gapbar i{display:block;height:100%;background:var(--gold)}
+.feed{max-height:420px;overflow-y:auto}
+.feed div{padding:6px 0;border-bottom:1px solid #1c212a;font-size:13.5px}
+.feed div:last-child{border:none}
+.feed .d{color:var(--dim2);font-size:11.5px;margin-right:7px}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+  background:#222a36;border:1px solid var(--line);padding:9px 18px;border-radius:20px;
+  font-size:13.5px;opacity:0;transition:.25s;pointer-events:none;z-index:60}
+#toast.on{opacity:1}
+</style></head><body>
+
+<div id="intro">
+  <div class="hero"><img id="kv" alt=""><div class="t">
+    <h1>模拟自行车队</h1><p>选一支队接手。这决定了接下来几年的难度。</p></div></div>
+  <div class="wrap" style="padding:24px 22px 60px">
+    <div id="resume"></div>
+    <div class="grid3" id="teams"></div>
+  </div>
+</div>
+
+<div id="shell">
+  <header>
+    <img class="badge" id="hBadge" alt="">
+    <div><h1 id="hName">—</h1><div class="meta" id="hMeta">—</div></div>
+    <div class="spacer"></div>
+    <div class="pill">预算 <b id="hBudget">—</b> 万</div>
+    <div class="pill">薪资 <b id="hPay">—</b> 万</div>
+    <div class="pill" id="hRank">—</div>
+    <button class="btn ghost" id="bSave" style="padding:6px 14px">存档</button>
+  </header>
+  <div>
+    <nav id="nav"></nav>
+    <main><div class="wrap" id="view"></div></main>
+  </div>
+</div>
+
+<div id="watch"><div class="wh">
+    <div><div class="dim" style="font-size:12px" id="wName">—</div>
+      <div class="clock" id="wClock">0:00</div></div>
+    <div style="flex:1">
+      <div class="dim" style="font-size:12px" id="wKm">—</div>
+      <div class="gapbar"><i id="wProg" style="width:0"></i></div></div>
+    <button class="btn ghost" id="wSpeed" style="padding:6px 14px">×1</button>
+    <button class="btn ghost" id="wPause" style="padding:6px 14px">暂停</button>
+    <button class="btn" id="wDone" style="padding:6px 16px">看结果</button>
+  </div>
+  <div class="wb"><div class="wrap">
+    <div class="card"><h3 id="wTitle">比赛进行中</h3>
+      <p class="note" id="wHint">突围、追击、掉队——全都是引擎逐秒算出来的，没有脚本。</p>
+      <canvas id="wCv" width="1100" height="300"
+        style="width:100%;border-radius:9px;background:#8fc7e8;display:block"></canvas>
+      <div class="road" id="wRoad"></div>
+      <div id="wGroups"></div></div>
+    <div class="grid2">
+      <div class="card"><h3>我队</h3><div id="wMine"></div></div>
+      <div class="card"><h3>场上动态</h3><div class="feed" id="wFeed"></div></div>
+    </div>
+  </div></div>
+</div>
+
+<div id="modal"><div class="dlg" id="dlg"></div></div>
+<div id="toast"></div>
+
+<!-- ======================================================================
+     浏览器版引导层（由 source/tools/build_web.py 注入到 play_app.html 前面）
+
+     它只做两件事：
+       1. 起一个 Worker，整个 Python 引擎在那边跑（见 web/worker.js）
+       2. 把 window.fetch 换掉：/api/ 的请求不出网，走 postMessage 进 Worker
+
+     play_app.html 的业务代码一个字没改。它照常在最后一行调 boot()，
+     第一次 fetch 会自己等引擎就绪——不需要任何「等加载完再启动」的胶水。
+     ====================================================================== -->
+<style>
+#boot-veil{position:fixed;inset:0;z-index:9999;background:#0d0f13;color:#e8eaef;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font:15px/1.7 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;
+  transition:opacity .4s;gap:18px;padding:24px;text-align:center}
+#boot-veil.gone{opacity:0;pointer-events:none}
+#boot-veil h2{font-size:19px;margin:0;font-weight:600;letter-spacing:.02em}
+#boot-bar{width:min(320px,70vw);height:3px;background:#272d38;border-radius:2px;overflow:hidden}
+#boot-fill{height:100%;width:0;background:#ffcf5c;transition:width .35s ease}
+#boot-msg{color:#8a92a3;font-size:13px;min-height:1.6em}
+#boot-note{color:#5f6879;font-size:12px;max-width:34em;line-height:1.7}
+#boot-veil b{color:#ffcf5c;font-weight:600}
+#busy{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:9998;
+  background:#161a21;border:1px solid #272d38;border-radius:999px;padding:9px 18px;
+  color:#e8eaef;font:13px/1 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;
+  display:none;align-items:center;gap:10px;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+#busy.on{display:flex}
+#busy i{width:8px;height:8px;border-radius:50%;background:#ffcf5c;
+  animation:bp 1s ease-in-out infinite}
+@keyframes bp{0%,100%{opacity:.25}50%{opacity:1}}
+#busy span{color:#8a92a3;font-variant-numeric:tabular-nums}
+</style>
+<div id="boot-veil">
+  <h2>模拟自行车队</h2>
+  <div id="boot-bar"><div id="boot-fill"></div></div>
+  <div id="boot-msg">正在启动引擎…</div>
+  <div id="boot-note">这一版把 Python 引擎整个搬进了你的浏览器——
+    比赛的每一秒都是现算的，和本地版跑的是同一份代码。
+    首次加载要拉运行时，之后走缓存。</div>
+</div>
+<div id="busy"><i></i>正在逐秒模拟这一场<span id="busy-t"></span></div>
+<script>
+(() => {
+  const veil = document.getElementById("boot-veil");
+  const fill = document.getElementById("boot-fill");
+  const msg  = document.getElementById("boot-msg");
+  const busy = document.getElementById("busy");
+  const busyT = document.getElementById("busy-t");
+  const SAVE_KEY = "ctm.save.v1";
+
+  const worker = new Worker("worker.js");
+  const waiting = new Map();
+  let seq = 0;
+
+  worker.onmessage = (e) => {
+    const m = e.data;
+    if (m.type === "progress") {
+      msg.textContent = m.msg;
+      fill.style.width = m.pct + "%";
+      return;
+    }
+    const w = waiting.get(m.id);
+    if (!w) return;
+    waiting.delete(m.id);
+    m.ok ? w.ok(m) : w.no(new Error(m.error));
+  };
+  worker.onerror = (e) => {
+    msg.innerHTML = "<b>启动失败</b>：" + (e.message || e.type);
+    fill.style.background = "#ff6b6b";
+  };
+
+  const send = (payload) => new Promise((ok, no) => {
+    const id = ++seq;
+    waiting.set(id, {ok, no});
+    worker.postMessage({ id, ...payload });
+  });
+
+  let saved = null;
+  try { saved = localStorage.getItem(SAVE_KEY); } catch (e) { /* 隐身窗口 */ }
+
+  const ready = send({
+    type: "boot",
+    pyodideUrl: "pyodide/pyodide.js",
+    engineUrl: new URL("engine.zip", location.href).href,
+    artIndexUrl: new URL("art_index.json", location.href).href,
+    save: saved,
+  }).then(() => {
+    setTimeout(() => { veil.classList.add("gone");
+                       setTimeout(() => veil.remove(), 500); }, 220);
+  }).catch(err => {
+    // sqlite3 没拉到的话真正的报错是一句和病因无关的 ModuleNotFoundError，
+    // 把病因补回去。
+    const extra = /No module named 'sqlite3'/.test(String(err))
+      ? "（sqlite3 运行时包没能下载，检查网络或 CDN 是否可达）" : "";
+    msg.innerHTML = "<b>启动失败</b>：" + String(err) + extra;
+    fill.style.background = "#ff6b6b";
+    throw err;
+  });
+
+  // 逐秒模拟一场比赛要几十秒。Worker 撑住了「页面不会卡死」，
+  // 但玩家仍然需要知道它在动——超过 1.2 秒才显示，普通操作不会闪。
+  let busyTimer = null, busyStart = 0;
+  const busyOn = () => {
+    busyStart = Date.now();
+    busyTimer = setInterval(() => {
+      const s = (Date.now() - busyStart) / 1000;
+      if (s > 1.2) { busy.classList.add("on"); busyT.textContent = s.toFixed(0) + "s"; }
+    }, 200);
+  };
+  const busyOff = () => {
+    clearInterval(busyTimer); busy.classList.remove("on"); busyT.textContent = "";
+  };
+
+  // ---- fetch 垫片 ----------------------------------------------------
+  // 只接管 /api/。图片走 <img src>，本来就不经过 fetch，由静态站点直接发。
+  const real = window.fetch.bind(window);
+
+  // 第一个参数可以是 string、URL 或 Request。只认字符串会在运行时炸，
+  // 而且炸在和真实原因毫不相干的地方。
+  const urlOf = x => typeof x === "string" ? x
+                   : x instanceof URL ? x.href
+                   : (x && typeof x.url === "string") ? x.url : null;
+
+  window.fetch = async (input, init) => {
+    const raw = urlOf(input);
+    if (raw === null || raw.indexOf("/api/") < 0) return real(input, init);
+    const path = new URL(raw, location.href).pathname;
+    const api = path.slice(path.indexOf("/api/"));   // 兼容 Pages 的子路径
+
+    await ready;
+    busyOn();
+    try {
+      const out = await send({
+        type: "call",
+        method: (init && init.method) || "GET",
+        path: api,
+        body: (init && init.body) || "",
+      });
+      // 存档要落到 localStorage，否则刷新一下这一局就没了。
+      if (out.save != null) {
+        try { localStorage.setItem(SAVE_KEY, out.save); }
+        catch (e) { console.warn("存档写入失败", e); }
+      }
+      return new Response(out.body, {
+        status: out.status, headers: { "Content-Type": out.ctype },
+      });
+    } finally { busyOff(); }
+  };
+
+  // 给对账和调试用：控制台里敲 await __ENGINE.fingerprint() 就能拿到
+  // 这一版引擎的指纹，和本地 python3 source/verify_web.py 的输出比对。
+  window.__ENGINE = {
+    send, ready,
+    fingerprint: async () => { await ready;
+      return JSON.parse((await send({type:"fingerprint"})).data); },
+  };
+})();
+</script>
+
+<script>
+/* ==================================================================
+   前端只做两件事：把服务端给的状态画出来，把玩家的点击发回去。
+   任何一条数值规则都不在这里——引擎只有 Python 那一份。
+   ================================================================== */
+let S = null, TAB = "race", BUSY = false;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c =>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+async function api(path, body){
+  const o = body ? {method:"POST", headers:{"Content-Type":"application/json"},
+                    body:JSON.stringify(body)} : {};
+  const r = await fetch(path, o);
+  return r.json();
+}
+function toast(t){ const e=$("#toast"); e.textContent=t; e.classList.add("on");
+  setTimeout(()=>e.classList.remove("on"), 1800); }
+
+async function act(path, body){
+  if (BUSY) return; BUSY = true;
+  document.body.style.cursor = "progress";
+  try{
+    const s = await api(path, body || {});
+    if (s.error){ toast("出错：" + s.error); return; }
+    if (s.started) apply(s);
+  } finally { BUSY = false; document.body.style.cursor = ""; }
+}
+
+/* ---------------- 开局 ---------------- */
+async function boot(){
+  const [teams, hs] = await Promise.all([api("/api/teams"), api("/api/hassave")]);
+  const st = await api("/api/state");
+  if (st.started){ apply(st); return; }
+  if (st.kv) $("#kv").src = st.kv;
+  if (hs.exists) $("#resume").innerHTML =
+    `<div class="card" style="display:flex;align-items:center;gap:14px">
+      <div style="flex:1"><h3>有一份存档</h3>
+      <p class="note" style="margin:0">上次玩到一半，可以直接接着来。</p></div>
+      <button class="btn" onclick="act('/api/load')">继续上次</button></div>`;
+  $("#teams").innerHTML = teams.map(t => `
+    <div class="tcard" onclick="act('/api/new',{team_id:'${t.id}',seed:2026})">
+      <div class="bar" style="background:${esc(t.color)}"></div>
+      <div class="hd"><img src="${t.badge||""}" alt="">
+        <div><div class="nm">${esc(t.short)}</div>
+          <div class="dim" style="font-size:12px">${esc(t.division)} · ${esc(t.country)}</div>
+        </div></div>
+      ${t.star ? `<div class="who"><img class="av" src="${t.star.portrait||""}">
+        <div style="font-size:12.5px"><div>${esc(t.star.name)}
+        <span class="tag">${esc(t.star.role_cn)}</span></div>
+        <div class="dim">当家车手 · 总评 ${t.star.overall}</div></div></div>` : ""}
+      <div class="st"><span>预算 <b>${t.budget}</b> 万</span>
+        <span>阵容 <b>${t.squad}</b> 人</span>
+        <span>均评 <b>${t.avg}</b></span></div>
+    </div>`).join("");
+}
+
+/* ---------------- 主循环 ---------------- */
+function apply(s){
+  S = s;
+  $("#intro").style.display = "none";
+  $("#shell").classList.add("on");
+  document.documentElement.style.setProperty("--team", s.team.color);
+  $("#hBadge").src = s.team.badge || "";
+  $("#hName").textContent = s.team.name;
+  $("#hMeta").textContent = `${s.season} 赛季 · ${s.team.division} · ${s.phase}`;
+  $("#hBudget").textContent = s.team.budget;
+  $("#hPay").textContent = s.payroll;
+  const me = s.standings.find(x => x.mine);
+  $("#hRank").innerHTML = me ? `世界排名 <b>第 ${me.rank}</b> · ${me.points} 分`
+                             : "尚无积分";
+  drawNav();
+  if (s.pending.length) { showDecision(s.pending[0]); }
+  else { $("#modal").classList.remove("on"); }
+  render();
+}
+
+const TABS = [["race","比赛"],["squad","阵容"],["cal","赛历"],
+              ["rank","排名"],["news","动态"],["hist","历史"]];
+function drawNav(){
+  $("#nav").innerHTML = TABS.map(([k,n]) =>
+    `<button class="${k===TAB?'on':''}" onclick="go('${k}')">${n}</button>`).join("");
+}
+function go(k){ TAB = k; drawNav(); render(); if(k==="hist") loadHist(); }
+
+function render(){
+  const v = $("#view");
+  if (TAB==="race") v.innerHTML = viewRace();
+  else if (TAB==="squad") v.innerHTML = viewSquad();
+  else if (TAB==="cal") v.innerHTML = viewCal();
+  else if (TAB==="rank") v.innerHTML = viewRank();
+  else if (TAB==="news") v.innerHTML = viewNews();
+  else if (TAB==="hist") v.innerHTML = $("#view").dataset.hist || "<p class='dim'>读取中……</p>";
+  drawProfiles();
+}
+
+/* ---------------- 比赛页 ---------------- */
+function viewRace(){
+  let h = "";
+  if (S.last_race) h += resultCard(S.last_race);
+  const r = S.next_race;
+  if (!r){
+    h += `<div class="card"><h3>赛季已经跑完</h3>
+      <p class="note">该进休赛期了：合同、转会、集训。</p>
+      <button class="btn big" onclick="act('/api/advance')">进入休赛期</button></div>`;
+    return h;
+  }
+  h += `<div class="card">
+    <div style="display:flex;gap:16px;align-items:flex-start">
+      ${r.landmark?`<img src="${r.landmark}" style="width:210px;height:118px;
+        object-fit:cover;border-radius:9px">`:""}
+      <div style="flex:1">
+        <div class="dim" style="font-size:12px">下一场 · 第 ${r.day} 天</div>
+        <h3 style="font-size:21px">${esc(r.name)}</h3>
+        <p class="note">${esc(r.tier)} · ${r.days} 个比赛日 ·
+          ${r.total_km} 公里 · 累计爬升 ${r.total_ascent} 米</p>
+        <div class="dim" style="font-size:13px">当前打法
+          <b style="color:var(--fg)">${esc(S.playbook)}</b>
+          ${Object.keys(S.rider_orders).length
+            ? `<span class="tag">另有 ${Object.keys(S.rider_orders).length} 人单独安排</span>`
+            : ""}</div>
+      </div>
+    </div>
+  </div>`;
+
+  h += `<div class="card"><h3>赛道</h3>
+    <p class="note">「利好谁」是按爬坡在赛道上出现的位置算的，不是按总爬升——
+      决定胜负的是最后 5 公里长什么样。</p>` +
+    r.stages.map((s,i)=>`
+    <div class="stage" style="margin-bottom:10px">
+      <div class="sh"><span class="ix">${s.index}</span>
+        <b>${esc(s.type_cn)}</b>
+        <span class="dim">${s.km} km · 爬升 ${s.ascent} m${s.koms?` · ${s.koms} 个爬坡点`:""}</span>
+        <span style="flex:1"></span>
+        ${s.favours.map(f=>`<span class="tag">${esc(f.role)} ${f.score}</span>`).join("")}
+      </div>
+      <svg class="prof" data-p="${s.profile.join(",")}"></svg>
+      ${s.notes.length?`<div style="padding:7px 11px;font-size:12.5px;color:var(--dim);
+        border-top:1px solid var(--line)">${esc(s.notes[0])}</div>`:""}
+    </div>`).join("") + `</div>`;
+
+  h += tacticsCard(r);
+
+  h += `<div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+    <button class="btn big" onclick="act('/api/advance')">出发 →</button>
+    <button class="btn ghost big" onclick="watchRace(${r.stages.length})">
+      亲自看${r.stages.length>1?"第 1 赛段":"这一场"}</button>
+    <button class="btn ghost big" onclick="if(confirm('跳到赛季结束？途中所有选择取默认值。'))act('/api/skip')">跳完本赛季</button>
+  </div>`;
+  return h;
+}
+
+/* 战术板：整队打法 + 逐人指令。
+   打法是「一键铺开」，逐人指令是「我要亲手管这两个人」——
+   经理游戏真正好玩的是后者。 */
+function tacticsCard(r){
+  // 这条赛道最看重什么，用来给车手排序：谁最该被保护，一眼能看出来
+  const fav = {};
+  for (const s of r.stages) for (const f of s.favours)
+    fav[f.role] = Math.max(fav[f.role]||0, f.score);
+  const rank = x => fav[x.role_cn] || 0;
+  const squad = S.roster.slice().sort((a,b)=> rank(b)-rank(a) || b.overall-a.overall);
+  const notes = Object.fromEntries(S.orders.map(o=>[o.name,o]));
+
+  const cap = S.squad_size || squad.length;
+  const chosen = S.lineup && S.lineup.length ? new Set(S.lineup) : null;
+  const auto = !chosen;
+  const nSel = chosen ? chosen.size : Math.min(cap, squad.length);
+
+  return `<div class="card"><h3>战术板</h3>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <b>参赛名单 ${nSel} / ${cap}</b>
+      <span class="dim" style="font-size:12.5px">
+        ${auto ? "当前由系统按赛道适配度自动挑人。" : "手动名单。"}
+        没上场的人在这段时间里恢复疲劳。</span>
+      <span style="flex:1"></span>
+      <button class="btn ghost" style="padding:5px 12px;font-size:12.5px"
+        onclick="act('/api/lineup',{ids:[]})">交回系统</button>
+      <button class="btn ghost" style="padding:5px 12px;font-size:12.5px"
+        onclick="pickFresh(${cap})">挑最不累的</button>
+    </div>
+    <p class="note">打法一键铺开全队；某个人要单独安排，就改他那一行。
+      <b>顶风是有代价的</b>——护航和干活的人自己赢不了，但他们省下的力气会
+      喂给被保护的那个人，队里保护两个人就每人分一半。
+      车手按「这条赛道有多适合他」排序。</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+      ${S.playbooks.map(p=>`<button class="btn ${p===S.playbook?'':'ghost'}"
+        style="padding:6px 14px;font-size:13px"
+        onclick="act('/api/playbook',{name:'${esc(p)}'})">${esc(p)}</button>`).join("")}
+      <span class="dim" style="font-size:12px;align-self:center">
+        换打法会清掉逐人指令</span>
+    </div>
+    <table>
+      <tr><th>上场</th><th>车手</th><th>角色</th><th class="n">总评</th>
+        <th class="n">适配</th><th class="n">疲劳</th>
+        <th>本场指令</th><th>这条指令的意思</th></tr>
+      ${squad.map(x=>{
+        const cur = S.effective_orders[x.id] || "自由发挥";
+        const solo = S.rider_orders[x.id];
+        const n = notes[cur] || {};
+        const fit = rank(x);
+        const inRace = chosen ? chosen.has(x.id) : true;
+        return `<tr style="opacity:${inRace?1:.45}">
+          <td><input type="checkbox" ${inRace?"checked":""}
+            onchange="toggleRider('${x.id}',${cap})"></td>
+          <td class="who"><img class="av" src="${x.portrait||""}">${esc(x.name)}</td>
+          <td class="dim">${esc(x.role_cn)}</td>
+          <td class="n">${x.overall}</td>
+          <td class="n" style="color:${fit>=75?'var(--gold)':fit>=55?'var(--fg)':'var(--dim2)'}">${fit||"—"}</td>
+          <td class="n"><div class="bars" style="width:52px;display:inline-block">
+            <i style="width:${(x.fatigue*100).toFixed(0)}%;background:${
+              x.fatigue>.6?'var(--bad)':x.fatigue>.3?'var(--gold)':'var(--ok)'}"></i></div></td>
+          <td><select ${solo?'style="border-color:var(--team)"':''}
+              onchange="act('/api/order',{rider_id:'${x.id}',order:this.value})"
+              class="sel">
+            <option value="">跟随打法（${esc(S.effective_orders[x.id]||"")}）</option>
+            ${S.orders.map(o=>`<option value="${esc(o.name)}"
+              ${solo===o.name?"selected":""}>${esc(o.name)}</option>`).join("")}
+          </select></td>
+          <td class="dim" style="font-size:12px">${esc((notes[cur]||{}).note||"")}</td>
+        </tr>`;}).join("")}
+    </table></div>`;
+}
+
+/* 名单：勾选即生效。第一次动手就把「系统自动」冻成一份显式名单，
+   否则玩家取消一个人，剩下七个还是「自动」，界面说不清到底谁上场。 */
+function currentLineup(cap){
+  if (S.lineup && S.lineup.length) return S.lineup.slice();
+  const fav = {};
+  for (const st of (S.next_race?.stages||[])) for (const f of st.favours)
+    fav[f.role] = Math.max(fav[f.role]||0, f.score);
+  return S.roster.slice()
+    .sort((a,b)=>(fav[b.role_cn]||0)-(fav[a.role_cn]||0)
+                 || (b.overall*(1-b.fatigue*0.6))-(a.overall*(1-a.fatigue*0.6)))
+    .slice(0, cap).map(r=>r.id);
+}
+function toggleRider(id, cap){
+  let ids = currentLineup(cap);
+  if (ids.includes(id)) ids = ids.filter(x=>x!==id);
+  else if (ids.length < cap) ids.push(id);
+  else { toast(`最多只能派 ${cap} 人`); render(); return; }
+  act("/api/lineup", {ids});
+}
+function pickFresh(cap){
+  const ids = S.roster.slice()
+    .sort((a,b)=>(a.fatigue-b.fatigue) || (b.overall-a.overall))
+    .slice(0, cap).map(r=>r.id);
+  act("/api/lineup", {ids});
+}
+
+function resultCard(L){
+  const top3 = L.top.slice(0,3);
+  return `<div class="card">
+    <div class="dim" style="font-size:12px">${esc(L.tier)} · ${L.days} 个比赛日 · 打法「${esc(L.playbook)}」</div>
+    <h3 style="font-size:20px">${esc(L.race)} · 成绩</h3>
+    <div class="podium">${top3.map((r,i)=>`
+      <div class="pod ${i===0?'p1':''}" style="${r.mine?'border-color:var(--team)':''}">
+        <img src="${r.portrait||""}">
+        <div class="pl">第 ${r.place} 名</div>
+        <div style="font-weight:600;font-size:13.5px">${esc(r.name)}</div>
+        <div class="dim" style="font-size:12px">${esc(r.team)}
+          ${r.gap>0?` +${fmtGap(r.gap)}`:""}</div>
+      </div>`).join("")}</div>
+    <div class="grid2">
+      <div><table><tr><th>名次</th><th>车手</th><th>车队</th><th class="n">差距</th></tr>
+        ${L.top.map(r=>`<tr class="${r.mine?'me':''}"><td class="n">${r.place}</td>
+          <td class="who"><img class="av" style="width:24px;height:24px" src="${r.portrait||""}">${esc(r.name)}</td>
+          <td class="dim">${esc(r.team)}</td>
+          <td class="n">${r.gap>0?"+"+fmtGap(r.gap):"—"}</td></tr>`).join("")}
+      </table></div>
+      <div>
+        <table><tr><th>本队</th><th class="n">名次</th><th class="n">差距</th></tr>
+        ${L.mine.map(r=>`<tr><td>${esc(r.name)}<span class="tag">${esc(r.role)}</span></td>
+          <td class="n">${r.place}</td><td class="n">${r.gap>0?"+"+fmtGap(r.gap):"—"}</td></tr>`).join("")}
+        </table>
+        <p class="note" style="margin-top:10px">本场为车队拿到 <b class="gold">${L.points_gained}</b> 世界排名积分。</p>
+        ${L.stages.length>1?`<div class="dim" style="font-size:12.5px">
+          赛段冠军：${L.stages.map(s=>`<span class="${s.winner_mine?'gold':''}">${esc(s.winner)}</span>`).join("、")}</div>`:""}
+      </div>
+    </div></div>`;
+}
+const fmtGap = g => g>=60 ? `${Math.floor(g/60)}'${String(Math.round(g%60)).padStart(2,"0")}"`
+                          : `${g.toFixed(0)}"`;
+
+/* ---------------- 阵容页 ---------------- */
+const ATTRS = [["flat","平路"],["climbing","爬坡"],["sprint","冲刺"],
+  ["time_trial","计时"],["endurance","耐力"],["positioning","抢位"]];
+function viewSquad(){
+  return `<div class="card"><h3>阵容 · ${S.roster.length} 人</h3>
+    <p class="note">训练方案在休赛期结算。年龄和潜力决定还能不能练得动——
+      29 岁之后练什么都慢，那时候该考虑的是续约几年，不是练不练。</p>
+    <table>
+      <tr><th>车手</th><th>角色</th><th class="n">年龄</th><th class="n">总评</th>
+        <th class="n">潜力</th><th>${ATTRS.map(a=>a[1]).join("</th><th>")}</th>
+        <th class="n">周薪</th><th class="n">合同</th><th>训练</th></tr>
+      ${S.roster.map(r=>`<tr>
+        <td class="who"><img class="av" src="${r.portrait||""}">
+          <div><div>${esc(r.name)}</div>
+          <div class="dim" style="font-size:11.5px">${esc(r.nation)} · ${r.mass}kg</div></div></td>
+        <td class="dim">${esc(r.role_cn)}</td>
+        <td class="n">${r.age}</td>
+        <td class="n"><b>${r.overall}</b></td>
+        <td class="n dim">${r.potential}</td>
+        ${ATTRS.map(([k])=>`<td class="n" style="color:${attrColor(r.attrs[k])}">${r.attrs[k]}</td>`).join("")}
+        <td class="n">${r.salary}</td>
+        <td class="n ${r.contract<=1?'bad':''}">${r.contract} 年</td>
+        <td><select onchange="act('/api/training',{rider_id:'${r.id}',program:this.value})"
+              style="background:var(--panel2);border:1px solid var(--line);
+                     color:var(--fg);border-radius:6px;padding:3px 6px;font-size:12px">
+          ${S.programs.map(p=>`<option value="${p.key}"
+            ${r.training && r.training.program===p.key?"selected":""}>${esc(p.name)}</option>`).join("")}
+        </select></td>
+      </tr>`).join("")}
+    </table></div>
+    <div class="card"><h3>赞助商</h3>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:10px">
+      ${S.team.sponsors.map(s=>`<div style="text-align:center">
+        <img src="${s.logo||""}" style="width:82px;height:52px;object-fit:contain">
+        <div class="dim" style="font-size:12px;margin-top:4px">${esc(s.name)}</div></div>`).join("")}
+      </div></div>`;
+}
+const attrColor = v => v>=82?"var(--gold)":v>=70?"var(--fg)":v>=58?"var(--dim)":"var(--dim2)";
+
+/* ---------------- 赛历页 ---------------- */
+function viewCal(){
+  const maxDay = Math.max(...S.calendar.map(r=>r.day+r.days), 300);
+  return `<div class="card"><h3>${S.season} 赛季赛历</h3>
+    <p class="note">${S.calendar.length} 场比赛。已经跑过的是暗的。</p>
+    <table><tr><th class="n">第几天</th><th>赛事</th><th>等级</th>
+      <th class="n">天数</th><th class="n">公里</th><th>赛段构成</th></tr>
+    ${S.calendar.map(r=>`<tr style="opacity:${r.done?.42:1}"
+        class="${r.next?'me':''}">
+      <td class="n dim">${r.day}</td>
+      <td>${r.next?"▶ ":""}<b>${esc(r.name)}</b></td>
+      <td class="dim">${esc(r.tier)}</td>
+      <td class="n">${r.days}</td><td class="n">${r.total_km}</td>
+      <td>${r.types.map(t=>`<span class="tag">${esc(TCN[t]||t)}</span>`).join("")}</td>
+    </tr>`).join("")}</table></div>`;
+}
+const TCN = {flat:"平",hilly:"丘",mountain:"山",summit_finish:"顶",
+             cobbled:"石",itt:"计",ttt:"团"};
+
+/* ---------------- 排名页 ---------------- */
+function viewRank(){
+  const mx = Math.max(1, ...S.standings.map(x=>x.points));
+  return `<div class="grid2">
+   <div class="card"><h3>车队排名</h3><p class="note">世界排名积分，决定升降级和赞助报价。</p>
+    <table>${S.standings.map(t=>`<tr class="${t.mine?'me':''}">
+      <td class="n dim" style="width:28px">${t.rank}</td>
+      <td class="who"><img class="av" style="width:24px;height:24px;object-fit:contain"
+        src="${t.badge||""}">${esc(t.name)}</td>
+      <td style="width:38%"><div class="bars"><i style="width:${t.points/mx*100}%;
+        background:${esc(t.color)}"></i></div></td>
+      <td class="n">${t.points}</td></tr>`).join("")}</table></div>
+   <div class="card"><h3>车手积分榜</h3><p class="note">本赛季至今。</p>
+    <table>${S.rider_leaders.map(r=>`<tr class="${r.mine?'me':''}">
+      <td class="n dim" style="width:28px">${r.rank}</td>
+      <td class="who"><img class="av" style="width:24px;height:24px" src="${r.portrait||""}">
+        ${esc(r.name)}<span class="tag">${esc(r.role_cn)}</span></td>
+      <td class="dim">${esc(r.team)}</td>
+      <td class="n">${r.points}</td></tr>`).join("")}</table></div>
+  </div>
+  ${S.history.length?`<div class="card"><h3>车队历年</h3>
+    <table><tr><th class="n">赛季</th><th>级别</th><th class="n">排名</th>
+      <th class="n">积分</th><th class="n">冠军</th><th class="n">预算</th></tr>
+    ${S.history.slice().reverse().map(h=>`<tr><td class="n">${h.season}</td>
+      <td>${esc(h.division)}</td><td class="n">${h.rank}</td>
+      <td class="n">${h.points}</td><td class="n gold">${h.wins}</td>
+      <td class="n">${h.budget}</td></tr>`).join("")}</table></div>`:""}`;
+}
+
+/* ---------------- 动态页 ---------------- */
+function viewNews(){
+  return `<div class="grid2">
+    <div class="card"><h3>赛季动态</h3><div class="feed">
+      ${S.headlines.map(h=>`<div><span class="d">第${h.day}天</span>
+        ${h.tag?`<span class="tag">${esc(h.tag)}</span> `:""}${esc(h.text)}</div>`).join("")
+        || "<p class='dim'>还没有动态。</p>"}
+    </div></div>
+    <div class="card"><h3>本赛季战报</h3>
+      <table><tr><th>赛事</th><th>冠军</th><th class="n">本队最好</th></tr>
+      ${S.season_results.map(r=>`<tr>
+        <td>${esc(r.race)}<span class="tag">${esc(r.tier)}</span></td>
+        <td class="dim">${esc(r.winner)} <span class="dim">${esc(r.winner_team)}</span></td>
+        <td class="n ${r.best_place===1?'gold':''}">${r.best_place?`第 ${r.best_place}`:"—"}</td>
+      </tr>`).join("") || "<tr><td class='dim'>还没有比赛。</td></tr>"}</table></div>
+  </div>`;
+}
+
+/* ---------------- 历史页 ---------------- */
+async function loadHist(){
+  const d = await api("/api/history");
+  const v = $("#view");
+  if (d.empty){ v.dataset.hist = "<p class='dim'>还没有历史数据，先跑几个赛季。</p>";
+    render(); return; }
+  const rc = r => d.role_cn[r]||r, tc = t => d.type_cn[t]||t;
+  const mx = Math.max(...d.roles.map(r=>r.per100||0));
+  const PAL = ["#4a90d9","#e8a33d","#5ad19a","#c678dd","#ff6b6b","#7bc0ff","#8a92a3"];
+  v.dataset.hist = `
+  <div class="card"><h3>名人堂</h3>
+    <p class="note">${d.summary.seasons} 个赛季 · ${d.summary.rows} 条成绩。按大赛冠军排序。</p>
+    <table><tr><th class="n">#</th><th>车手</th><th class="n">大赛冠军</th><th class="n">总冠军</th></tr>
+    ${d.hall.map((r,i)=>`<tr><td class="n dim">${i+1}</td>
+      <td class="${i<3?'gold':''}">${esc(r.rider_name)}</td>
+      <td class="n">${r.big}</td><td class="n dim">${r.wins}</td></tr>`).join("")}</table></div>
+  <div class="grid2">
+   <div class="card"><h3>赛道纪录</h3><table>
+    ${d.records.map(r=>`<tr><td>${esc(r.race_name)}</td>
+      <td class="n">${hms(r.best)}</td><td class="dim">${esc(r.rider_name)} ${r.season}</td></tr>`).join("")}
+   </table></div>
+   <div class="card"><h3>车队王朝</h3><table>
+    ${d.dynasty.map(r=>`<tr><td>${esc(r.team_name)}</td>
+      <td class="n">${r.titles} 次年度第一</td></tr>`).join("")}</table></div>
+  </div>
+  <div class="card"><h3>角色产出</h3>
+    <p class="note">per100 = 每一百个「车手赛季」赢几场。原始胜场数没有意义——
+      工兵占了半个车队，胜场当然多。</p>
+    <table><tr><th>角色</th><th class="n">人数</th><th class="n">per100</th>
+      <th>产出强度</th><th class="n">大环赛</th><th class="n">纪念碑</th></tr>
+    ${d.roles.map(r=>`<tr><td>${esc(rc(r.role))}</td><td class="n dim">${r.pop}</td>
+      <td class="n"><b>${r.per100}</b></td>
+      <td style="width:40%"><div class="bars"><i style="width:${(r.per100/mx*100).toFixed(0)}%"></i></div></td>
+      <td class="n">${r.gt}</td><td class="n">${r.mon}</td></tr>`).join("")}</table></div>
+  <div class="card"><h3>地形筛选</h3>
+    <p class="note">每种赛段的冠军由谁拿走。如果山地赛段的冠军里冲刺手占两成，
+      说明地形根本没在筛人。</p>
+    ${d.terrain.map(t=>{
+      const es = Object.entries(t.shares).filter(([,v])=>v>=2);
+      return `<div style="margin:12px 0">
+        <div style="display:flex;justify-content:space-between;font-size:13px">
+          <b>${esc(tc(t.stage_type))}</b><span class="dim">${t.total} 场</span></div>
+        <div style="display:flex;height:20px;border-radius:5px;overflow:hidden;margin-top:5px;
+          font-size:11px;line-height:20px;color:#0c0e12">
+        ${es.map(([k,val],i)=>`<span style="width:${val}%;background:${PAL[i%7]};
+          text-align:center;overflow:hidden;white-space:nowrap"
+          title="${esc(rc(k))} ${val}%">${val>=10?esc(rc(k)):""}</span>`).join("")}</div>
+      </div>`;}).join("")}</div>`;
+  render();
+}
+const hms = s => s==null?"—":`${Math.floor(s/3600)}:${String(Math.floor(s%3600/60)).padStart(2,"0")}:${String(Math.floor(s%60)).padStart(2,"0")}`;
+
+/* ---------------- 决策 ---------------- */
+function showDecision(d){
+  $("#dlg").innerHTML =
+    (d.art?`<img class="pic" src="${d.art}">`:"") +
+    `<div class="bd"><div class="kind">${esc(d.kind)}</div>
+     <h2>${esc(d.title)}</h2>
+     <p class="txt">${esc(d.detail)}</p>
+     ${d.options.map((o,i)=>`<button class="opt" onclick="pick(${i})">
+        ${esc(o)}${i===d.default?'<span class="tag">默认</span>':""}</button>`).join("")}
+     ${S.pending.length>1?`<button class="opt" style="text-align:center;color:var(--dim)"
+        onclick="act('/api/autoresolve')">全部按默认处理（还有 ${S.pending.length-1} 件）</button>`:""}
+     </div>`;
+  $("#modal").classList.add("on");
+}
+function pick(i){ act("/api/resolve", {index:0, choice:i}); }
+
+/* ==================================================================
+   观战：把完整引擎录下来的那几百帧播出来。
+   这里一行数值逻辑都没有——所有位置、差距、事件都是 Python 算好的，
+   前端只负责按时间轴把它们放出来。
+   ================================================================== */
+let RP=null, WF=0, WT=null, WSPD=1, WPAUSE=false;
+
+async function watchRace(nStages){
+  if (BUSY) return;
+  $("#wTitle").textContent = "完整引擎正在跑这一场……";
+  $("#wHint").textContent = "逐秒模拟，大约需要二三十秒。跑完之后你看到的结果就是真实结果。";
+  $("#wRoad").innerHTML = ""; $("#wGroups").innerHTML = "";
+  $("#wMine").innerHTML = ""; $("#wFeed").innerHTML = "";
+  $("#watch").classList.add("on");
+  BUSY = true;
+  try{
+    const s = await api("/api/watch", {stage_index:0});
+    if (s.error){ toast("出错："+s.error); $("#watch").classList.remove("on"); return; }
+    apply(s);
+    RP = await api("/api/replay");
+  } finally { BUSY = false; }
+  if (!RP || !RP.frames || !RP.frames.length){
+    $("#watch").classList.remove("on"); return;
+  }
+  loadArt(RP.art || {});
+  $("#wName").textContent = RP.name;
+  $("#wTitle").textContent = RP.name;
+  $("#wHint").textContent = `${RP.km} km · 爬升 ${RP.ascent} m —— 突围、追击、掉队全都是引擎逐秒算出来的，没有脚本。`;
+  WF = 0; WPAUSE = false; $("#wPause").textContent = "暂停";
+  clearInterval(WT); WT = setInterval(tickWatch, 70);
+}
+
+function tickWatch(){
+  if (WPAUSE || !RP) return;
+  for (let i=0;i<WSPD && WF<RP.frames.length;i++) WF++;
+  if (WF >= RP.frames.length){ clearInterval(WT); WT=null; }
+  drawWatch(RP.frames[Math.min(WF, RP.frames.length-1)]);
+}
+
+/* ---- 画面：五层卷轴 + 三头身车手 ----------------------------------
+   美术清单里那套「队服不出图、用灰度图 + 程序染色」的做法在这里落地：
+   一张姿势图，二十支队各染各的色，运行时生成，不占任何额外美术工作量。
+
+   横轴不是里程，是**时间差**。领先两分钟的突围按里程算在画面外八百米处，
+   永远看不见；按时间差压缩之后，转播里那句「领先两分十秒」就直接是
+   画面上的距离。 */
+const IMG = {}, TINT = {};
+const PX_PER_SEC = 2.1;      // 一秒差距占多少像素
+const ROAD_Y = 196;
+
+function loadArt(art){
+  const put = (k, url) => { if(!url) return;
+    const im = new Image(); im.src = url; IMG[k] = im; };
+  ["L1","L2","L3","L4","L5"].forEach(k => put(k, art[k]));
+  (art.poses||[]).forEach((u,i) => put("pose"+i, u));
+}
+
+function tinted(poseKey, color){
+  const key = poseKey + color;
+  if (TINT[key]) return TINT[key];
+  const src = IMG[poseKey];
+  if (!src || !src.complete || !src.naturalWidth) return null;
+  const c = document.createElement("canvas");
+  c.width = src.naturalWidth; c.height = src.naturalHeight;
+  const g = c.getContext("2d");
+  g.drawImage(src, 0, 0);
+  // 只在不透明像素上叠色：轮廓不变，队服换色由程序完成
+  g.globalCompositeOperation = "source-atop";
+  g.globalAlpha = 0.55; g.fillStyle = color;
+  g.fillRect(0, 0, c.width, c.height);
+  TINT[key] = c;
+  return c;
+}
+
+function band(ctx, im, camPx, factor, y, h, W){
+  if (!im || !im.complete || !im.naturalWidth) return;
+  const sc = h / im.naturalHeight, w = im.naturalWidth * sc;
+  let off = (-camPx * factor) % w;
+  if (off > 0) off -= w;
+  for (let x = off; x < W; x += w) ctx.drawImage(im, x, y, w, h);
+}
+
+function drawCanvas(f){
+  const cv = $("#wCv"); if (!cv) return;
+  const ctx = cv.getContext("2d"), W = cv.width, H = cv.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = "#8fc7e8"; ctx.fillRect(0,0,W,H);
+
+  // 卷轴用「已走里程」驱动，所以景在动、速度感来自真实速度
+  const camPx = f.km * 1000 * 5.2;
+  band(ctx, IMG.L1, camPx, 0.10, 0,   150, W);
+  band(ctx, IMG.L2, camPx, 0.22, 38,  132, W);
+  band(ctx, IMG.L3, camPx, 0.48, 100, 112, W);
+  if (IMG.L4 && IMG.L4.complete) band(ctx, IMG.L4, camPx, 1.0, ROAD_Y, 76, W);
+  else { ctx.fillStyle="#3b3f45"; ctx.fillRect(0,ROAD_Y,W,76); }
+
+  const headX = W - 110;
+  const colorOf = tid => (RP.colors||{})[tid] || "#8899aa";
+
+  // 从后往前画，前面的压住后面的
+  const gs = f.groups.slice().reverse();
+  for (const g of gs){
+    const gx = headX - g.gap * PX_PER_SEC;
+    if (gx < -160) continue;
+    const tcs = g.tc || [];
+    const n = Math.min(g.n, 14);
+    for (let i = 0; i < n; i++){
+      const col = i % 5, row = Math.floor(i / 5);
+      const depth = col / 4;
+      const x = gx - row * 26 - col * 5;
+      if (x < -40 || x > W + 40) continue;
+      const y = ROAD_Y + 8 + depth * 24;
+      const h = 58 - depth * 9;
+      const im = tinted("pose" + (i % 8), colorOf(tcs[i]));
+      if (!im) continue;
+      const w = h * im.width / im.height;
+      ctx.globalAlpha = 0.94 - depth * 0.12;
+      ctx.drawImage(im, x - w/2, y - h, w, h);
+      ctx.globalAlpha = 1;
+    }
+    // 集团标签
+    ctx.font = "600 13px -apple-system,PingFang SC,sans-serif";
+    ctx.textAlign = "center";
+    const label = `${g.kind} ${g.n}人${g.gap>0?" +"+fmtGap(g.gap):""}`;
+    const tw = ctx.measureText(label).width + 14;
+    ctx.fillStyle = g.mine ? "rgba(74,144,217,.92)" : "rgba(12,16,22,.72)";
+    ctx.fillRect(gx - tw/2, ROAD_Y - 34, tw, 20);
+    ctx.fillStyle = "#fff";
+    ctx.fillText(label, gx, ROAD_Y - 20);
+  }
+
+  band(ctx, IMG.L5, camPx, 1.35, H - 42, 42, W);
+
+  // 终点线：只在最后两公里出现，出现了就说明快到了
+  const left = RP.km - f.km;
+  if (left < 2.0){
+    const fx = headX + left * 1000 * 5.2 * 0.06;
+    for (let i = 0; i < 10; i++){
+      ctx.fillStyle = i % 2 ? "#fff" : "#111";
+      ctx.fillRect(fx - 7, ROAD_Y + i * 7.6, 14, 7.6);
+    }
+  }
+}
+
+function drawWatch(f){
+  drawCanvas(f);
+  const total = RP.km;
+  $("#wClock").textContent = `${Math.floor(f.t/3600)}:${String(Math.floor(f.t%3600/60)).padStart(2,"0")}:${String(f.t%60).padStart(2,"0")}`;
+  $("#wKm").textContent = `已走 ${f.km.toFixed(1)} / ${total} km　剩余 ${(total-f.km).toFixed(1)} km`;
+  $("#wProg").style.width = (f.km/total*100).toFixed(1)+"%";
+
+  // 路面：把每个集团按已走里程摆上去
+  const road = $("#wRoad");
+  const koms = (RP.koms||[]).map(k=>
+    `<div style="position:absolute;left:${(k.km/total*100).toFixed(1)}%;top:0;bottom:0;
+      border-left:1px dashed #3a4453" title="${esc(k.label)}"></div>`).join("");
+  road.innerHTML = koms + f.groups.map((g,i)=>{
+    const cls = g.kind==="主集团" ? "main" : (g.n<=12 ? "brk" : "");
+    const top = 22 + i*22;
+    return `<div class="blob ${cls} ${g.mine?"has":""}"
+      style="left:${(g.km/total*100).toFixed(2)}%;top:${top}px">
+      ${esc(g.kind)} ${g.n}人${g.gap>0?` +${fmtGap(g.gap)}`:""}${g.mine?` · 我队${g.mine}`:""}
+    </div>`;}).join("");
+
+  $("#wGroups").innerHTML = `<table>
+    <tr><th>集团</th><th class="n">人数</th><th class="n">落后</th><th class="n">我队</th></tr>
+    ${f.groups.map(g=>`<tr class="${g.mine?'me':''}">
+      <td>${esc(g.kind)}</td><td class="n">${g.n}</td>
+      <td class="n">${g.gap>0?"+"+fmtGap(g.gap):"领先"}</td>
+      <td class="n">${g.mine||"—"}</td></tr>`).join("")}</table>`;
+
+  $("#wMine").innerHTML = `<table>
+    <tr><th>车手</th><th class="n">落后</th><th class="n">体力 W′</th><th>状态</th></tr>
+    ${f.mine.map(m=>`<tr><td>${esc(RP.mine_names[m[0]]||"")}</td>
+      <td class="n">${m[1]>0?"+"+fmtGap(m[1]):"领先"}</td>
+      <td class="n" style="width:26%">
+        <div class="bars"><i style="width:${(m[2]*100).toFixed(0)}%;
+          background:${m[2]<.25?'var(--bad)':m[2]<.6?'var(--gold)':'var(--ok)'}"></i></div></td>
+      <td class="dim">${esc(m[3])}</td></tr>`).join("")
+      || "<tr><td class='dim'>本队车手都已完赛或退出</td></tr>"}</table>`;
+
+  const shown = (RP.events||[]).filter(e=>e[0]<=f.t).slice(-14).reverse();
+  $("#wFeed").innerHTML = shown.map(e=>`<div><span class="d">${
+    Math.floor(e[0]/60)}′</span>${esc(e[1])}</div>`).join("")
+    || "<div class='dim'>还没有值得播报的事。</div>";
+}
+
+$("#wPause").onclick = ()=>{ WPAUSE=!WPAUSE; $("#wPause").textContent = WPAUSE?"继续":"暂停"; };
+$("#wSpeed").onclick = ()=>{ WSPD = WSPD>=8?1:WSPD*2; $("#wSpeed").textContent = "×"+WSPD; };
+$("#wDone").onclick = ()=>{ clearInterval(WT); WT=null; $("#watch").classList.remove("on");
+  TAB="race"; drawNav(); render(); };
+
+/* ---------------- 剖面图绘制 ---------------- */
+function drawProfiles(){
+  document.querySelectorAll("svg.prof").forEach(sv=>{
+    const p = sv.dataset.p.split(",").map(Number);
+    const W = 1000, H = 100, mx = Math.max(1, ...p);
+    const pts = p.map((v,i)=>`${i/(p.length-1)*W},${H-v/mx*(H-8)}`).join(" ");
+    sv.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    sv.setAttribute("preserveAspectRatio","none");
+    sv.innerHTML =
+      `<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="var(--team)" stop-opacity=".55"/>
+        <stop offset="1" stop-color="var(--team)" stop-opacity=".05"/></linearGradient></defs>
+       <polygon points="0,${H} ${pts} ${W},${H}" fill="url(#g)"/>
+       <polyline points="${pts}" fill="none" stroke="var(--team)" stroke-width="2"
+         vector-effect="non-scaling-stroke"/>`;
+  });
+}
+
+$("#bSave").onclick = async ()=>{ await api("/api/save",{}); toast("已存档"); };
+boot();
+</script></body></html>

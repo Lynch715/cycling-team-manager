@@ -1,0 +1,158 @@
+<!-- ======================================================================
+     浏览器版引导层（由 source/tools/build_web.py 注入到 play_app.html 前面）
+
+     它只做两件事：
+       1. 起一个 Worker，整个 Python 引擎在那边跑（见 web/worker.js）
+       2. 把 window.fetch 换掉：/api/ 的请求不出网，走 postMessage 进 Worker
+
+     play_app.html 的业务代码一个字没改。它照常在最后一行调 boot()，
+     第一次 fetch 会自己等引擎就绪——不需要任何「等加载完再启动」的胶水。
+     ====================================================================== -->
+<style>
+#boot-veil{position:fixed;inset:0;z-index:9999;background:#0d0f13;color:#e8eaef;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font:15px/1.7 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;
+  transition:opacity .4s;gap:18px;padding:24px;text-align:center}
+#boot-veil.gone{opacity:0;pointer-events:none}
+#boot-veil h2{font-size:19px;margin:0;font-weight:600;letter-spacing:.02em}
+#boot-bar{width:min(320px,70vw);height:3px;background:#272d38;border-radius:2px;overflow:hidden}
+#boot-fill{height:100%;width:0;background:#ffcf5c;transition:width .35s ease}
+#boot-msg{color:#8a92a3;font-size:13px;min-height:1.6em}
+#boot-note{color:#5f6879;font-size:12px;max-width:34em;line-height:1.7}
+#boot-veil b{color:#ffcf5c;font-weight:600}
+#busy{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:9998;
+  background:#161a21;border:1px solid #272d38;border-radius:999px;padding:9px 18px;
+  color:#e8eaef;font:13px/1 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;
+  display:none;align-items:center;gap:10px;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+#busy.on{display:flex}
+#busy i{width:8px;height:8px;border-radius:50%;background:#ffcf5c;
+  animation:bp 1s ease-in-out infinite}
+@keyframes bp{0%,100%{opacity:.25}50%{opacity:1}}
+#busy span{color:#8a92a3;font-variant-numeric:tabular-nums}
+</style>
+<div id="boot-veil">
+  <h2>模拟自行车队</h2>
+  <div id="boot-bar"><div id="boot-fill"></div></div>
+  <div id="boot-msg">正在启动引擎…</div>
+  <div id="boot-note">这一版把 Python 引擎整个搬进了你的浏览器——
+    比赛的每一秒都是现算的，和本地版跑的是同一份代码。
+    首次加载要拉运行时，之后走缓存。</div>
+</div>
+<div id="busy"><i></i>正在逐秒模拟这一场<span id="busy-t"></span></div>
+<script>
+(() => {
+  const veil = document.getElementById("boot-veil");
+  const fill = document.getElementById("boot-fill");
+  const msg  = document.getElementById("boot-msg");
+  const busy = document.getElementById("busy");
+  const busyT = document.getElementById("busy-t");
+  const SAVE_KEY = "ctm.save.v1";
+
+  const worker = new Worker("worker.js");
+  const waiting = new Map();
+  let seq = 0;
+
+  worker.onmessage = (e) => {
+    const m = e.data;
+    if (m.type === "progress") {
+      msg.textContent = m.msg;
+      fill.style.width = m.pct + "%";
+      return;
+    }
+    const w = waiting.get(m.id);
+    if (!w) return;
+    waiting.delete(m.id);
+    m.ok ? w.ok(m) : w.no(new Error(m.error));
+  };
+  worker.onerror = (e) => {
+    msg.innerHTML = "<b>启动失败</b>：" + (e.message || e.type);
+    fill.style.background = "#ff6b6b";
+  };
+
+  const send = (payload) => new Promise((ok, no) => {
+    const id = ++seq;
+    waiting.set(id, {ok, no});
+    worker.postMessage({ id, ...payload });
+  });
+
+  let saved = null;
+  try { saved = localStorage.getItem(SAVE_KEY); } catch (e) { /* 隐身窗口 */ }
+
+  const ready = send({
+    type: "boot",
+    pyodideUrl: "__PYODIDE_URL__",
+    engineUrl: new URL("engine.zip", location.href).href,
+    artIndexUrl: new URL("art_index.json", location.href).href,
+    save: saved,
+  }).then(() => {
+    setTimeout(() => { veil.classList.add("gone");
+                       setTimeout(() => veil.remove(), 500); }, 220);
+  }).catch(err => {
+    // sqlite3 没拉到的话真正的报错是一句和病因无关的 ModuleNotFoundError，
+    // 把病因补回去。
+    const extra = /No module named 'sqlite3'/.test(String(err))
+      ? "（sqlite3 运行时包没能下载，检查网络或 CDN 是否可达）" : "";
+    msg.innerHTML = "<b>启动失败</b>：" + String(err) + extra;
+    fill.style.background = "#ff6b6b";
+    throw err;
+  });
+
+  // 逐秒模拟一场比赛要几十秒。Worker 撑住了「页面不会卡死」，
+  // 但玩家仍然需要知道它在动——超过 1.2 秒才显示，普通操作不会闪。
+  let busyTimer = null, busyStart = 0;
+  const busyOn = () => {
+    busyStart = Date.now();
+    busyTimer = setInterval(() => {
+      const s = (Date.now() - busyStart) / 1000;
+      if (s > 1.2) { busy.classList.add("on"); busyT.textContent = s.toFixed(0) + "s"; }
+    }, 200);
+  };
+  const busyOff = () => {
+    clearInterval(busyTimer); busy.classList.remove("on"); busyT.textContent = "";
+  };
+
+  // ---- fetch 垫片 ----------------------------------------------------
+  // 只接管 /api/。图片走 <img src>，本来就不经过 fetch，由静态站点直接发。
+  const real = window.fetch.bind(window);
+
+  // 第一个参数可以是 string、URL 或 Request。只认字符串会在运行时炸，
+  // 而且炸在和真实原因毫不相干的地方。
+  const urlOf = x => typeof x === "string" ? x
+                   : x instanceof URL ? x.href
+                   : (x && typeof x.url === "string") ? x.url : null;
+
+  window.fetch = async (input, init) => {
+    const raw = urlOf(input);
+    if (raw === null || raw.indexOf("/api/") < 0) return real(input, init);
+    const path = new URL(raw, location.href).pathname;
+    const api = path.slice(path.indexOf("/api/"));   // 兼容 Pages 的子路径
+
+    await ready;
+    busyOn();
+    try {
+      const out = await send({
+        type: "call",
+        method: (init && init.method) || "GET",
+        path: api,
+        body: (init && init.body) || "",
+      });
+      // 存档要落到 localStorage，否则刷新一下这一局就没了。
+      if (out.save != null) {
+        try { localStorage.setItem(SAVE_KEY, out.save); }
+        catch (e) { console.warn("存档写入失败", e); }
+      }
+      return new Response(out.body, {
+        status: out.status, headers: { "Content-Type": out.ctype },
+      });
+    } finally { busyOff(); }
+  };
+
+  // 给对账和调试用：控制台里敲 await __ENGINE.fingerprint() 就能拿到
+  // 这一版引擎的指纹，和本地 python3 source/verify_web.py 的输出比对。
+  window.__ENGINE = {
+    send, ready,
+    fingerprint: async () => { await ready;
+      return JSON.parse((await send({type:"fingerprint"})).data); },
+  };
+})();
+</script>

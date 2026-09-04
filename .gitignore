@@ -31,3 +31,6 @@ data/replay.json
 
 # 一次性的可行性验证页（378KB base64，不进版本库）
 pyodide_可行性验证.html
+
+# 一次性的测试产物
+.trash_art/
