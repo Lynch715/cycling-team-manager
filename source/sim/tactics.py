@@ -57,6 +57,56 @@ NEUTRAL = Directive()
 # 强度基线
 # --------------------------------------------------------------------------
 
+# --------------------------------------------------------------------------
+# 可调旋钮
+#
+# 这三个量是耦合的：强度曲线管集团凝聚力，chase_boost 管突围能不能守住，
+# tolerated_gap 决定主集团什么时候开始收网。单独动任何一个都会把另外两个
+# 的表现推坏——所以它们被摆在一起，由 source/tune_peloton.py 联合拟合，
+# 而不是散在代码里各调各的。
+# --------------------------------------------------------------------------
+
+# 强度曲线的控制点，(剩余比例, CP 倍数)，按剩余比例从大到小排。
+INTENSITY_POINTS: tuple[tuple[float, float], ...] = (
+    (0.93, 1.13),   # 开场抢突围，最凶的 15 分钟
+    (0.72, 0.92),   # 突围放走后，集团放松
+    (0.35, 0.96),
+    (0.14, 1.03),
+    (0.04, 1.12),
+    (0.00, 1.19),   # 最后几公里
+)
+
+# True = 控制点之间线性插值（折线）；False = 阶梯。
+# 阶梯会把掉队全部堆在跳变的那一秒——一整批人在同一瞬间被推过极限。
+INTENSITY_SMOOTH = False
+
+# chase_boost 的总增益。给小了追不回突围，给大了收网期过猛、亚军被拉开。
+CHASE_GAIN = 0.85
+
+# tolerated_gap_minutes 的斜率（分钟 / 公里剩余）。
+TOLERATED_SLOPE = 0.042
+
+
+def _intensity_at(remaining_frac: float) -> float:
+    """按控制点求强度。阶梯模式取所在区间的值，折线模式做线性插值。"""
+    pts = INTENSITY_POINTS
+    if remaining_frac > pts[0][0]:
+        return pts[0][1]
+    if not INTENSITY_SMOOTH:
+        for frac, val in pts[1:]:
+            if remaining_frac > frac:
+                return val
+        return pts[-1][1]
+    for i in range(len(pts) - 1):
+        hi_f, hi_v = pts[i]
+        lo_f, lo_v = pts[i + 1]
+        if remaining_frac > lo_f:
+            span = hi_f - lo_f
+            t = (remaining_frac - lo_f) / span if span else 0.0
+            return lo_v + (hi_v - lo_v) * t
+    return pts[-1][1]
+
+
 def base_intensity(remaining_frac: float, grade: float, stage_len_km: float) -> float:
     """集团领骑者的基础强度（CP 的倍数）。
 
@@ -79,18 +129,7 @@ def base_intensity(remaining_frac: float, grade: float, stage_len_km: float) -> 
     # 不再有那一下猛的，收网期的追击就软了，突围守住了。
     # 凝聚力和突围控制在这条曲线上是耦合的，动它必须连 `chase_boost`
     # 一起重调。所以退回阶梯版——**用一个已知的缺陷，换掉一个更糟的缺陷。**
-    if remaining_frac > 0.93:
-        base = 1.13          # 开场抢突围，最凶的 15 分钟
-    elif remaining_frac > 0.72:
-        base = 0.92          # 突围放走后，集团放松
-    elif remaining_frac > 0.35:
-        base = 0.96
-    elif remaining_frac > 0.14:
-        base = 1.03
-    elif remaining_frac > 0.04:
-        base = 1.12
-    else:
-        base = 1.19          # 最后几公里
+    base = _intensity_at(remaining_frac)
 
     # 长赛段整体强度更低（保命优先）
     base *= 1.0 - max(0.0, (stage_len_km - 170.0)) * 0.00045
@@ -128,7 +167,7 @@ def selection_factor(remaining_frac: float) -> float:
 # 这条曲线就是一场公路赛的全部悬念：放到四五分钟，压住，
 # 最后四十公里收网。真实转播里屏幕角上跳动的那个数字，就是它。
 def tolerated_gap_minutes(remaining_m: float) -> float:
-    return max(0.0, min(6.0, remaining_m / 1000.0 * 0.042))
+    return max(0.0, min(6.0, remaining_m / 1000.0 * TOLERATED_SLOPE))
 
 
 def chase_boost(gap_m: float, remaining_m: float, group_size: int,
@@ -165,7 +204,7 @@ def chase_boost(gap_m: float, remaining_m: float, group_size: int,
     drive = min(1.0, error / (60.0 * 11.5))
     # 系数要给得足：真正的收网期主集团能把时速拉到 50 公里。给小了的话
     # 追击速度只比突围快零点几米每秒，八公里的差距要追一整天。
-    return 0.85 * drive * manpower * commitment
+    return CHASE_GAIN * drive * manpower * commitment
 
 
 # --------------------------------------------------------------------------

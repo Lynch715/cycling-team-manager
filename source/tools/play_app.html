@@ -81,6 +81,11 @@ main{overflow-y:auto;padding:20px 22px 60px;min-height:0}
   /* 不许折行。默认换行会把「总成绩核心」拆成一列五个字、表头拆成一列
      一个字——横向滚一下远比这好看。 */
   main .card th,main .card td{white-space:nowrap}
+  /* 赛段那行的角色标签：宁可折到下一行，也不要把「总成绩核心」
+     压成一列三个字 */
+  .stage .sh{flex-wrap:wrap;row-gap:6px}
+  .stage .sh .tag{white-space:nowrap}
+  main .card .dim b{white-space:nowrap}
 
   #intro .hero{height:200px}
   #intro .hero .t h2{font-size:22px}
