@@ -282,7 +282,8 @@ tr.me td{background:rgba(74,144,217,.10)}
 
   const ready = send({
     type: "boot",
-    pyodideUrl: "pyodide/pyodide.js",
+    pyodideUrl: "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js",
+    fallbackUrl: "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js",
     engineUrl: new URL("engine.zip", location.href).href,
     artIndexUrl: new URL("art_index.json", location.href).href,
     save: saved,

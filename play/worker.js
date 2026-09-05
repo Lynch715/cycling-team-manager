@@ -17,8 +17,25 @@ const progress = (pct, msg) => post({ type: "progress", pct, msg });
 
 async function boot(cfg) {
   progress(8, "正在拉 Python 运行时…");
-  self.importScripts(cfg.pyodideUrl);
-  PY = await self.loadPyodide({ indexURL: cfg.pyodideUrl.replace(/\/[^/]*$/, "/") });
+  // 依次试：打包时配的地址 → 官方 CDN。
+  // 这个回退是有来历的：一次带 --local-pyodide 的打包被直接发上了 Pages，
+  // 页面指向一个根本没提交的本地运行时，玩家看到的只有一句
+  // 「Load failed」——既不知道是哪个文件没了，也没有任何补救。
+  const cands = [cfg.pyodideUrl];
+  if (cfg.fallbackUrl && cfg.fallbackUrl !== cfg.pyodideUrl) cands.push(cfg.fallbackUrl);
+  let lastErr = null;
+  for (const url of cands) {
+    try {
+      self.importScripts(url);
+      PY = await self.loadPyodide({ indexURL: url.replace(/\/[^/]*$/, "/") });
+      lastErr = null;
+      break;
+    } catch (e) {
+      lastErr = new Error("运行时加载失败：" + url + "（" + (e && e.message || e) + "）");
+      PY = null;
+    }
+  }
+  if (!PY) throw lastErr;
 
   // sqlite3 在 Pyodide 里是从标准库拆出去的独立包，game/records.py 在
   // import 期就要它——缺了整个引擎起不来。

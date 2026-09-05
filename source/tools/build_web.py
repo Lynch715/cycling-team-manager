@@ -55,8 +55,9 @@ DEFAULT_EDGE = 640
 
 def build_index(pyodide_url: str) -> str:
     app = APP.read_text(encoding="utf-8")
-    prelude = PRELUDE.read_text(encoding="utf-8").replace(
-        "__PYODIDE_URL__", pyodide_url)
+    prelude = (PRELUDE.read_text(encoding="utf-8")
+               .replace("__PYODIDE_URL__", pyodide_url)
+               .replace("__PYODIDE_CDN__", CDN_PYODIDE))
     marker = "<script>"
     i = app.index(marker)
     return app[:i] + prelude + "\n" + app[i:]
@@ -151,6 +152,9 @@ def main() -> None:
     shutil.copy(ROOT / "source" / "web" / "worker.js", OUT / "worker.js")
     print(f"  index.html  {(OUT/'index.html').stat().st_size/1024:.0f} KB"
           f"  （运行时：{url}）")
+    if args.local_pyodide:
+        print("  ⚠️  这是离线自测包：它指向 play/pyodide/，而那个目录不进版本库。")
+        print("     要发布到 GitHub Pages，请不带 --local-pyodide 重新打包。")
 
     n = build_zip(OUT / "engine.zip")
     print(f"  engine.zip  {(OUT/'engine.zip').stat().st_size/1024:.0f} KB"

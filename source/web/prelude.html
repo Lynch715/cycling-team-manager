@@ -81,6 +81,7 @@
   const ready = send({
     type: "boot",
     pyodideUrl: "__PYODIDE_URL__",
+    fallbackUrl: "__PYODIDE_CDN__",
     engineUrl: new URL("engine.zip", location.href).href,
     artIndexUrl: new URL("art_index.json", location.href).href,
     save: saved,
