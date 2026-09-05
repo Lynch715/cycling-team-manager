@@ -34,7 +34,12 @@ nav{display:flex;gap:2px;padding:0 12px;background:#12151b;border-bottom:1px sol
 nav button{padding:9px 15px;font-size:14px;color:var(--dim);border-bottom:2px solid transparent}
 nav button:hover{color:var(--fg)}
 nav button.on{color:var(--fg);border-bottom-color:var(--team)}
-main{overflow-y:auto;padding:20px 22px 60px}
+/* 包住 nav + main 的这一格必须允许被压扁。grid 项的 min-height 默认是
+   auto（= 不小于内容），所以内容一超过一屏，这一格就把 #shell 撑破，
+   main 的高度跟着等于内容高度——overflow-y:auto 永远没机会触发。
+   而 body 是 overflow:hidden，于是整页彻底滚不动，下半截够不着。 */
+#shell > div{display:grid;grid-template-rows:auto 1fr;min-height:0}
+main{overflow-y:auto;padding:20px 22px 60px;min-height:0}
 .wrap{max-width:1180px;margin:0 auto}
 
 /* ---------- 通用 ---------- */

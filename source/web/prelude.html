@@ -21,6 +21,7 @@
 #boot-note{color:#5f6879;font-size:12px;max-width:34em;line-height:1.7}
 #boot-veil b{color:#ffcf5c;font-weight:600}
 #busy{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:9998;
+  pointer-events:none;
   background:#161a21;border:1px solid #272d38;border-radius:999px;padding:9px 18px;
   color:#e8eaef;font:13px/1 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;
   display:none;align-items:center;gap:10px;box-shadow:0 8px 30px rgba(0,0,0,.5)}
@@ -100,8 +101,12 @@
 
   // 逐秒模拟一场比赛要几十秒。Worker 撑住了「页面不会卡死」，
   // 但玩家仍然需要知道它在动——超过 1.2 秒才显示，普通操作不会闪。
-  let busyTimer = null, busyStart = 0;
+  // 必须计数，不能用一个定时器变量：前端有 Promise.all 并发发两个请求的
+  // 地方，后一次 busyOn 会覆盖掉前一次的 timer id，前一个 interval 就永远
+  // 清不掉了——那个提示会一直挂在屏幕底部，写着「正在逐秒模拟这一场」。
+  let inflight = 0, busyTimer = null, busyStart = 0;
   const busyOn = () => {
+    if (++inflight > 1) return;
     busyStart = Date.now();
     busyTimer = setInterval(() => {
       const s = (Date.now() - busyStart) / 1000;
@@ -109,7 +114,10 @@
     }, 200);
   };
   const busyOff = () => {
-    clearInterval(busyTimer); busy.classList.remove("on"); busyT.textContent = "";
+    if (--inflight > 0) return;
+    inflight = 0;
+    clearInterval(busyTimer); busyTimer = null;
+    busy.classList.remove("on"); busyT.textContent = "";
   };
 
   // ---- fetch 垫片 ----------------------------------------------------
