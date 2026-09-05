@@ -34,3 +34,7 @@ pyodide_可行性验证.html
 
 # 一次性的测试产物
 .trash_art/
+
+# sqlite 探针与 FUSE 残留（运行时产物）
+data/.records.db*
+data/.fuse_hidden*
