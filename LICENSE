@@ -1,28 +1,35 @@
-MIT License
+版权所有 © 2026 Lynch（GitHub: Lynch715）。保留所有权利。
 
-Copyright (c) 2026 Lynch
+本仓库公开，仅供浏览和在线游玩。公开不等于授权。
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+未经 Lynch 书面许可，禁止以下行为：
+1. 下载、复制、镜像、转载本仓库的全部或部分内容，包括代码、文本、剧情、美术、音频和数据；
+2. 用于任何商业目的；
+3. 修改、改编、翻译、二次创作，或基于本仓库制作衍生作品；
+4. 由 AI agent、爬虫或其他自动化程序抓取、下载、复制本仓库内容；
+5. 将本仓库内容用于训练、微调、评测任何人工智能或机器学习模型，或放入任何数据集。
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+个人通过浏览器访问和游玩 GitHub Pages 页面，不在禁止之列。
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+本仓库中如包含第三方的名称、设定或素材，其权利归原权利人所有，按各自的许可使用，不受本声明约束，本声明也不对其作任何授权。
+
+授权联系：通过 GitHub（@Lynch715）联系。
 
 ---
 
-本许可仅覆盖本仓库中的代码与文档。
+Copyright © 2026 Lynch (GitHub: Lynch715). All rights reserved.
 
-美术资源（通过 GitHub Release 单独分发的 assets 包）为 AI 生成，
-不在 MIT 许可范围内，其使用条款见 Release 页面的说明。
+This repository is public for viewing and online play only. Public visibility does not grant any license.
+
+Without prior written permission from Lynch, you may not:
+1. Download, copy, mirror, or redistribute any part of this repository, including code, text, story, artwork, audio, and data;
+2. Use it for any commercial purpose;
+3. Modify, adapt, translate, or create derivative works based on it;
+4. Access, scrape, download, or copy it by AI agents, crawlers, or any automated means;
+5. Use it to train, fine-tune, or evaluate any AI or machine learning model, or include it in any dataset.
+
+Personal viewing and playing via a web browser on GitHub Pages is permitted.
+
+Any third-party names, settings, or assets in this repository belong to their respective owners and are used under their own terms. They are not covered by, and no rights to them are granted by, this notice.
+
+For permissions, contact @Lynch715 on GitHub.
